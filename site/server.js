@@ -1,3 +1,4 @@
+"use strict";
 // Sample express web server.  Supports the same features as the provided server,
 // and demonstrates a big potential security loophole in express.
 
@@ -7,6 +8,7 @@ var fs = require("fs");
 var banned = [];
 banUpperCase("./public/", "");
 var expressValidator = require('express-validator');
+var sqlite = require("sqlite");
 
 // Define the sequence of functions to be called for each request.  Make URLs
 // lower case, ban upper case filenames, require authorisation for admin.html,
@@ -87,17 +89,39 @@ app.post('/login_user', function (req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         console.log('error');
-        return res.status(422).json({ errors: errors.array() });
+        // return res.status(422).json({ errors: errors.array() });
     }
 
     //Compare to database values
     var email = req.body.email;
     var password = req.body.password;
 
+    var result = validateUser(email,password);
+
     //Redirect user
     // res.send('Login successful');
 })
 
+async function validateUser(email,password) {
+    try {
+        var db = await sqlite.open("./users.db");
+        //Change to Prepared Statement
+        let ps = "SELECT password FROM users WHERE email='?'";
+        db.get(ps,[email],(err,row)=> {
+			  if (err) {
+			    return console.error(err.message);
+			  }
+			  console.log(row);
+			 
+		});
+		// var as = await db.all("SELECT password FROM users WHERE email='john_smith@gmail.com'");
+
+
+        // console.log(as);
+
+    } catch (e) { console.log(e); }
+    // return as;
+}
 //Register New User
 app.post('/register_user', function (req, res) {
     //Validate user input
@@ -106,8 +130,9 @@ app.post('/register_user', function (req, res) {
     req.check('email','Invalid email address').isEmail();
     req.check('password','Invalid password').isLength({min:8}).equal(req.body.confirmPassword);
 
-    //Compare to database values
+    //Check if email exists in database
 
+    //Add new user
 
     //Redirect user
 
