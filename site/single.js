@@ -1,11 +1,22 @@
 "use strict";
-var sqlite = require("sqlite");
-fetch();
+var sqlite = require("sqlite3");
 
-async function fetch() {
-    try {
-        var db = await sqlite.open("./users.db");
-        var as = await db.get("select * from users where id=42");
-        console.log(as);
-    } catch (e) { console.log(e); }
+//Insert user into databse
+export.insertUser = function(){
+    var email = "barcelonafc@gmail.com";
+    var fname = "Leo";
+    var lname = "Messi";
+    var password = "goal";
+
+    db.serialize(() => {
+        var command = "INSERT INTO USERS ('email', 'fname', 'lname', 'password') ";
+        command += "VALUES (?, ?, ?, ?) ";
+        db.run(command, [email, fname, lname, password], function(error) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Added user");
+            }
+        });
+    });
 }
