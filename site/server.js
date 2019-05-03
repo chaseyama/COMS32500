@@ -7,8 +7,6 @@ var app = express();
 var fs = require("fs");
 var banned = [];
 banUpperCase("./public/", "");
-var expressValidator = require('express-validator');
-var sqlite = require("sqlite");
 
 // Define the sequence of functions to be called for each request.  Make URLs
 // lower case, ban upper case filenames, require authorisation for admin.html,
@@ -20,8 +18,23 @@ var options = { setHeaders: deliverXHTML };
 app.use(express.static("public", options));
 app.listen(8080, "localhost");
 console.log("Visit http://localhost:8080/");
-app.use(express.urlencoded());
-app.use(expressValidator());
+
+
+/*
+    3rd Party Modules
+*/
+const bodyParser = require('body-parser')
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
+
+/*
+    Our Imported Modules
+*/
+const usersDb = require('./usersDatabase.js');
+
+
 
 // Make the URL lower case.
 function lower(req, res, next) {
@@ -78,63 +91,42 @@ function banUpperCase(root, folder) {
     - User Validation (Check login credentials then redirect to login page)
     - User Registration
 */
+usersDb.createDatabase();
 //Login User
-const { check, validationResult } = require('express-validator/check');
-
 app.post('/login_user', function (req, res) {
-    //Validate user input
-    req.check('email','Invalid email address').isEmail();
-    req.check('password','Invalid password').isLength({min:8});
-
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        console.log('error');
-        // return res.status(422).json({ errors: errors.array() });
-    }
-
     //Compare to database values
     var email = req.body.email;
     var password = req.body.password;
-
-    var result = validateUser(email,password);
-
-    //Redirect user
-    // res.send('Login successful');
 })
 
-async function validateUser(email,password) {
-    try {
-        var db = await sqlite.open("./users.db");
-        //Change to Prepared Statement
-        let ps = "SELECT password FROM users WHERE email='?'";
-        db.get(ps,[email],(err,row)=> {
-			  if (err) {
-			    return console.error(err.message);
-			  }
-			  console.log(row);
-			 
-		});
-		// var as = await db.all("SELECT password FROM users WHERE email='john_smith@gmail.com'");
 
-
-        // console.log(as);
-
-    } catch (e) { console.log(e); }
-    // return as;
-}
 //Register New User
 app.post('/register_user', function (req, res) {
+    console.log('Entering register_user method');
+
+    var email = req.body.email;
+    var fname = req.body.fname;
+    var lname = req.body.lname;
+    var password = req.body.password;
+
     //Validate user input
-    req.check('fname', 'Please enter your first name.').isLength({min:1});
-    req.check('lname', 'Please enter your last name.').isLength({min:1});
-    req.check('email','Invalid email address').isEmail();
-    req.check('password','Invalid password').isLength({min:8}).equal(req.body.confirmPassword);
+
 
     //Check if email exists in database
 
+    var query = usersDb.fetchUser(email);
+    if(query){
+        console.log('This email is already in use. Please try a different email.');
+    }
     //Add new user
-
+    var user = {'email': email,
+                'fname': fname,
+                'lname': lname,
+                'password': password
+    };
+    usersDb.insertUser(user);
     //Redirect user
+    res.send('Successfully registered new user')
 
 })
 
