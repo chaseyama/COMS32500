@@ -23,11 +23,14 @@ console.log("Visit http://localhost:8080/");
 /*
     3rd Party Modules
 */
-const bodyParser = require('body-parser')
-app.use( bodyParser.json() );       // to support JSON-encoded bodies
+const bodyParser = require('body-parser');
+app.use(bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
+
+const expressValidator = require('express-validator');
+app.use(expressValidator());
 
 /*
     Our Imported Modules
@@ -110,14 +113,17 @@ app.post('/register_user', function (req, res) {
     var password = req.body.password;
 
     //Validate user input
+    req.check('email', 'Invalid email address.').isEmail();
+    req.check('password','Password not long enough').isLength({min:6});
+    req.check('password','Password does not match').equals(req.body.confirmPassword);
 
+    var errors = req.validationErrors();
 
-    //Check if email exists in database
-
-    var query = usersDb.fetchUser(email);
-    if(query){
-        console.log('This email is already in use. Please try a different email.');
+    if(errors){
+        res.send(errors);
     }
+    //Check if user exists
+
     //Add new user
     var user = {'email': email,
                 'fname': fname,
