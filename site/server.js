@@ -36,8 +36,13 @@ app.use(expressValidator());
     Our Imported Modules
 */
 const usersDb = require('./usersDatabase.js');
+const market = require('./market.js');
 
-
+/*
+    Initialize Databases
+*/
+usersDb.createUserTable();
+market.createMarketTable();
 
 // Make the URL lower case.
 function lower(req, res, next) {
@@ -94,7 +99,7 @@ function banUpperCase(root, folder) {
     - User Validation (Check login credentials then redirect to login page)
     - User Registration
 */
-usersDb.createUserTable();
+
 //Login User
 app.post('/login_user', function (req, res) {
     //Validate user input
@@ -123,12 +128,12 @@ app.post('/register_user', function (req, res) {
         res.send(errors);
     }
     //Check if user exists
-    var query = usersDb.fetchUser(req.body.email);
-    if(query){
-        res.send(query);
-    }else{
-        res.send('Nothing found');
-    }
+    // var query = usersDb.fetchUser(req.body.email);
+    // if(query){
+    //     res.send(query);
+    // }else{
+    //     res.send('Nothing found');
+    // }
     
 
     //Add new user
@@ -137,9 +142,9 @@ app.post('/register_user', function (req, res) {
                 'lname': req.body.lname,
                 'password': req.body.password
     };
-    // usersDb.insertUser(user);
+    usersDb.insertUser(user);
     //Redirect user
-    // res.send('Successfully registered new user')
+    res.send('Successfully registered new user')
 
 })
 
@@ -152,6 +157,40 @@ app.post('/find_item', function (req,res){
 
     console.log(req.body.item_category + ' ' + req.body.item_price);
 
+})
+
+//Insert new item
+app.post('/sell_item', function (req,res){
+    console.log('Entering insert new item method');
+
+    //Validate all fields are complete/wellformated
+        //Description must be within character limit
+
+
+    //Calculate price range
+    var priceRange;
+    if(req.body.price <= 10){
+        priceRange = '£';
+    }else if(req.body.price > 10 && req.body.price <= 20){
+        priceRange = '££';
+    }else if(req.body.price > 20 && req.body.price <= 30){
+        priceRange = '£££';
+    }else{
+        priceRange = '££££';
+    }
+    
+    //Insert into database
+    var newItem = {
+        'itemName': req.body.itemName,
+        'price': req.body.price,
+        'priceRange': priceRange,
+        'category': req.body.category,
+        'description': req.body.description,
+        'seller': req.body.seller
+    };
+    console.log(newItem);
+    market.insertItem(newItem);
+    console.log('Exiting insert new item method');
 })
 
 

@@ -62,7 +62,10 @@
                             <h1>Browse</h1>
                             
                                 <h3>Category</h3>
-                                <button class="btn btn-info" role="button" type="button" onclick="set_category('clothing')" id="clothing">Clothing</button>
+                                <button class="btn btn-info">
+                                    <h4>Clothing</h4>
+                                    <input type="radio" id="clothing"/>
+                                </button>
                                 <button class="btn btn-info" role="button" type="button" onclick="set_category('bedding')" id="bedding">Bedding</button>
                                 <button class="btn btn-info" role="button" type="button" onclick="set_category('furniture')" id="furniture">Furniture</button>
                                 <button class="btn btn-info" role="button" type="button" onclick="set_category('kitchenware')" id="kitchenware">Kitchenware</button>
@@ -88,6 +91,9 @@
                             </script>
                         </section>
 
+                        <!-- 
+                        Create new item
+                        -->
                         <section id="sell">
                             <h1>Sell</h1>
                             <form action="/sell_item" method="post">
@@ -95,13 +101,24 @@
                                 <input type="text" name="itemName"/>
                                 <h3>Asking Price</h3>
                                 <input type="number" name="price"/>
-                                <input type="hidden" name="priceRange"/>
+                                <h3>Category</h3>
+                                    <h4>Clothing</h4>
+                                    <input type="radio" name="category" value="clothing"/>
+                                    <h4>Bedding</h4>
+                                    <input type="radio" name="category" value="bedding"/>
+                                    <h4>Furniture</h4>
+                                    <input type="radio" name="category" value="furniture"/>
+                                    <h4>Kitchenware</h4>
+                                    <input type="radio" name="category" value="kitchenware"/>
+                                    <h4>Electronics</h4>
+                                    <input type="radio" name="category" value="electronics"/>
+                                    <h4>Other</h4>
+                                    <input type="radio" name="category" value="other"/>
                                 <h3>Description</h3>
                                 <textarea name="description" rows="10" cols="50">Please briefly describe your item. 
                                 </textarea>
                                 <input type="hidden" name="seller" value="1"/>
                                 <input type="submit" name="submit"/>
-
                             </form>
                         </section>
                     </div>

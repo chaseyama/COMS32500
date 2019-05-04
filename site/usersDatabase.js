@@ -33,6 +33,7 @@ exports.createUserTable = function() {
     Parameter: Dictionary object containing the user information
 */
 exports.insertUser = function(userInfo){
+    console.log('Entering insert user method');
     db.serialize(() => {
         var command = "INSERT INTO USERS ('email', 'fname', 'lname', 'password') ";
         command += "VALUES (?, ?, ?, ?);";
@@ -41,16 +42,16 @@ exports.insertUser = function(userInfo){
                 console.log(error);
             } else {
                 console.log("Successfully added user");
-                    db.serialize(() => {
-                        var command = "SELECT * FROM USERS";
-                        var results = db.all(command, [], function(error,rows) {
-                            if (error) {
-                                console.log(error);
-                            } else {
-                                console.log(rows);
-                            }
-                        });
+                db.serialize(() => {
+                    var command = "SELECT * FROM USERS";
+                    var results = db.all(command, [], function(error,rows) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log(rows);
+                        }
                     });
+                });
             }
         });
     });
