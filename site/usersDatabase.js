@@ -5,13 +5,13 @@
 */
 
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database("users.db");
+const db = new sqlite3.Database("studyabroad.db");
 
 /*
     Create Database Method
     Description: Create users table
 */
-exports.createDatabase = function() {
+exports.createUserTable = function() {
     db.serialize(() => {
         // create a new database table:
         db.run("CREATE TABLE IF NOT EXISTS users (" +
@@ -33,6 +33,7 @@ exports.createDatabase = function() {
     Parameter: Dictionary object containing the user information
 */
 exports.insertUser = function(userInfo){
+    console.log('Entering insert user method');
     db.serialize(() => {
         var command = "INSERT INTO USERS ('email', 'fname', 'lname', 'password') ";
         command += "VALUES (?, ?, ?, ?);";
@@ -41,16 +42,16 @@ exports.insertUser = function(userInfo){
                 console.log(error);
             } else {
                 console.log("Successfully added user");
-                    db.serialize(() => {
-                        var command = "SELECT * FROM USERS";
-                        var results = db.all(command, [], function(error,rows) {
-                            if (error) {
-                                console.log(error);
-                            } else {
-                                console.log(rows);
-                            }
-                        });
+                db.serialize(() => {
+                    var command = "SELECT * FROM USERS";
+                    var results = db.all(command, [], function(error,rows) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log(rows);
+                        }
                     });
+                });
             }
         });
     });
@@ -64,16 +65,17 @@ exports.insertUser = function(userInfo){
 exports.fetchUser = function(email){
     db.serialize( () => {
         var command = "SELECT * FROM USERS WHERE email = ? ;";
-        db.get(command, email, function(error,rows){
+        db.get(command, email, (error,rows) => {
             if(error){
                 console.log(error);
             }else{
                 if(rows){
-                    // console.log(rows);
-                    return rows;
+                    console.log('Successfully queried user');
+                    //!!! Not actually returning anything
+                    callback(rows);
                 }else{
-                    return false;
                     console.log("No user with that email exists");
+                    callback(null);
                 }
             }
         });

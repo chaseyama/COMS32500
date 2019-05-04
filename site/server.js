@@ -23,18 +23,26 @@ console.log("Visit http://localhost:8080/");
 /*
     3rd Party Modules
 */
-const bodyParser = require('body-parser')
-app.use( bodyParser.json() );       // to support JSON-encoded bodies
+const bodyParser = require('body-parser');
+app.use(bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
+
+const expressValidator = require('express-validator');
+app.use(expressValidator());
 
 /*
     Our Imported Modules
 */
 const usersDb = require('./usersDatabase.js');
+const market = require('./market.js');
 
-
+/*
+    Initialize Databases
+*/
+usersDb.createUserTable();
+market.createMarketTable();
 
 // Make the URL lower case.
 function lower(req, res, next) {
@@ -91,12 +99,18 @@ function banUpperCase(root, folder) {
     - User Validation (Check login credentials then redirect to login page)
     - User Registration
 */
-usersDb.createDatabase();
+
 //Login User
 app.post('/login_user', function (req, res) {
+    //Validate user input
+    req.check('email', 'Invalid email address.').isEmail();
+    req.check('password','Password not long enough').isLength({min:6});
+    if(errors){
+        res.send(errors);
+    }
     //Compare to database values
-    var email = req.body.email;
-    var password = req.body.password;
+
+
 })
 
 
@@ -104,31 +118,93 @@ app.post('/login_user', function (req, res) {
 app.post('/register_user', function (req, res) {
     console.log('Entering register_user method');
 
-    var email = req.body.email;
-    var fname = req.body.fname;
-    var lname = req.body.lname;
-    var password = req.body.password;
-
     //Validate user input
+    req.check('email', 'Invalid email address.').isEmail();
+    req.check('password','Password not long enough').isLength({min:6});
+    req.check('password','Password does not match').equals(req.body.confirmPassword);
+    var errors = req.validationErrors();
 
-
-    //Check if email exists in database
-
-    var query = usersDb.fetchUser(email);
-    if(query){
-        console.log('This email is already in use. Please try a different email.');
+    if(errors){
+        res.send(errors);
     }
+    //Check if user exists
+    // var query = usersDb.fetchUser(req.body.email);
+    // if(query){
+    //     res.send(query);
+    // }else{
+    //     res.send('Nothing found');
+    // }
+    
+
     //Add new user
-    var user = {'email': email,
-                'fname': fname,
-                'lname': lname,
-                'password': password
+    var user = {'email': req.body.email,
+                'fname': req.body.fname,
+                'lname': req.body.lname,
+                'password': req.body.password
     };
     usersDb.insertUser(user);
     //Redirect user
     res.send('Successfully registered new user')
 
 })
+
+/*
+    Marketplace Handlers
+*/
+//Search item
+app.post('/find_item', function (req,res){
+    console.log('Entering find_item method');
+
+    console.log(req.body.item_category + ' ' + req.body.item_price);
+
+})
+
+//Insert new item
+app.post('/sell_item', function (req,res){
+    console.log('Entering insert new item method');
+
+    //Validate all fields are complete/wellformated
+        //Description must be within character limit
+
+
+    //Calculate price range
+    var priceRange;
+    if(req.body.price <= 10){
+        priceRange = '£';
+    }else if(req.body.price > 10 && req.body.price <= 20){
+        priceRange = '££';
+    }else if(req.body.price > 20 && req.body.price <= 30){
+        priceRange = '£££';
+    }else{
+        priceRange = '££££';
+    }
+    
+    //Insert into database
+    var newItem = {
+        'itemName': req.body.itemName,
+        'price': req.body.price,
+        'priceRange': priceRange,
+        'category': req.body.category,
+        'description': req.body.description,
+        'seller': req.body.seller
+    };
+    console.log(newItem);
+    market.insertItem(newItem);
+    console.log('Exiting insert new item method');
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
