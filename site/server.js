@@ -94,12 +94,18 @@ function banUpperCase(root, folder) {
     - User Validation (Check login credentials then redirect to login page)
     - User Registration
 */
-usersDb.createDatabase();
+usersDb.createUserTable();
 //Login User
 app.post('/login_user', function (req, res) {
+    //Validate user input
+    req.check('email', 'Invalid email address.').isEmail();
+    req.check('password','Password not long enough').isLength({min:6});
+    if(errors){
+        res.send(errors);
+    }
     //Compare to database values
-    var email = req.body.email;
-    var password = req.body.password;
+
+
 })
 
 
@@ -107,34 +113,59 @@ app.post('/login_user', function (req, res) {
 app.post('/register_user', function (req, res) {
     console.log('Entering register_user method');
 
-    var email = req.body.email;
-    var fname = req.body.fname;
-    var lname = req.body.lname;
-    var password = req.body.password;
-
     //Validate user input
     req.check('email', 'Invalid email address.').isEmail();
     req.check('password','Password not long enough').isLength({min:6});
     req.check('password','Password does not match').equals(req.body.confirmPassword);
-
     var errors = req.validationErrors();
 
     if(errors){
         res.send(errors);
     }
     //Check if user exists
+    var query = usersDb.fetchUser(req.body.email);
+    if(query){
+        res.send(query);
+    }else{
+        res.send('Nothing found');
+    }
+    
 
     //Add new user
-    var user = {'email': email,
-                'fname': fname,
-                'lname': lname,
-                'password': password
+    var user = {'email': req.body.email,
+                'fname': req.body.fname,
+                'lname': req.body.lname,
+                'password': req.body.password
     };
-    usersDb.insertUser(user);
+    // usersDb.insertUser(user);
     //Redirect user
-    res.send('Successfully registered new user')
+    // res.send('Successfully registered new user')
 
 })
+
+/*
+    Marketplace Handlers
+*/
+//Search item
+app.post('/find_item', function (req,res){
+    console.log('Entering find_item method');
+
+    console.log(req.body.item_category + ' ' + req.body.item_price);
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
