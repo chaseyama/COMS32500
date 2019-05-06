@@ -13,12 +13,11 @@ banUpperCase("./public/", "");
 // and deliver static files from ./public.
 app.use(lower);
 app.use(ban)
-app.use("/index.html", auth);
+app.all("/", auth);
 var options = { setHeaders: deliverXHTML };
 app.use(express.static("public", options));
 app.listen(8080, "localhost");
 console.log("Visit http://localhost:8080/");
-
 
 /*
     3rd Party Modules
@@ -31,6 +30,10 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 const expressValidator = require('express-validator');
 app.use(expressValidator());
+
+const bcrypt = require('bcrypt');
+
+const session = require('express-session');
 
 /*
     Our Imported Modules
@@ -64,7 +67,7 @@ function ban(req, res, next) {
 
 // Redirect the browser to the login page.
 function auth(req, res, next) {
-    res.redirect("/login.html");
+    res.redirect("/index.html");
 }
 
 // Called by express.static.  Deliver response as XHTML.
@@ -104,15 +107,20 @@ function banUpperCase(root, folder) {
 app.post('/login_user', function (req, res) {
     //Validate user input
     req.check('email', 'Invalid email address.').isEmail();
-    req.check('password','Password not long enough').isLength({min:6});
+    req.check('password','Password not long enough').isLength({min:8});
     if(errors){
         res.send(errors);
     }
     //Compare to database values
 
+    bcrypt.compare('password', hash, function(err, res){
+        if(res === true){
 
+        }else{
+
+        }
+    });
 })
-
 
 //Register New User
 app.post('/register_user', function (req, res) {
@@ -120,7 +128,7 @@ app.post('/register_user', function (req, res) {
 
     //Validate user input
     req.check('email', 'Invalid email address.').isEmail();
-    req.check('password','Password not long enough').isLength({min:6});
+    req.check('password','Password not long enough').isLength({min:8});
     req.check('password','Password does not match').equals(req.body.confirmPassword);
     var errors = req.validationErrors();
 
@@ -128,23 +136,26 @@ app.post('/register_user', function (req, res) {
         res.send(errors);
     }
     //Check if user exists
-    // var query = usersDb.fetchUser(req.body.email);
-    // if(query){
-    //     res.send(query);
-    // }else{
-    //     res.send('Nothing found');
-    // }
-    
+    usersDb.fetchUser(req.body.email, (rows) => {
+        if(rows){
+            res.send('An account with this email already exists. Please log in or register under a different email address.');
+        }
+    });
 
     //Add new user
+    var salt = bcrypt.genSaltSync(10);
+    var hashedPassword = bcrypt.hashSync(req.body.password, salt);
+
     var user = {'email': req.body.email,
                 'fname': req.body.fname,
                 'lname': req.body.lname,
-                'password': req.body.password
+                'password': hashedPassword,
+                'salt': salt
     };
     usersDb.insertUser(user);
+    res.send(user);
     //Redirect user
-    res.send('Successfully registered new user')
+    res.send('Successfully registered new user');
 
 })
 
