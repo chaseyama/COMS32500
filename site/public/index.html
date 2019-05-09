@@ -24,17 +24,17 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">Study Abroad Bristol</a>
+                    <a class="navbar-brand" href="index.html">Study Abroad Bristol</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
+                    <li class="active"><a href="index.html">Home</a></li>
                     <li><a href="resources.html">Explore Bristol</a></li>
                     <li><a href="market.html">Marketplace Exchange</a></li>
                     <li><a href="questions.html">Q&amp;A and FAQs</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    <li><a href="/login.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="/login.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 </ul>
             </div>
         </nav>
@@ -112,9 +112,9 @@
                                 <h3>Login</h3>
                                 <form action="/login_user" method="post">
                                     <h4>Email</h4>
-                                    <input type="text" id="email" name="email"/>
+                                    <input type="text" id="email" name="email" required="required"/>
                                     <h4>Password</h4>
-                                    <input type="password" id="password" name="password"/>
+                                    <input type="password" id="password" name="password" required="required"/>
                                     <input type="submit"/>
                                 </form>
                             </div>

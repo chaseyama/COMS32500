@@ -48,31 +48,30 @@
                         <section id="login">
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <h3>Login</h3>
-                                <form action="/login_user" method="post">
+                                <form action="/login_user" method="post" onsubmit="return checkForm(this);">
                                     <h4>Email</h4>
-                                    <input type="text" id="email" name="email"/>
+                                    <input type="text" id="email" name="email" required="required"/>
                                     <h4>Password</h4>
-                                    <input type="text" id="password" name="password"/>
+                                    <input type="password" id="password" name="password" required="required"/>
                                     <input type="submit"/>
                                 </form>
                             </div>
                         </section>
-                        
                         <section id="register">
                             <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                 <h3>Register</h3>
                                 <p>Create an account with us to make the most of your time at Bristol!</p>
                                 <form action="/register_user" method="post">
                                     <h4>First Name</h4>
-                                    <input type="text" id="fname" name="fname"/>
+                                    <input type="text" id="fname" name="fname" required="required"/>
                                     <h4>Last Name</h4>
                                     <input type="text" id="lname" name="lname"/>
                                     <h4>Email</h4>
-                                    <input type="text" id="email" name="email"/>
+                                    <input type="text" id="email" name="email" required="required"/>
                                     <h4>Password</h4>
-                                    <input type="password" id="password" name="password"/>
+                                    <input type="password" id="password" name="password" required="required"/>
                                     <h4>Confirm Password</h4>
-                                    <input type="password" id="confirmPassword" name="confirmPassword"/>
+                                    <input type="password" id="confirmPassword" name="confirmPassword" required="required"/>
                                     <input type="submit"/>
                                 </form>
                             </div>

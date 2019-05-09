@@ -1,7 +1,6 @@
 "use strict";
 // Sample express web server.  Supports the same features as the provided server,
 // and demonstrates a big potential security loophole in express.
-
 var express = require("express");
 var app = express();
 var fs = require("fs");
@@ -13,6 +12,23 @@ banUpperCase("./public/", "");
 // and deliver static files from ./public.
 app.use(lower);
 app.use(ban)
+
+/*
+    Generate session using express-session module
+*/
+const session = require('express-session');
+const uuid = require('uuid/v4');
+var ssn = null;
+app.use(session({
+    genid: (req) => {
+        console.log('Inside the session middlware');
+        return uuid();
+    },
+    secret: 'keyboard cat', //Change to env variable in prod environment
+    resave: false,
+    saveUninitialized: true
+}))
+
 app.all("/", auth);
 var options = { setHeaders: deliverXHTML };
 app.use(express.static("public", options));
@@ -32,8 +48,8 @@ const expressValidator = require('express-validator');
 app.use(expressValidator());
 
 const bcrypt = require('bcrypt');
+const path = require('path');
 
-const session = require('express-session');
 
 /*
     Our Imported Modules
@@ -46,6 +62,7 @@ const market = require('./market.js');
 */
 usersDb.createUserTable();
 market.createMarketTable();
+
 
 // Make the URL lower case.
 function lower(req, res, next) {
@@ -67,6 +84,8 @@ function ban(req, res, next) {
 
 // Redirect the browser to the login page.
 function auth(req, res, next) {
+    console.log('Inside the homepage callback function');
+    console.log(req.sessionID);
     res.redirect("/index.html");
 }
 
@@ -97,52 +116,93 @@ function banUpperCase(root, folder) {
     }
 }
 
+
+
 /*
     User Code:
-    - User Validation (Check login credentials then redirect to login page)
+    - User Login
     - User Registration
 */
 
-//Login User
+/*
+    Login User Method:
+    - Need to add routing/error handling to front end if error exists
+*/
 app.post('/login_user', function (req, res) {
-    //Validate user input
+    console.log('Logging in user');
+    /*
+        Validate user input using express-validator
+        - Check valid email
+        - Check password minimum length (8 characters)
+    */
     req.check('email', 'Invalid email address.').isEmail();
     req.check('password','Password not long enough').isLength({min:8});
+    var errors = req.validationErrors();
     if(errors){
-        res.send(errors);
+        ssn.errors = errors;
+        res.sendFile(path.join(__dirname+'/public/login.html'));
     }
-    //Compare to database values
 
-    bcrypt.compare('password', hash, function(err, res){
-        if(res === true){
-
+    /*
+        Validate credentials against database
+        - Check if password matches
+        - Redirect to appropriate result
+    */
+    usersDb.fetchUser(req.body.email, (rows) => {
+        if(rows){
+            bcrypt.compare(req.body.password, rows[0].password, function(err, result){
+                if(result === true){
+                    //Save email as session variable
+                    ssn = req.session;
+                    ssn.email = req.body.email;
+                    console.log(ssn.email);
+                    //Redirect user
+                    res.sendFile(path.join(__dirname+'/public/profile.html'));
+                }else{
+                    res.send('Incorrect password');
+                }
+            });
         }else{
-
+            res.send('There is no registered user with this email.');
         }
     });
 })
 
-//Register New User
+/*
+    Register New User Method:
+    - Need to add routing/error handling to front end if error exists
+*/
 app.post('/register_user', function (req, res) {
     console.log('Entering register_user method');
 
-    //Validate user input
+    /*
+        User input validation using express-validator
+        - Require first name
+        - Check for valid email
+        - Check password minimum length (8 characters) and that passwords match
+    */
     req.check('email', 'Invalid email address.').isEmail();
     req.check('password','Password not long enough').isLength({min:8});
     req.check('password','Password does not match').equals(req.body.confirmPassword);
     var errors = req.validationErrors();
-
     if(errors){
         res.send(errors);
     }
-    //Check if user exists
+
+    /*
+        Check for existing user
+    */
     usersDb.fetchUser(req.body.email, (rows) => {
         if(rows){
             res.send('An account with this email already exists. Please log in or register under a different email address.');
         }
     });
 
-    //Add new user
+    /*
+        Add new user to the database
+        - Use bcrypt to hash password with salt
+        - Redirect user to profile page
+    */
     var salt = bcrypt.genSaltSync(10);
     var hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
@@ -153,10 +213,14 @@ app.post('/register_user', function (req, res) {
                 'salt': salt
     };
     usersDb.insertUser(user);
-    res.send(user);
-    //Redirect user
-    res.send('Successfully registered new user');
 
+    //Save Session
+    ssn = req.session;
+    ssn.email = req.body.email;
+    ssn.fname = req.body.fname;
+    
+    //Redirect user
+    res.sendFile(path.join(__dirname+'/public/profile.html'));
 })
 
 /*
@@ -165,9 +229,19 @@ app.post('/register_user', function (req, res) {
 //Search item
 app.post('/find_item', function (req,res){
     console.log('Entering find_item method');
+    console.log('Searching for item with category: ' + req.body.item_category + ' and price range: ' + req.body.item_price);
+    var itemParameter = {
+        'category': req.body.item_category,
+        'priceRange': req.body.item_price
+    };
 
-    console.log(req.body.item_category + ' ' + req.body.item_price);
-
+    market.fetchItems(itemParameter,(rows) =>{
+        if(rows){
+            res.send(rows);
+        }else{
+            res.send('No items match that search category');
+        }
+    });
 })
 
 //Insert new item
