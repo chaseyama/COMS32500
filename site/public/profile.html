@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  lang="en-GB" xml:lang="en-GB">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Study Abroad Bristol</title>
+    <!-- Bootstrap: Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
+
+</head>
+    <body>
+        <!--Website Banner-->
+        <header>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <h1>Study Abroad Bristol</h1>    
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!--Navigation Bar-->  
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Study Abroad Bristol</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="resources.html">Explore Bristol</a></li>
+                    <li><a href="market.html">Marketplace Exchange</a></li>
+                    <li><a href="questions.html">Q&amp;A and FAQs</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="login.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        
+        <!--Main Content-->  
+        <main>
+            <div id='email'></div>
+
+
+            <button onclick="showEmail();">Click Me!</button>
+
+            <script type="text/javascript">
+                
+            function showEmail(){          
+                var email= Session['email'];      
+                console.log('Printing email: ' + email);
+                document.getElementById('email').innerText = email;
+
+            };   
+            </script>
+            
+        </main>
+        <footer>
+            <p>Jack Allison and Cameron Haseyama</p>
+        </footer>
+    </body>
+
+    <!-- Bootstrap: jQuery library --> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Bootstrap: Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> 
+    
+</html>

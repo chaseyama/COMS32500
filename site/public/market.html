@@ -30,17 +30,17 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">Study Abroad Bristol</a>
+                    <a class="navbar-brand" href="index.html">Study Abroad Bristol</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="resources.html">Explore Bristol</a></li>
-                    <li><a href="market.html">Marketplace Exchange</a></li>
+                    <li class="active"><a href="market.html">Marketplace Exchange</a></li>
                     <li><a href="questions.html">Q&amp;A and FAQs</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    <li><a href="login.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 </ul>
             </div>
         </nav>
@@ -58,65 +58,106 @@
                             </p>
                             <p>Add a toggle between buy and sell. Buy will display search fields then the results. Sell will display the fields to fill out to sell an item. </p>
                         </section>
+                        <div class="row">
+                                <div class="col-sm-12">
+                                    <button onclick="browse()">Browse</button>
+                                    <button onclick="sell()">Sell</button>
+                                </div>
+                        </div>
+                        <script type="text/javascript">
+                            function browse() {
+                              document.getElementById("browse").style.display = "block";
+                                document.getElementById("sell").style.display = "none";
+                            }
+                            function sell() {
+                                document.getElementById("sell").style.display = "block";
+                                document.getElementById("browse").style.display = "none";
+                            }
+                        </script>
                         <section id="search">
-                            <h1>Browse</h1>
-                            
-                                <h3>Category</h3>
-                                <button class="btn btn-info">
-                                    <h4>Clothing</h4>
-                                    <input type="radio" id="clothing"/>
-                                </button>
-                                <button class="btn btn-info" role="button" type="button" onclick="set_category('bedding')" id="bedding">Bedding</button>
-                                <button class="btn btn-info" role="button" type="button" onclick="set_category('furniture')" id="furniture">Furniture</button>
-                                <button class="btn btn-info" role="button" type="button" onclick="set_category('kitchenware')" id="kitchenware">Kitchenware</button>
-                                <button class="btn btn-info" role="button" type="button" onclick="set_category('electronics')" id="electronics">Electronics</button>
-                                <button class="btn btn-info" role="button" type="button" onclick="set_category('other')" id="other">Other</button>
-                                <h3>Price Range</h3>
-                                <button class="btn btn-info" role="button" type="button" onclick="set_price('£')" id="£">£</button>
-                                <button class="btn btn-info" role="button" type="button" onclick="set_price('££')" id="££">££</button>
-                                <button class="btn btn-info" role="button" type="button" onclick="set_price('£££')" id="£££">£££</button>
-                                <button class="btn btn-info" role="button" type="button" onclick="set_price('££££')" id="££££">££££</button>
-                            <form action="/find_item" method="post">
-                                <input type="input" name="item_category" id="item_category" value=""/>
-                                <input type="input" name="item_price" id="item_price" value=""/>
-                                <button>SEARCH</button>
-                            </form>
-                            <script type="text/javascript">
-                                function set_category(category){
-                                    document.getElementById("item_category").value = category;
-                                }
-                                function set_price(price){
-                                    document.getElementById("item_price").value = price;
-                                }
-                            </script>
+                            <section id="browse" class="jumbotron">
+                                <h1>Browse</h1>
+                                    <h3>Category</h3>
+                                    <button class="btn btn-info" role="button" type="button" onclick="set_category('clothing')" id="clothing">Clothing</button>
+                                    <button class="btn btn-info" role="button" type="button" onclick="set_category('bedding')" id="bedding">Bedding</button>
+                                    <button class="btn btn-info" role="button" type="button" onclick="set_category('furniture')" id="furniture">Furniture</button>
+                                    <button class="btn btn-info" role="button" type="button" onclick="set_category('kitchenware')" id="kitchenware">Kitchenware</button>
+                                    <button class="btn btn-info" role="button" type="button" onclick="set_category('electronics')" id="electronics">Electronics</button>
+                                    <button class="btn btn-info" role="button" type="button" onclick="set_category('other')" id="other">Other</button>
+                                    <h3>Price Range</h3>
+                                    <button class="btn btn-info" role="button" type="button" onclick="set_price('£')" id="£">£</button>
+                                    <button class="btn btn-info" role="button" type="button" onclick="set_price('££')" id="££">££</button>
+                                    <button class="btn btn-info" role="button" type="button" onclick="set_price('£££')" id="£££">£££</button>
+                                    <button class="btn btn-info" role="button" type="button" onclick="set_price('££££')" id="££££">££££</button>
+                                <form action="/find_item" method="post">
+                                    <input type="input" name="item_category" id="item_category" value=""/>
+                                    <input type="input" name="item_price" id="item_price" value=""/>
+                                    <button>SEARCH</button>
+                                </form>
+                                <script type="text/javascript">
+                                    function set_category(category){
+                                        document.getElementById("item_category").value = category;
+                                    }
+                                    function set_price(price){
+                                        document.getElementById("item_price").value = price;
+                                    }
+                                </script>
+                            </section>
                         </section>
-
                         <!-- 
                         Create new item
                         -->
-                        <section id="sell">
+                        <section id="sell" style="display:none" class="jumbotron">
                             <h1>Sell</h1>
                             <form action="/sell_item" method="post">
-                                <h3>Item Name</h3>
-                                <input type="text" name="itemName"/>
-                                <h3>Asking Price</h3>
-                                <input type="number" name="price"/>
-                                <h3>Category</h3>
-                                    <h4>Clothing</h4>
-                                    <input type="radio" name="category" value="clothing"/>
-                                    <h4>Bedding</h4>
-                                    <input type="radio" name="category" value="bedding"/>
-                                    <h4>Furniture</h4>
-                                    <input type="radio" name="category" value="furniture"/>
-                                    <h4>Kitchenware</h4>
-                                    <input type="radio" name="category" value="kitchenware"/>
-                                    <h4>Electronics</h4>
-                                    <input type="radio" name="category" value="electronics"/>
-                                    <h4>Other</h4>
-                                    <input type="radio" name="category" value="other"/>
-                                <h3>Description</h3>
-                                <textarea name="description" rows="10" cols="50">Please briefly describe your item. 
-                                </textarea>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h3>Item Name</h3>
+                                        <input type="text" name="itemName" required="required"/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h3>Asking Price (£)</h3>
+                                        <input type="number" name="price" min="0.00" step="0.01" required="required"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <h3>Category</h3>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <h4>Clothing</h4>
+                                        <input type="radio" name="category" value="clothing" checked="checked" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h4>Bedding</h4>
+                                        <input type="radio" name="category" value="bedding"/>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h4>Furniture</h4>
+                                        <input type="radio" name="category" value="furniture"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <h4>Kitchenware</h4>
+                                        <input type="radio" name="category" value="kitchenware"/>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h4>Electronics</h4>
+                                        <input type="radio" name="category" value="electronics"/>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h4>Other</h4>
+                                        <input type="radio" name="category" value="other"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h3>Description</h3>
+                                        <textarea name="description" rows="10" cols="50" maxlength="255" required="required">Please briefly describe your item. 
+                                        </textarea>
+                                    </div>
+                                </div>
                                 <input type="hidden" name="seller" value="1"/>
                                 <input type="submit" name="submit"/>
                             </form>
