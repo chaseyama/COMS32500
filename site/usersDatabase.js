@@ -19,7 +19,8 @@ exports.createUserTable = function() {
           "'email' VARCHAR(255), " +
           "'fname' VARCHAR(255), " +
           "'lname' VARCHAR(255), " +
-          "'password' VARCHAR(255));");
+          "'password' VARCHAR(255), " +
+          "'salt' VARCHAR(255));");
         // db.run("INSERT INTO USERS (email, fname, lname, password) VALUES ('bristol@gmail.com', 'John', 'Smith', 'password');");
 
         console.log('successfully created the users table in data.db');
@@ -35,13 +36,13 @@ exports.createUserTable = function() {
 exports.insertUser = function(userInfo){
     console.log('Entering insert user method');
     db.serialize(() => {
-        var command = "INSERT INTO USERS ('email', 'fname', 'lname', 'password') ";
-        command += "VALUES (?, ?, ?, ?);";
-        db.run(command, [userInfo['email'], userInfo['fname'], userInfo['lname'], userInfo ['password']], function(error) {
+        var command = "INSERT INTO USERS ('email', 'fname', 'lname', 'password', 'salt') ";
+        command += "VALUES (?, ?, ?, ?, ?);";
+        db.run(command, [userInfo['email'], userInfo['fname'], userInfo['lname'], userInfo['password'], userInfo['salt']], function(error) {
             if (error) {
                 console.log(error);
             } else {
-                console.log("Successfully added user");
+                console.log("Successfully added user, printing all users");
                 db.serialize(() => {
                     var command = "SELECT * FROM USERS";
                     var results = db.all(command, [], function(error,rows) {
@@ -62,21 +63,16 @@ exports.insertUser = function(userInfo){
     Description: Search for registered user using email
     Parameter: String containing the user's email
 */
-exports.fetchUser = function(email){
+exports.fetchUser = function(email, callback){
+    var command = "SELECT * FROM USERS WHERE email = ? ;";
     db.serialize( () => {
-        var command = "SELECT * FROM USERS WHERE email = ? ;";
-        db.get(command, email, (error,rows) => {
-            if(error){
-                console.log(error);
+        db.all(command, email, (error,rows) => {
+            if(rows.length != 0){
+                console.log('Successfully queried user');
+                callback(rows);
             }else{
-                if(rows){
-                    console.log('Successfully queried user');
-                    //!!! Not actually returning anything
-                    callback(rows);
-                }else{
-                    console.log("No user with that email exists");
-                    callback(null);
-                }
+                console.log("No user with that email exists");
+                callback(null);
             }
         });
     });
@@ -88,22 +84,22 @@ exports.fetchUser = function(email){
     Parameter: String containing the user's email
 */
 exports.fetchUserPassword = function(email){
-    db.serialize( () => {
-        var command = "SELECT password FROM USERS WHERE email = ? ;";
-        db.get(command, email, function(error,rows){
-            if(error){
-                console.log(error);
-            }else{
-                if(rows){
-                    console.log(rows);
-                    return rows;
-                }else{
-                    return false;
-                    console.log("No user with that email exists");
-                }
-            }
-        });
-    });
+    // db.serialize( () => {
+    //     var command = "SELECT password FROM USERS WHERE email = ? ;";
+    //     db.get(command, email, function(error,rows){
+    //         if(error){
+    //             console.log(error);
+    //         }else{
+    //             if(rows){
+    //                 console.log(rows);
+    //                 return rows;
+    //             }else{
+    //                 return false;
+    //                 console.log("No user with that email exists");
+    //             }
+    //         }
+    //     });
+    // });
 }
 
 /*

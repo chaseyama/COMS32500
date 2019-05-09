@@ -36,11 +36,11 @@ exports.fetchAllItems = function(){
 }
 
 /*
-	Query Items Method
+	Query Specific Item Method
 	Description: Query  items from marketplace database that match the search criteria
 	Parameters: Object containing category and price values
 */
-exports.fetchItems = function(item){
+exports.fetchSpecificItem = function(itemId){
 
 }
 /*
@@ -48,8 +48,23 @@ exports.fetchItems = function(item){
 	Description: Return specific item based on id
 	Parameters: Integer representing item id
 */
-exports.fetchItem = function(itemId){
-
+exports.fetchItems = function(itemParameters, callback){
+    var command = "SELECT * FROM market WHERE category = ? AND priceRange = ?;";
+    db.serialize( () => {
+        db.all(command, [itemParameters['category'], itemParameters['priceRange']], function(error,rows){
+            if(error){
+                console.log(error);
+            }else{
+                if(rows){
+                    console.log(rows[0]);
+                    callback(rows);
+                }else{
+                    console.log("No items match this query");
+                    callback(null);
+                }
+            }
+        });
+    });
 }
 
 /*
