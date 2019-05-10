@@ -49,7 +49,7 @@
             <h2>Notifications:</h2>
             
             <h2>Your Items For Sale:</h2>
-                <form action="/delete_items" method="post">
+                
                     <section style="overflow-y: scroll; height:200px;">
                     
                         <% if(myItems){ %>
@@ -61,7 +61,12 @@
                                     <li>Category: <%= myItems[i].category %></li>
                                     <li>Asking Price: £<%= myItems[i].price %></li>
                                     <li>Description: <%= myItems[i].description %></li>
-                                    <li>Delete Item: <input type="checkbox" name="delete" id="" value="<%=myItems[i].id%>"></li>
+                                    <li>Delete Item: 
+                                        <form action="/delete_items" method="post">
+                                            <input type="hidden" name="delete" id="delete" value="<%=myItems[i].id%>">
+                                            <button type="submit" name="Manage Items">Delete Item</button>
+                                        </form>
+                                    </li>
                                 <%
                                     
                                 }%>
@@ -69,11 +74,10 @@
                         <%}else{%>
                             <p>You Have No Items For Sale</p>   
                         <%}%>
-                        <
+                        
                     </section>
                 <button onclick="print_selected()">Click Me</button>
-                <button type="submit" name="Manage Items">Manage Items</button>
-                </form>
+                
 
             <h2>Your Questions:</h2>
             

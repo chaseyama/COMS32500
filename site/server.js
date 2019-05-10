@@ -302,7 +302,13 @@ app.post('/sell_item', function (req,res){
 
 app.post('/delete_items', function(req,res){
     console.log('Inside delete item function:');
-    console.log(req.body);
+    market.removeItem(req.body.delete,(rows) =>{
+        if(rows){
+            res.send('Item ' + req.body.delete + ' successfully deleted');
+        }else{
+            res.send('Error, item not deleted');
+        }
+    });
 
 })
 

@@ -128,8 +128,7 @@ exports.updateItem = function(item){
 */
 exports.removeItem = function(itemId, callback){
     db.serialize(() => {
-        var command = "DELETE FROM market WHERE itemId = ?";
-        command += "VALUES (?);";
+        var command = "DELETE FROM market WHERE id = ?";
         db.run(command, [itemId], function(error) {
             if (error) {
                 console.log(error);
