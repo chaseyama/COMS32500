@@ -42,9 +42,40 @@
         
         <!--Main Content-->  
         <main>
-            <h1>Profile Page</h1>
-            <p><%= fname %></p>
+            <h1>Welcome <%= fname %></h1>
             
+            <button action='logout' name="logOut">Log Out</button>
+
+            <h2>Notifications:</h2>
+            
+            <h2>Your Items For Sale:</h2>
+                <form action="/delete_items" method="post">
+                    <section style="overflow-y: scroll; height:200px;">
+                    
+                        <% if(myItems){ %>
+                            <ul>
+                                <% for(var i=myItems.length-1; i >= 0; i--) { %>
+                                    <h4>
+                                        <%= myItems[i].itemName %>
+                                    </h4>
+                                    <li>Category: <%= myItems[i].category %></li>
+                                    <li>Asking Price: £<%= myItems[i].price %></li>
+                                    <li>Description: <%= myItems[i].description %></li>
+                                    <li>Delete Item: <input type="checkbox" name="delete" id="" value="<%=myItems[i].id%>"></li>
+                                <%
+                                    
+                                }%>
+                            </ul>
+                        <%}else{%>
+                            <p>You Have No Items For Sale</p>   
+                        <%}%>
+                        <
+                    </section>
+                <button onclick="print_selected()">Click Me</button>
+                <button type="submit" name="Manage Items">Manage Items</button>
+                </form>
+
+            <h2>Your Questions:</h2>
             
         </main>
         <footer>

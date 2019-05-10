@@ -36,12 +36,28 @@ exports.fetchAllItems = function(){
 }
 
 /*
-	Query Specific Item Method
-	Description: Query  items from marketplace database that match the search criteria
+	Query User's Items Method
+	Description: Query  items from marketplace database that correspond to the userID
 	Parameters: Object containing category and price values
 */
-exports.fetchSpecificItem = function(itemId){
-
+exports.fetchUsersItems = function(userId, callback){
+    console.log('Searching for all items being sold by: ' + userId);
+    var command = "SELECT * FROM market WHERE seller = ?;";
+    db.serialize( () => {
+        db.all(command, [userId], function(error,rows){
+            if(error){
+                console.log(error);
+            }else{
+                if(rows.length != 0){
+                    console.log(rows);
+                    callback(rows);
+                }else{
+                    console.log("No items for sale");
+                    callback(null);
+                }
+            }
+        });
+    });
 }
 /*
 	Query Item Method
@@ -49,14 +65,15 @@ exports.fetchSpecificItem = function(itemId){
 	Parameters: Integer representing item id
 */
 exports.fetchItems = function(itemParameters, callback){
+    console.log('Searching for all items');
     var command = "SELECT * FROM market WHERE category = ? AND priceRange = ?;";
     db.serialize( () => {
         db.all(command, [itemParameters['category'], itemParameters['priceRange']], function(error,rows){
             if(error){
                 console.log(error);
             }else{
-                if(rows){
-                    console.log(rows[0]);
+                if(rows.length != 0){
+                    console.log(rows);
                     callback(rows);
                 }else{
                     console.log("No items match this query");
@@ -109,8 +126,20 @@ exports.updateItem = function(item){
 /*
 	Remove Item Method
 */
-exports.removeItem = function(item){
-
+exports.removeItem = function(itemId, callback){
+    db.serialize(() => {
+        var command = "DELETE FROM market WHERE itemId = ?";
+        command += "VALUES (?);";
+        db.run(command, [itemId], function(error) {
+            if (error) {
+                console.log(error);
+                callback(false);
+            } else {
+                console.log('Removed item: ' + itemId);
+                callback(true);
+            }
+        });
+    });
 }
 
 

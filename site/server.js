@@ -156,7 +156,13 @@ app.post('/login_user', function (req, res) {
                         //Save email as session variable
                         var fname = rows[0].fname;   
                         //Redirect user
-                        res.render('profile', {fname: fname});
+                        var userItems = market.fetchUsersItems(1, (rows) => {
+                            var msg = null; 
+                            if(rows){
+                                msg = rows;
+                            }
+                            res.render('profile', {fname: req.body.fname, myItems: msg});
+                        });
                     }
                     else{
                         var errors = [{
@@ -229,16 +235,21 @@ app.post('/register_user', function (req, res) {
                 usersDb.insertUser(user);
                 
                 //Redirect user
-                res.render('profile', {fname: req.body.fname});
-
+                var userItems = market.fetchUsersItems(1, (rows) => {
+                    var msg = null; 
+                    if(rows){
+                        msg = rows;
+                    }
+                    res.render('profile', {fname: req.body.fname, myItems: msg});
+                });
             }
         });
     }
 })
 
-/*
+/***
     Marketplace Handlers
-*/
+***/
 //Search item
 app.post('/find_item', function (req,res){
     console.log('Entering find_item method');
@@ -250,9 +261,9 @@ app.post('/find_item', function (req,res){
 
     market.fetchItems(itemParameter,(rows) =>{
         if(rows){
-            res.send(rows);
+            res.render('market', {browse: true, browseResults: rows});
         }else{
-            res.send('No items match that search category');
+            res.render('market', {browse: true, browseResults: null});
         }
     });
 })
@@ -284,16 +295,16 @@ app.post('/sell_item', function (req,res){
     };
     console.log(newItem);
     market.insertItem(newItem);
-    console.log('Exiting insert new item method');
+    //Redirect and how queried item
+    res.render('market', {browse: false, browseResults: rows});
+    
 })
 
+app.post('/delete_items', function(req,res){
+    console.log('Inside delete item function:');
+    console.log(req.body);
 
-
-
-
-
-
-
+})
 
 
 

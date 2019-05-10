@@ -66,42 +66,90 @@
                         </div>
                         <script type="text/javascript">
                             function browse() {
-                              document.getElementById("browse").style.display = "block";
+                                document.getElementById("browse").style.display = "block";
+                                document.getElementById("browseResults").style.display = "block";
                                 document.getElementById("sell").style.display = "none";
                             }
                             function sell() {
                                 document.getElementById("sell").style.display = "block";
                                 document.getElementById("browse").style.display = "none";
+                                document.getElementById("browseResults").style.display = "none";
                             }
                         </script>
                         <section id="search">
                             <section id="browse" class="jumbotron">
                                 <h1>Browse</h1>
-                                    <h3>Category</h3>
-                                    <button class="btn btn-info" role="button" type="button" onclick="set_category('clothing')" id="clothing" checked="checked">Clothing</button>
-                                    <button class="btn btn-info" role="button" type="button" onclick="set_category('bedding')" id="bedding">Bedding</button>
-                                    <button class="btn btn-info" role="button" type="button" onclick="set_category('furniture')" id="furniture">Furniture</button>
-                                    <button class="btn btn-info" role="button" type="button" onclick="set_category('kitchenware')" id="kitchenware">Kitchenware</button>
-                                    <button class="btn btn-info" role="button" type="button" onclick="set_category('electronics')" id="electronics">Electronics</button>
-                                    <button class="btn btn-info" role="button" type="button" onclick="set_category('other')" id="other">Other</button>
-                                    <h3>Price Range</h3>
-                                    <button class="btn btn-info" role="button" type="button" onclick="set_price('£')" id="£">£</button>
-                                    <button class="btn btn-info" role="button" type="button" onclick="set_price('££')" id="££">££</button>
-                                    <button class="btn btn-info" role="button" type="button" onclick="set_price('£££')" id="£££">£££</button>
-                                    <button class="btn btn-info" role="button" type="button" onclick="set_price('££££')" id="££££">££££</button>
-                                <form action="/find_item" method="post">
-                                    <input type="input" name="item_category" id="item_category" value=""/>
-                                    <input type="input" name="item_price" id="item_price" value=""/>
+                                    <form action="/find_item" method="post">
+                                        <h3>Category</h3>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <h4>Clothing</h4>
+                                                <input type="radio" value="clothing" name="item_category" id="item_category" checked="checked"/>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <h4>Bedding</h4>
+                                                <input type="radio" value="bedding" name="item_category" id="item_category"/>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <h4>Furniture</h4>
+                                                <input type="radio" value="furniture" name="item_category" id="item_category"/>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <h4>Kitchenware</h4>
+                                        <input type="radio" value="kitchenware" name="item_category" id="item_category"/>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <h4>Electronics</h4>
+                                                <input type="radio" value="electronics" name="item_category" id="item_category"/>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                 <h4>Other</h4>
+                                                <input type="radio" value="other" name="item_category" id="item_category"/>
+                                            </div>
+                                        </div>
+                                        <h3>Price Range</h3>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <h4>£</h4>
+                                                <input type="radio" value="£" name="item_price" id="item_price" checked="checked"/>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <h4>££</h4>
+                                                <input type="radio" value="££" name="item_price" id="item_price"/>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <h4>£££</h4>
+                                                <input type="radio" value="£££" name="item_price" id="item_price"/>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <h4>££££</h4>
+                                                <input type="radio" value="£££" name="item_price" id="item_price"/>
+                                            </div>
+       
+                                        </div>
+                                    <input type="hidden" name="item_price" id="item_price" required="required" value=""/>
                                     <button>SEARCH</button>
                                 </form>
-                                <script type="text/javascript">
-                                    function set_category(category){
-                                        document.getElementById("item_category").value = category;
-                                    }
-                                    function set_price(price){
-                                        document.getElementById("item_price").value = price;
-                                    }
-                                </script>
+                            </section>
+                            <section id="browseResults" class="jumbotron">
+                                <%if(browse){ %>
+                                    <h2>Results</h2>
+                                    <% if(browseResults){ %>
+                                        <ul>
+                                            <% for(var i=browseResults.length-1; i >= 0; i--) { %>
+                                                <h4>
+                                                    <%= browseResults[i].itemName %>
+                                                </h4>
+                                                <li>Asking Price: £<%= browseResults[i].price %></li>
+                                                <li>Description: <%= browseResults[i].description %></li>
+                                            <%}%>
+                                        </ul>
+                                    <%}else{%>
+                                        <p>No items matched your search result.</p>   
+                                    <%}%>
+                                <%}%>
                             </section>
                         </section>
                         <!-- 
