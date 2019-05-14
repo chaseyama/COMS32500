@@ -49,7 +49,8 @@ app.use(expressValidator());
 
 const bcrypt = require('bcrypt');
 const path = require('path');
-
+// const ejs = require('ejs');
+app.set('view engine', 'ejs');
 
 /*
     Our Imported Modules
@@ -135,43 +136,57 @@ app.post('/login_user', function (req, res) {
         - Check valid email
         - Check password minimum length (8 characters)
     */
-    req.check('email', 'Invalid email address.').isEmail();
+    req.check('email', 'Please enter a valid email address.').isEmail();
     req.check('password','Password not long enough').isLength({min:8});
     var errors = req.validationErrors();
     if(errors){
-        ssn.errors = errors;
-        res.sendFile(path.join(__dirname+'/public/login.html'));
+        console.log({loginErrors: errors});
+        res.render('login', {loginErrors: errors, registerErrors: null});
     }
-
-    /*
+    else{
+        /*
         Validate credentials against database
         - Check if password matches
         - Redirect to appropriate result
-    */
-    usersDb.fetchUser(req.body.email, (rows) => {
-        if(rows){
-            bcrypt.compare(req.body.password, rows[0].password, function(err, result){
-                if(result === true){
-                    //Save email as session variable
-                    ssn = req.session;
-                    ssn.email = req.body.email;
-                    console.log(ssn.email);
-                    //Redirect user
-                    res.sendFile(path.join(__dirname+'/public/profile.html'));
-                }else{
-                    res.send('Incorrect password');
-                }
-            });
-        }else{
-            res.send('There is no registered user with this email.');
-        }
-    });
+        */
+        usersDb.fetchUser(req.body.email, (rows) => {
+            if(rows){
+                bcrypt.compare(req.body.password, rows[0].password, function(err, result){
+                    if(result === true){
+                        //Save email as session variable
+                        var fname = rows[0].fname;   
+                        //Redirect user
+                        var userItems = market.fetchUsersItems(1, (rows) => {
+                            var msg = null; 
+                            if(rows){
+                                msg = rows;
+                            }
+                            res.render('profile', {fname: req.body.fname, myItems: msg});
+                        });
+                    }
+                    else{
+                        var errors = [{
+                            params: 'password',
+                            msg: 'Invalid Password'
+                        }];
+                        res.render('login',{loginErrors: errors, registerErrors: null});
+                    }
+                })
+            }else{
+                var errors = [{
+                    params: 'email',
+                    msg: 'There is no registered user with this email.'
+                }]
+                console.log(errors);
+                res.render('login',{loginErrors: errors, registerErrors: null});
+            }
+        });
+    }
 })
 
-/*
+/***
     Register New User Method:
-    - Need to add routing/error handling to front end if error exists
-*/
+***/
 app.post('/register_user', function (req, res) {
     console.log('Entering register_user method');
 
@@ -181,51 +196,60 @@ app.post('/register_user', function (req, res) {
         - Check for valid email
         - Check password minimum length (8 characters) and that passwords match
     */
-    req.check('email', 'Invalid email address.').isEmail();
-    req.check('password','Password not long enough').isLength({min:8});
-    req.check('password','Password does not match').equals(req.body.confirmPassword);
+    req.check('email', 'Please enter a valid email address').isEmail();
+    req.check('password','Password requirement: minimum 8 characters').isLength({min:8});
+    req.check('confirmPassword','Password does not match').equals(req.body.password);
     var errors = req.validationErrors();
     if(errors){
-        res.send(errors);
+        console.log('Validation errors found: rendering errors')
+        res.render('login',{loginErrors: null, registerErrors: errors});
     }
+    else{
+         /*
+            Check for existing user
+        */
+        usersDb.fetchUser(req.body.email, (rows) => {
+            if(rows){
+                errors = [{
+                            params: 'email',
+                            msg: 'There is already an account associated with this email.'
+                }]
+                console.log('Account errors found: rendering errors');
+                console.log(errors);
+                res.render('login',{loginErrors: null, registerErrors: errors});
+            }else{
+                /*
+                    Add new user to the database
+                    - Use bcrypt to hash password with salt
+                    - Redirect user to profile page
+                */
+                var salt = bcrypt.genSaltSync(10);
+                var hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
-    /*
-        Check for existing user
-    */
-    usersDb.fetchUser(req.body.email, (rows) => {
-        if(rows){
-            res.send('An account with this email already exists. Please log in or register under a different email address.');
-        }
-    });
-
-    /*
-        Add new user to the database
-        - Use bcrypt to hash password with salt
-        - Redirect user to profile page
-    */
-    var salt = bcrypt.genSaltSync(10);
-    var hashedPassword = bcrypt.hashSync(req.body.password, salt);
-
-    var user = {'email': req.body.email,
-                'fname': req.body.fname,
-                'lname': req.body.lname,
-                'password': hashedPassword,
-                'salt': salt
-    };
-    usersDb.insertUser(user);
-
-    //Save Session
-    ssn = req.session;
-    ssn.email = req.body.email;
-    ssn.fname = req.body.fname;
-    
-    //Redirect user
-    res.sendFile(path.join(__dirname+'/public/profile.html'));
+                var user = {'email': req.body.email,
+                            'fname': req.body.fname,
+                            'lname': req.body.lname,
+                            'password': hashedPassword,
+                            'salt': salt
+                };
+                usersDb.insertUser(user);
+                
+                //Redirect user
+                var userItems = market.fetchUsersItems(1, (rows) => {
+                    var msg = null; 
+                    if(rows){
+                        msg = rows;
+                    }
+                    res.render('profile', {fname: req.body.fname, myItems: msg});
+                });
+            }
+        });
+    }
 })
 
-/*
+/***
     Marketplace Handlers
-*/
+***/
 //Search item
 app.post('/find_item', function (req,res){
     console.log('Entering find_item method');
@@ -237,9 +261,9 @@ app.post('/find_item', function (req,res){
 
     market.fetchItems(itemParameter,(rows) =>{
         if(rows){
-            res.send(rows);
+            res.render('market', {browse: true, browseResults: rows});
         }else{
-            res.send('No items match that search category');
+            res.render('market', {browse: true, browseResults: null});
         }
     });
 })
@@ -247,10 +271,6 @@ app.post('/find_item', function (req,res){
 //Insert new item
 app.post('/sell_item', function (req,res){
     console.log('Entering insert new item method');
-
-    //Validate all fields are complete/wellformated
-        //Description must be within character limit
-
 
     //Calculate price range
     var priceRange;
@@ -275,16 +295,22 @@ app.post('/sell_item', function (req,res){
     };
     console.log(newItem);
     market.insertItem(newItem);
-    console.log('Exiting insert new item method');
+    //Redirect and how queried item
+    res.render('market', {browse: false, browseResults: rows});
+    
 })
 
+app.post('/delete_items', function(req,res){
+    console.log('Inside delete item function:');
+    market.removeItem(req.body.delete,(rows) =>{
+        if(rows){
+            res.send('Item ' + req.body.delete + ' successfully deleted');
+        }else{
+            res.send('Error, item not deleted');
+        }
+    });
 
-
-
-
-
-
-
+})
 
 
 
