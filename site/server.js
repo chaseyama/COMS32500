@@ -87,7 +87,8 @@ function ban(req, res, next) {
 function auth(req, res, next) {
     console.log('Inside the homepage callback function');
     console.log(req.sessionID);
-    res.redirect("/index.html");
+    res.render('index');
+    // res.redirect("/index.html");
 }
 
 // Called by express.static.  Deliver response as XHTML.
@@ -117,18 +118,46 @@ function banUpperCase(root, folder) {
     }
 }
 
+/******************************************************************************
+******************************************************************************
+                                WEBSITE ROUTING
+******************************************************************************
+******************************************************************************/
 
+app.get('/', function(req, res) {
+    res.render('index');
+});
 
-/*
-    User Code:
-    - User Login
-    - User Registration
-*/
+app.get('/login', function(req, res) {
+    res.render('login', {loginErrors: null, registerErrors: null});
+});
 
-/*
-    Login User Method:
-    - Need to add routing/error handling to front end if error exists
-*/
+app.get('/market', function(req, res){
+    res.render('market', {browse: false, browseResults: null});
+});
+
+app.get('/resources', function(req, res) {
+    res.render('resources');
+});
+
+app.get('/questions', function(req, res) {
+    res.render('questions');
+});
+
+app.get('/profile', function(req, res) {
+    res.render('profile');
+});
+
+/******************************************************************************
+******************************************************************************
+    USER ACCOUNTS CODE
+    - USER LOGIN
+    - USER REGISTRATION
+******************************************************************************
+******************************************************************************/
+/***
+    USER LOGIN
+***/
 app.post('/login_user', function (req, res) {
     console.log('Logging in user');
     /*
@@ -185,7 +214,7 @@ app.post('/login_user', function (req, res) {
 })
 
 /***
-    Register New User Method:
+    REGISTER USER:
 ***/
 app.post('/register_user', function (req, res) {
     console.log('Entering register_user method');
@@ -211,8 +240,8 @@ app.post('/register_user', function (req, res) {
         usersDb.fetchUser(req.body.email, (rows) => {
             if(rows){
                 errors = [{
-                            params: 'email',
-                            msg: 'There is already an account associated with this email.'
+                    params: 'email',
+                    msg: 'There is already an account associated with this email.'
                 }]
                 console.log('Account errors found: rendering errors');
                 console.log(errors);
@@ -300,6 +329,9 @@ app.post('/sell_item', function (req,res){
     
 })
 
+/*
+    Delete item
+*/
 app.post('/delete_items', function(req,res){
     console.log('Inside delete item function:');
     market.removeItem(req.body.delete,(rows) =>{
