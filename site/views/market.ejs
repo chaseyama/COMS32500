@@ -6,140 +6,107 @@
     <title>Study Abroad Bristol</title>
     <!-- Bootstrap: Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
-    <style type="text/css">
-        .btn:focus{
-            background-color: red;
-        }
-
-    </style>
+    <link rel="stylesheet" href="styles/index.css"/>
 
 </head>
     <body>
-        <!--Website Banner-->
-        <header>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <h1>Study Abroad Bristol</h1>    
-                    </div>
-                </div>
-            </div>
-        </header>
         
         <!--Navigation Bar-->  
         <%- include('partials/navbar') %>
-
         
         <!--Main Content-->  
         <main>
-            <section id="marketplace">
-                <div class="container">
-                    <div class="row">
-                        <section id="market_header">
-                            <h2>Student Marketplace</h2>
-                            <p>
-                            Welcome to Study Abroad Bristol's Marketplace. Hoping to save some money on anything from bedding to dishware, clothing to electronics? All of our sellers are other study abroad students. At the end of your term here at UoB? Don't let your barely used things go to waste. Make some money by reselling your used items here to others who can give them a good home.
-                            </p>
-                            <p>Add a toggle between buy and sell. Buy will display search fields then the results. Sell will display the fields to fill out to sell an item. </p>
-                        </section>
-                        <div class="row">
-                                <div class="col-sm-12">
-                                    <button onclick="browse()">Browse</button>
-                                    <button onclick="sell()">Sell</button>
-                                </div>
-                        </div>
-                        <script type="text/javascript">
-                            function browse() {
-                                document.getElementById("browse").style.display = "block";
-                                document.getElementById("browseResults").style.display = "block";
-                                document.getElementById("sell").style.display = "none";
-                            }
-                            function sell() {
-                                document.getElementById("sell").style.display = "block";
-                                document.getElementById("browse").style.display = "none";
-                                document.getElementById("browseResults").style.display = "none";
-                            }
-                        </script>
-                        <section id="search">
-                            <section id="browse" class="jumbotron">
-                                <h1>Browse</h1>
-                                    <form action="/find_item" method="post">
-                                        <h3>Category</h3>
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <h4>Clothing</h4>
-                                                <input type="radio" value="clothing" name="item_category" id="item_category" checked="checked"/>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <h4>Bedding</h4>
-                                                <input type="radio" value="bedding" name="item_category" id="item_category"/>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <h4>Furniture</h4>
-                                                <input type="radio" value="furniture" name="item_category" id="item_category"/>
-                                            </div>
+            <section id="marketplace" class="container">
+                
+                <!-- Description Section -->
+                <section id="market_header" class="row">
+                    <div class="col-sm-12 text-center">
+                        <h2>Student Marketplace</h2>
+                        <p>
+                        Welcome to Study Abroad Bristol's Marketplace. Hoping to save some money on anything from bedding to dishware, clothing to electronics? All of our sellers are other study abroad students. At the end of your term here at UoB? Don't let your barely used things go to waste. Make some money by reselling your used items here to others who can give them a good home.
+                        </p>
+                    </div>
+                    <ul class="nav nav-tabs nav-justified">
+                        <li class="active"><a data-toggle="tab" href="#browse">Browse Items</a></li>
+                        <li><a data-toggle="tab" href="#sell">Sell Item</a></li>
+                    </ul>    
+                </section>
+
+                <!-- Main section -->
+                        
+                <section id="search" class="row tab-content">
+                    <!-- Browse Item Section -->
+                    <section id="browse" class="tab-pane fade in active jumbotron">
+                        <h3>Browse Items</h3>
+                        <form action="/find_item" method="post">
+                                <h3>Category</h3>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <h4>Clothing</h4>
+                                        <input type="radio" value="clothing" name="item_category" id="item_category" checked="checked"/>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h4>Bedding</h4>
+                                        <input type="radio" value="bedding" name="item_category" id="item_category"/>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h4>Furniture</h4>
+                                        <input type="radio" value="furniture" name="item_category" id="item_category"/>
+                                    </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <h4>Kitchenware</h4>
+                                            <input type="radio" value="kitchenware" name="item_category" id="item_category"/>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <h4>Kitchenware</h4>
-                                        <input type="radio" value="kitchenware" name="item_category" id="item_category"/>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <h4>Electronics</h4>
-                                                <input type="radio" value="electronics" name="item_category" id="item_category"/>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                 <h4>Other</h4>
-                                                <input type="radio" value="other" name="item_category" id="item_category"/>
-                                            </div>
+                                    <div class="col-sm-4">
+                                        <h4>Electronics</h4>
+                                        <input type="radio" value="electronics" name="item_category" id="item_category"/>
+                                    </div>
+                                        <div class="col-sm-4">
+                                             <h4>Other</h4>
+                                            <input type="radio" value="other" name="item_category" id="item_category"/>
                                         </div>
-                                        <h3>Price Range</h3>
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <h4>£</h4>
-                                                <input type="radio" value="£" name="item_price" id="item_price" checked="checked"/>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <h4>££</h4>
-                                                <input type="radio" value="££" name="item_price" id="item_price"/>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <h4>£££</h4>
-                                                <input type="radio" value="£££" name="item_price" id="item_price"/>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <h4>££££</h4>
-                                                <input type="radio" value="£££" name="item_price" id="item_price"/>
-                                            </div>
-       
+                                    </div>
+                                    <h3>Price Range</h3>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <h4>£</h4> <input type="radio" value="£" name="item_price" id="item_price" checked="checked"/>
                                         </div>
-                                    <input type="hidden" name="item_price" id="item_price" required="required" value=""/>
-                                    <button>SEARCH</button>
-                                </form>
-                            </section>
-                            <section id="browseResults" class="jumbotron">
-                                <%if(browse){ %>
-                                    <h2>Results</h2>
-                                    <% if(browseResults){ %>
-                                        <ul>
-                                            <% for(var i=browseResults.length-1; i >= 0; i--) { %>
-                                                <h4>
-                                                    <%= browseResults[i].itemName %>
-                                                </h4>
-                                                <li>Asking Price: £<%= browseResults[i].price %></li>
-                                                <li>Description: <%= browseResults[i].description %></li>
-                                            <%}%>
-                                        </ul>
-                                    <%}else{%>
-                                        <p>No items matched your search result.</p>   
-                                    <%}%>
+                                        <div class="col-sm-3">
+                                            <h4>££</h4> <input type="radio" value="££" name="item_price" id="item_price"/>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <h4>£££</h4> <input type="radio" value="£££" name="item_price" id="item_price"/>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <h4>££££</h4> <input type="radio" value="££££" name="item_price" id="item_price"/>
+                                        </div>
+                                    </div>
+                                <button>SEARCH</button>
+                        </form>
+                        <section id="browseResults" class="jumbotron">
+                            <%if(browse){ %>
+                                <h2>Results</h2>
+                                <% if(browseResults){ %>
+                                    <ul>
+                                        <% for(var i=browseResults.length-1; i >= 0; i--) { %>
+                                        <h4>
+                                        <%= browseResults[i].itemName %>
+                                        </h4>
+                                        <li>Asking Price: £<%= browseResults[i].price %></li>
+                                        <li>Description: <%= browseResults[i].description %></li>
+                                        <%}%>
+                                    </ul>
+                                <%}else{%>
+                                    <p>No items matched your search result.</p>   
                                 <%}%>
-                            </section>
+                            <%}%>
                         </section>
-                        <!-- 
-                        Create new item
-                        -->
-                        <section id="sell" style="display:none" class="jumbotron">
+                    </section>
+                        
+                    <!-- Sell Item Section -->
+                    <section id="sell" class="tab-pane fade jumbotron">
                             <h1>Sell</h1>
                             <form action="/sell_item" method="post">
                                 <div class="row">
@@ -195,7 +162,7 @@
                             </form>
                         </section>
                     </div>
-                </div>
+                
             </section>
             
         </main>
@@ -211,3 +178,24 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> 
     
 </html>
+
+
+                <!--  -->
+<!--                         <div class="row">
+                                <div class="col-sm-12">
+                                    <button onclick="browse()">Browse</button>
+                                    <button onclick="sell()">Sell</button>
+                                </div>
+                        </div> -->
+<!--                         <script type="text/javascript">
+                            function browse() {
+                                document.getElementById("browse").style.display = "block";
+                                document.getElementById("browseResults").style.display = "block";
+                                document.getElementById("sell").style.display = "none";
+                            }
+                            function sell() {
+                                document.getElementById("sell").style.display = "block";
+                                document.getElementById("browse").style.display = "none";
+                                document.getElementById("browseResults").style.display = "none";
+                            }
+                            </script> -->

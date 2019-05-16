@@ -287,6 +287,7 @@ app.post('/find_item', function (req,res){
         'category': req.body.item_category,
         'priceRange': req.body.item_price
     };
+    console.log(req.body.item_price);
 
     market.fetchItems(itemParameter,(rows) =>{
         if(rows){
@@ -325,7 +326,7 @@ app.post('/sell_item', function (req,res){
     console.log(newItem);
     market.insertItem(newItem);
     //Redirect and how queried item
-    res.render('market', {browse: false, browseResults: rows});
+    res.render('market', {browse: false, browseResults: null});
     
 })
 
