@@ -28,7 +28,7 @@
                     </div>
                     <ul class="nav nav-tabs nav-justified">
                         <li class="active"><a data-toggle="tab" href="#browse">Browse Items</a></li>
-                        <li><a data-toggle="tab" href="#sell">Sell Item</a></li>
+                        <li><a data-toggle="tab" href="#sell" onclick="">Sell Item</a></li>
                     </ul>    
                 </section>
 
@@ -85,25 +85,28 @@
                                     </div>
                                 <button>SEARCH</button>
                         </form>
-                        <section id="browseResults" class="jumbotron">
-                            <%if(browse){ %>
+                    </section>
+                   
+
+                    <%if(browse){ %>
+                        <section id="browseResults" class="row">
                                 <h2>Results</h2>
                                 <% if(browseResults){ %>
-                                    <ul>
-                                        <% for(var i=browseResults.length-1; i >= 0; i--) { %>
-                                        <h4>
-                                        <%= browseResults[i].itemName %>
-                                        </h4>
-                                        <li>Asking Price: £<%= browseResults[i].price %></li>
-                                        <li>Description: <%= browseResults[i].description %></li>
-                                        <%}%>
-                                    </ul>
+                                    <% for(var i=browseResults.length-1; i >= 0; i--) { %>
+                                        <div class="well well-sm">
+                                            <h4>
+                                            <%= browseResults[i].itemName %>
+                                            </h4>
+                                            <p>Asking Price: £<%= browseResults[i].price %></p>
+                                            <p>Description: <%= browseResults[i].description %></p>
+                                        </div>
+                                    <%}%>
                                 <%}else{%>
                                     <p>No items matched your search result.</p>   
                                 <%}%>
-                            <%}%>
                         </section>
-                    </section>
+                    <%}%>
+                    
                         
                     <!-- Sell Item Section -->
                     <section id="sell" class="tab-pane fade jumbotron">

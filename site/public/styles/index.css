@@ -16,6 +16,9 @@ h3{
   color: #C61909;
   text-decoration: underline;
 }
+h4{
+  font-size: 2em;
+}
 p{
   font-family: Georgia;
   font-size: 1.5em;

@@ -1,5 +1,5 @@
 "use strict";
-
+const bcrypt = require('bcrypt');
 /*
     Sqlite Methods for the Users Database
 */
@@ -43,16 +43,6 @@ exports.insertUser = function(userInfo){
                 console.log(error);
             } else {
                 console.log("Successfully added user, printing all users");
-                db.serialize(() => {
-                    var command = "SELECT * FROM USERS";
-                    var results = db.all(command, [], function(error,rows) {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            console.log(rows);
-                        }
-                    });
-                });
             }
         });
     });
@@ -63,16 +53,17 @@ exports.insertUser = function(userInfo){
     Description: Search for registered user using email
     Parameter: String containing the user's email
 */
-exports.fetchUser = function(email, callback){
+exports.fetchUserByEmail = function(email, callback){
     var command = "SELECT * FROM USERS WHERE email = ? ;";
     db.serialize( () => {
         db.all(command, email, (error,rows) => {
+            // if(error) throw error;
             if(rows.length != 0){
                 console.log('Successfully queried user');
-                callback(rows);
+                callback(null, rows);
             }else{
                 console.log("No user with that email exists");
-                callback(null);
+                callback(error, null);
             }
         });
     });
@@ -83,23 +74,22 @@ exports.fetchUser = function(email, callback){
     Description: Search for registered user using email
     Parameter: String containing the user's email
 */
-exports.fetchUserPassword = function(email){
-    // db.serialize( () => {
-    //     var command = "SELECT password FROM USERS WHERE email = ? ;";
-    //     db.get(command, email, function(error,rows){
-    //         if(error){
-    //             console.log(error);
-    //         }else{
-    //             if(rows){
-    //                 console.log(rows);
-    //                 return rows;
-    //             }else{
-    //                 return false;
-    //                 console.log("No user with that email exists");
-    //             }
-    //         }
-    //     });
-    // });
+exports.comparePassword = function(password, userPassword, callback){
+    bcrypt.compare(password, userPassword, function(err, result){
+        if(err) throw err;
+        callback(null, result);
+    })
+}
+
+exports.getUserById = function(id, callback){
+    var command = "SELECT * FROM USERS WHERE id = ?";
+    db.serialize(() =>{
+        db.all(command, id, (error, rows) =>{
+            if(error) throw error;
+            callback(error, rows[0]);
+        });
+
+    });
 }
 
 /*

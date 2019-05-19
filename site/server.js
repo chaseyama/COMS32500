@@ -52,11 +52,27 @@ const path = require('path');
 // const ejs = require('ejs');
 app.set('view engine', 'ejs');
 
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const flash = require('connect-flash');
+
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 /*
     Our Imported Modules
 */
 const usersDb = require('./usersDatabase.js');
 const market = require('./market.js');
+
+// Global variables
+app.use(function(req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_message = req.flash('error_message');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 /*
     Initialize Databases
@@ -87,8 +103,10 @@ function ban(req, res, next) {
 function auth(req, res, next) {
     console.log('Inside the homepage callback function');
     console.log(req.sessionID);
-    res.render('index');
-    // res.redirect("/index.html");
+    res.render('index',{
+        user: null
+    });
+
 }
 
 // Called by express.static.  Deliver response as XHTML.
@@ -125,27 +143,84 @@ function banUpperCase(root, folder) {
 ******************************************************************************/
 
 app.get('/', function(req, res) {
-    res.render('index');
+    var user;
+    if(req.user) user = req.user;
+    else user = null;
+    res.render('index',{
+        user: user
+    });
+});
+app.get('/index', function(req, res) {
+    var user;
+    if(req.user) user = req.user;
+    else user = null;
+    res.render('index',{
+        user: user
+    });
 });
 
 app.get('/login', function(req, res) {
-    res.render('login', {loginErrors: null, registerErrors: null});
+    res.render('login', {
+        error_message: null, 
+        success_message: null,
+        user: null
+    });
+});
+app.get('/register', function(req, res) {
+    res.render('register', {
+        errorMessages: null,
+        user: null
+    });
 });
 
 app.get('/market', function(req, res){
-    res.render('market', {browse: false, browseResults: null});
+    var user;
+    if(req.user) user = req.user;
+    else user = null;
+    res.render('market', {
+        browse: false, 
+        browseResults: null,
+        user: user
+    });
 });
 
 app.get('/resources', function(req, res) {
-    res.render('resources');
+    var user;
+    if(req.user) user = req.user;
+    else user = null;
+    res.render('resources',{
+        user: user
+    });
+
 });
 
 app.get('/questions', function(req, res) {
-    res.render('questions');
+    var user;
+    if(req.user) user = req.user;
+    else user = null;
+    res.render('questions',{
+        user: user
+    });
 });
 
 app.get('/profile', function(req, res) {
-    res.render('profile');
+    var user;
+    if(req.user) user = req.user;
+    else user = null;
+    res.render('profile',{
+        success_message: null,
+        user:user
+    });
+});
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    req.flash('success_message', 'You are logged out');
+  // res.redirect('login');
+    res.render('login', { 
+        success_message: req.flash('success_message'),
+        user: null
+    });
 });
 
 /******************************************************************************
@@ -155,103 +230,97 @@ app.get('/profile', function(req, res) {
     - USER REGISTRATION
 ******************************************************************************
 ******************************************************************************/
+passport.use(new LocalStrategy({passReqToCallback: true}, function(req, username, password, done) {
+        console.log('Entering Local Strategy Login Method');
+        usersDb.fetchUserByEmail(username, (error, user) => {
+            if(error) throw error;
+            if(!user){
+                console.log('User not found');
+                req.flash({error_message: 'Unknown user'});
+                return done(null, false, { error_message: req.flash('error_message') });
+            }else{
+                console.log('User found, comparing passwords');
+                usersDb.comparePassword(password, user[0].password, (error, isMatch) =>{
+                    console.log('Password Comparison Result: ' + isMatch);
+                    console.log(user[0]);
+                    if(error) throw error;
+                    if(isMatch){
+                        console.log('About to return match');
+                        req.flash({success_message: 'Successfully logged in'});
+                        return done(null, user[0], { success_message: req.flash('success_message') });   
+                    }else{
+                        console.log('About to return fail');
+                        req.flash({error_message: 'Incorrect password'});
+                        return done(null, false, { error_message: req.flash('error_message') });
+                    }
+                });    
+
+            }
+        });    
+    }
+));
+
+
 /***
     USER LOGIN
 ***/
-app.post('/login_user', function (req, res) {
-    console.log('Logging in user');
-    /*
-        Validate user input using express-validator
-        - Check valid email
-        - Check password minimum length (8 characters)
-    */
-    req.check('email', 'Please enter a valid email address.').isEmail();
-    req.check('password','Password not long enough').isLength({min:8});
-    var errors = req.validationErrors();
-    if(errors){
-        console.log({loginErrors: errors});
-        res.render('login', {loginErrors: errors, registerErrors: null});
-    }
-    else{
-        /*
-        Validate credentials against database
-        - Check if password matches
-        - Redirect to appropriate result
-        */
-        usersDb.fetchUser(req.body.email, (rows) => {
-            if(rows){
-                bcrypt.compare(req.body.password, rows[0].password, function(err, result){
-                    if(result === true){
-                        //Save email as session variable
-                        var fname = rows[0].fname;   
-                        //Redirect user
-                        var userItems = market.fetchUsersItems(1, (rows) => {
-                            var msg = null; 
-                            if(rows){
-                                msg = rows;
-                            }
-                            res.render('profile', {fname: req.body.fname, myItems: msg});
-                        });
-                    }
-                    else{
-                        var errors = [{
-                            params: 'password',
-                            msg: 'Invalid Password'
-                        }];
-                        res.render('login',{loginErrors: errors, registerErrors: null});
-                    }
-                })
-            }else{
-                var errors = [{
-                    params: 'email',
-                    msg: 'There is no registered user with this email.'
-                }]
-                console.log(errors);
-                res.render('login',{loginErrors: errors, registerErrors: null});
-            }
-        });
-    }
-})
+app.post('/login_user', 
+    passport.authenticate('local', {
+        successRedirect: 'profile', 
+        failureRedirect: 'login', 
+        failureFlash: true}),
+    function(req, res) {
+        res.redirect('/');
+    });
+
+passport.serializeUser(function(user, done){
+    done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done){
+    usersDb.getUserById(id, function(error, user){
+        done(error, user);
+    });
+});
 
 /***
     REGISTER USER:
 ***/
 app.post('/register_user', function (req, res) {
     console.log('Entering register_user method');
-
+    console.log(req.body.email);
     /*
-        User input validation using express-validator
+        User input sanitation using express-validator
         - Require first name
         - Check for valid email
         - Check password minimum length (8 characters) and that passwords match
     */
+
     req.check('email', 'Please enter a valid email address').isEmail();
     req.check('password','Password requirement: minimum 8 characters').isLength({min:8});
     req.check('confirmPassword','Password does not match').equals(req.body.password);
-    var errors = req.validationErrors();
-    if(errors){
-        console.log('Validation errors found: rendering errors')
-        res.render('login',{loginErrors: null, registerErrors: errors});
+    var error = req.validationErrors();
+    if(error){
+        var errors = [];
+        for(var i = 0; i < error.length; i++){
+            errors.push(error[i].msg)
+        }
+        req.flash('error_message', errors);
+        res.render('register', { 
+            error_message: req.flash('error_message'),
+            user: null
+        });
     }
     else{
-         /*
-            Check for existing user
-        */
-        usersDb.fetchUser(req.body.email, (rows) => {
+        usersDb.fetchUserByEmail(req.body.email, (error, rows) => {
+            if(error) throw error;
             if(rows){
-                errors = [{
-                    params: 'email',
-                    msg: 'There is already an account associated with this email.'
-                }]
-                console.log('Account errors found: rendering errors');
-                console.log(errors);
-                res.render('login',{loginErrors: null, registerErrors: errors});
+                req.flash('error_message', 'There is already an account associated with this email');
+                res.render('register', {
+                    error_message: req.flash('error_message'),
+                    user: null
+                });
             }else{
-                /*
-                    Add new user to the database
-                    - Use bcrypt to hash password with salt
-                    - Redirect user to profile page
-                */
                 var salt = bcrypt.genSaltSync(10);
                 var hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
@@ -269,7 +338,13 @@ app.post('/register_user', function (req, res) {
                     if(rows){
                         msg = rows;
                     }
-                    res.render('profile', {fname: req.body.fname, myItems: msg});
+                    req.flash('success_message', 'Your account has been successfully registered');
+                    res.render('login', {
+                        fname: req.body.fname,
+                        myItems: msg,
+                        success_message: req.flash('success_message'),
+                        user: null
+                    });
                 });
             }
         });
