@@ -6,65 +6,43 @@
     <title>Study Abroad Bristol</title>
     <!-- Bootstrap: Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
-
+    <link rel="stylesheet" href="styles/index.css"/>
 </head>
-    <body>
-        <!--Website Banner-->
-        <header>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <h1>Study Abroad Bristol</h1>    
-                    </div>
-                </div>
-            </div>
-        </header>
-        
+    <body>    
         <!--Navigation Bar-->  
         <%- include('partials/navbar') %>
 
         
         <!--Main Content-->  
-        <main>
-            <h1>Welcome <%= fname %></h1>
-            
-            <button action='logout' name="logOut">Log Out</button>
-
-            <h2>Notifications:</h2>
-            
-            <h2>Your Items For Sale:</h2>
-                
-                    <section style="overflow-y: scroll; height:200px;">
+        <main class="container">
+            <% if(success_message){ %>
+                <div class="alert alert-success"><%= success_message %></div>
+            <% }%>
+            <div class="row">
+                <section id="user_profile" class="well col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     
-                        <% if(myItems){ %>
-                            <ul>
-                                <% for(var i=myItems.length-1; i >= 0; i--) { %>
-                                    <h4>
-                                        <%= myItems[i].itemName %>
-                                    </h4>
-                                    <li>Category: <%= myItems[i].category %></li>
-                                    <li>Asking Price: £<%= myItems[i].price %></li>
-                                    <li>Description: <%= myItems[i].description %></li>
-                                    <li>Delete Item: 
-                                        <form action="/delete_items" method="post">
-                                            <input type="hidden" name="delete" id="delete" value="<%=myItems[i].id%>">
-                                            <button type="submit" name="Manage Items">Delete Item</button>
-                                        </form>
-                                    </li>
-                                <%
-                                    
-                                }%>
-                            </ul>
-                        <%}else{%>
-                            <p>You Have No Items For Sale</p>   
-                        <%}%>
-                        
-                    </section>
-                <button onclick="print_selected()">Click Me</button>
-                
+                    <a href="/logout" class="btn btn-secondary">Logout</a>
+                </section>
+                <section id="Notifications" class="well col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <h3>Notifications:</h3>
 
-            <h2>Your Questions:</h2>
+                </section>
+            </div>
+
+            <div class="row">
+                <h3>Items For Sale:</h3>  
+                <section style="overflow-y: scroll; height: 18em;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      
+                        
+                </section>
+            </div>
+            <div class="row">
+                <h3>Your Questions:</h3>
+                <section></section>
+            </div>
             
+
+
         </main>
         <footer>
             <p>Jack Allison and Cameron Haseyama</p>
