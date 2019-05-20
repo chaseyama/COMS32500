@@ -65,6 +65,8 @@ app.use(flash());
 */
 const usersDb = require('./usersDatabase.js');
 const market = require('./market.js');
+const questions = require('./questions.js');
+const responses = require('./responses.js');
 
 // Global variables
 app.use(function(req, res, next) {
@@ -79,6 +81,55 @@ app.use(function(req, res, next) {
 */
 usersDb.createUserTable();
 market.createMarketTable();
+questions.createQuestionsTable();
+responses.createResponsesTable();
+
+
+// var newQuestion = {
+//         'title': 'Whats the answer?',
+//         'description': 'Id really like to know',
+//         'category': 'general',
+//         'author': '63'
+//     };
+
+// var newQuestion = {
+//         'title': 'Where do I get soap?',
+//         'description': 'Looking for the cheapest stores',
+//         'category': 'supplies',
+//         'author': '92'
+//     };
+
+// var newQuestion = {
+//         'title': 'What time should I get up?',
+//         'description': 'Im really not a morning person',
+//         'category': 'general',
+//         'author': '18'
+//     };
+
+
+// console.log(newQuestion);
+// questions.insertQuestion(newQuestion);
+// console.log(questions.fetchAllQuestions());
+// questions.removeQuestion(2);
+// questions.removeQuestion(5);
+// questions.removeQuestion(6);
+// questions.removeQuestion(7);
+// questions.removeQuestion(10);
+
+// var newResponse = {
+//         'description': 'The answer is 42!',
+//         'author': '98',
+//         'questionId': '1'
+//     };
+
+// var newResponse = {
+//         'description': 'Go to Tesco!',
+//         'author': '76',
+//         'questionId': '2'
+//     };
+// console.log(newResponse);
+// responses.insertResponse(newResponse);
+// responses.removeResponse(5);
 
 
 // Make the URL lower case.
@@ -198,8 +249,22 @@ app.get('/questions', function(req, res) {
     var user;
     if(req.user) user = req.user;
     else user = null;
-    res.render('questions',{
-        user: user
+    questions.fetchAllQuestions((rows) =>{
+        if(rows){
+            res.render('questions', {browse: true, browseResults: rows,
+        user: user});
+        }else{
+            res.render('questions', {browse: true, browseResults: null,
+        user: null});
+        }
+    });
+});
+
+app.get('/new_question', function(req, res) {
+    res.render('new_question', {
+        error_message: null, 
+        success_message: null,
+        user: null
     });
 });
 
@@ -366,9 +431,11 @@ app.post('/find_item', function (req,res){
 
     market.fetchItems(itemParameter,(rows) =>{
         if(rows){
-            res.render('market', {browse: true, browseResults: rows});
+            res.render('market', {browse: true, browseResults: rows,
+        user: user});
         }else{
-            res.render('market', {browse: true, browseResults: null});
+            res.render('market', {browse: true, browseResults: null,
+        user: null});
         }
     });
 })
@@ -401,7 +468,8 @@ app.post('/sell_item', function (req,res){
     console.log(newItem);
     market.insertItem(newItem);
     //Redirect and how queried item
-    res.render('market', {browse: false, browseResults: null});
+    res.render('market', {browse: false, browseResults: null,
+        user: user});
     
 })
 
@@ -420,6 +488,154 @@ app.post('/delete_items', function(req,res){
 
 })
 
+/***
+    Question Handlers
+***/
+//Fetch questions by category
+app.post('/fetch_by_category', function (req,res){
+    console.log('Entering fetch_by_category method');
+    console.log(req.body.category);
+    var user;
+    if(req.user) user = req.user;
+    else user = null;
+    questions.fetchQuestionsByCategory(req.body.category, (rows) =>{
+        if(rows){
+            res.render('questions', {browse: true, browseResults: rows,
+        user: user});
+        }else{
+            res.render('questions', {browse: true, browseResults: null,
+        user: user});
+        }
+    });
+})
+
+//Fetch question by id
+app.get('/fetch_by_id', function (req,res){
+    console.log('Entering fetch_by_id method');
+    console.log(req.query.id);
+    var user;
+    if(req.user) user = req.user;
+    else user = null;
+    questions.fetchQuestionById(req.query.id, (rows) =>{
+        var question = rows[0];
+        responses.fetchResponsesByQuestionId(question.id, (rows) =>{
+            if(rows){
+                res.render('one_question', {
+                    browse: true, 
+                    question: question,
+                    responses: rows,
+                    user: user
+                });
+            }else{
+                res.render('one_question', {
+                    browse: true, 
+                    browseResults: null,
+                    question: question,
+                    responses: null,
+                    user: user
+                });
+            }
+        });
+    });
+})
+
+//Post new question
+app.post('/post_question', function (req,res){
+    console.log('Entering post_question method');
+    
+    //Insert into database
+    var newQuestion = {
+        'title': req.body.title,
+        'description': req.body.description,
+        'category': req.body.category,
+        'author': req.body.author
+    };
+    console.log(newQuestion);
+    questions.insertQuestion(newQuestion);
+    //Redirect
+    var user;
+    if(req.user) user = req.user;
+    else user = null;
+    questions.fetchAllQuestions((rows) =>{
+        if(rows){
+            res.render('questions', {browse: true, browseResults: rows,
+        user: user});
+        }else{
+            res.render('questions', {browse: true, browseResults: null,
+        user: null});
+        }
+    });
+    
+})
+
+//Delete question and it's responses
+app.get('/delete_question', function (req,res){
+    console.log('Entering delete_question method');
+    questions.fetchQuestionById(req.query.id, (rows) =>{
+        var question = rows[0];
+        responses.removeResponsesByQuestionId(req.query.id, (rows) =>{
+            questions.removeQuestion(req.query.id, (rows) =>{
+                //Redirect
+                    var user = null;
+                    if(req.user) user = req.user;
+                
+                    questions.fetchAllQuestions((rows) =>{
+                        if(rows){
+                            res.render('questions', {browse: true, browseResults: rows,
+                        user: user});
+                        }else{
+                            res.render('questions', {browse: true, browseResults: null,
+                        user: null});
+                        }
+                    });
+            });
+        });
+    });
+    
+})
+
+/***
+    Response Handlers
+***/
+//Post new response
+app.post('/post_response', function (req,res){
+    console.log('Entering post_response method');
+    
+    //Insert into database
+    var newResponse = {
+        'description': req.body.description,
+        'author': req.body.author,
+        'questionId': req.body.questionId
+    };
+    console.log(newResponse);
+    responses.insertResponse(newResponse);
+    //Redirect
+    var user;
+    if(req.user) user = req.user;
+    else user = null;
+    questions.fetchQuestionById(req.body.questionId, (rows) =>{
+        var question = rows[0];
+        responses.fetchResponsesByQuestionId(question.id, (rows) =>{
+            if(rows){
+                res.render('one_question', {
+                    browse: true, 
+                    question: question,
+                    responses: rows,
+                    user: user
+                });
+            }else{
+                res.render('one_question', {
+                    browse: true, 
+                    browseResults: null,
+                    question: question,
+                    responses: null,
+                    user: user
+                });
+            }
+        });
+    });
+    
+})
 
 
 
