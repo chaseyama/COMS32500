@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  lang="en-GB" xml:lang="en-GB">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Study Abroad Bristol</title>
+    <!-- Bootstrap: Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="styles/index.css"/>
+
+</head>
+    <body>
+        
+        <!--Navigation Bar-->  
+        <%- include('partials/navbar') %>
+        
+        <!--Main Content-->  
+        <main>
+            <div class="container">
+                <div class="text-center">
+                    <h2>New Question</h2>
+                    <form action="/post_question" method="post">
+                        <div class="row">
+                            
+                                <h3>Title</h3>
+                                <textarea name="title" rows="1" cols="75" maxlength="255" required="required"/></textarea>
+                        </div>
+                        <div class="row">
+                            <h3>Category</h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h4>General</h4>
+                                <input type="radio" name="category" value="general" checked="checked"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <h4>Supplies</h4>
+                                <input type="radio" name="category" value="supplies"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <h4>Academics</h4>
+                                <input type="radio" name="category" value="academics"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <h4>Travel</h4>
+                                <input type="radio" name="category" value="travel"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h3>Description</h3>
+                                <textarea name="description" rows="10" cols="100" maxlength="255" required="required">Please briefly explain your question.</textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" name="author" value="1"/>
+                        <input type="submit" name="submit"/>
+                    </form>
+                </div>
+
+            </div>
+
+        </main>
+        <footer>
+            <p>Jack Allison and Cameron Haseyama</p>
+        </footer>
+    </body>
+
+    <!-- Bootstrap: jQuery library --> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Bootstrap: Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> 
+    
+</html>
