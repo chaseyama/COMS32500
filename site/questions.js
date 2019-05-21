@@ -29,8 +29,24 @@ exports.createQuestionsTable = function() {
 	Fetch All Questions Method
 	Description: Query all questions from questions database
 */
-exports.fetchAllQuestions = function(){
-
+exports.fetchAllQuestions = function(callback){
+    console.log('Fetching all questions.');
+    var command = "SELECT * FROM questions;";
+    db.serialize( () => {
+        db.all(command, function(error,rows){
+            if(error){
+                console.log(error);
+            }else{
+                if(rows.length != 0){
+                    console.log(rows);
+                    callback(rows);
+                }else{
+                    console.log("No questions in database");
+                    callback(null);
+                }
+            }
+        });
+    });
 }
 
 /*
@@ -58,12 +74,12 @@ exports.fetchUsersQuestions = function(userId, callback){
     });
 }
 /*
-	Query Question Method
-	Description: Return specific question based on id
-	Parameters: Integer representing question id
+	Query Questions Method
+	Description: Return questions in a certain category
+	Parameters: Category of questions to be retrieved
 */
-exports.fetchQuestions = function(questionCategory, callback){
-    console.log('Searching for all questions');
+exports.fetchQuestionsByCategory = function(questionCategory, callback){
+    console.log('Fetching questions in category: ' + questionCategory);
     var command = "SELECT * FROM questions WHERE category = ?;";
     db.serialize( () => {
         db.all(command, [questionCategory], function(error,rows){
@@ -75,6 +91,31 @@ exports.fetchQuestions = function(questionCategory, callback){
                     callback(rows);
                 }else{
                     console.log("No questions match this query");
+                    callback(null);
+                }
+            }
+        });
+    });
+}
+
+/*
+    Query Question Method
+    Description: Return specific question based on id
+    Parameters: Integer representing question id
+*/
+exports.fetchQuestionById = function(questionId, callback){
+    console.log('Fetching question with id: ' + questionId);
+    var command = "SELECT * FROM questions WHERE id = ?;";
+    db.serialize( () => {
+        db.all(command, [questionId], function(error,rows){
+            if(error){
+                console.log(error);
+            }else{
+                if(rows.length != 0){
+                    console.log(rows);
+                    callback(rows);
+                }else{
+                    console.log("No questions match this id");
                     callback(null);
                 }
             }
@@ -98,7 +139,7 @@ exports.insertQuestion = function(question){
                 console.log('Added new question' + question['title']);
 
                 //Console check for add
-                console.log('Checking added question')
+                console.log('Checking added question');
                 db.serialize(() => {
                     var command = "SELECT * FROM questions";
                     var results = db.all(command, [], function(error,rows) {

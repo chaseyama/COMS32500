@@ -6,41 +6,60 @@
     <title>Study Abroad Bristol</title>
     <!-- Bootstrap: Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="styles/index.css"/>
 
 </head>
     <body>
-        <!--Website Banner-->
-        <header>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <h1>Study Abroad Bristol</h1>    
-                    </div>
-                </div>
-            </div>
-        </header>
         
         <!--Navigation Bar-->  
         <%- include('partials/navbar') %>
-
         
         <!--Main Content-->  
         <main>
-            <div id='email'></div>
+            <div class="container">
+                <div class="text-center">
+                    <h2>Q&amp;A</h2>
+                </div>
+
+                <a href="/new_question" class="btn btn-info" role="button">Ask a Question</a>
+
+                <!-- Search By Category -->
+                <form action='/fetch_by_category' method='post'>
+                    <input type="text" name="category" id="category"></input>
+                    <input type="submit"></input>
+                </form>
+
+                <button name='general_button' onclick='set_category("general")' value="general">General</button>
+                <button name='supplies_button' onclick='set_category("supplies")' value="supplies">Supplies</button>
+                <button name='academics_button' onclick='set_category("academics")' value="academics">Academics</button>
+                <button name='travel_button' onclick='set_category("travel")' value="travel">Travel</button>
+
+                <script type="text/javascript">
+                    function set_category(category){
+                        document.getElementById('category').value=category;
+                    }
+                </script>
 
 
-            <button onclick="showEmail();">Click Me!</button>
+                <section id="browseResults" class="row">
+                    <h3>Results</h3>
+                    <% if(browseResults){ %>
+                        <% for(var i=browseResults.length-1; i >= 0; i--) { %>
+                            <div class="well well-sm">
+                                <p>Author: <%= browseResults[i].author %></p>
+                                <h4><a href="/fetch_by_id?id=<%=browseResults[i].id%>">
+                                <%= browseResults[i].title %>
+                                </a></h4>
+                                <p><%= browseResults[i].description %></p>
+                            </div>
+                        <%}%>
+                    <%}else{%>
+                        <p>No questions matched your search result.</p>
+                    <%}%>
+                </section>
 
-            <script type="text/javascript">
-                
-            function showEmail(){          
-                var email= Session['email'];      
-                console.log('Printing email: ' + email);
-                document.getElementById('email').innerText = email;
+            </div>
 
-            };   
-            </script>
-            
         </main>
         <footer>
             <p>Jack Allison and Cameron Haseyama</p>
