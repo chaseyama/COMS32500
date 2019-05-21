@@ -109,4 +109,17 @@ exports.selectUsers = function() {
     });
 }
 
+exports.getEmailById = function(userId, callback){
+    db.serialize(() => {
+        var command = "SELECT email, fname FROM USERS WHERE id = ?";
+        db.all(command, userId, (error, rows) =>{
+            if(error) throw error;
+            var email = rows[0].email;
+            var fname = rows[0].fname;
+            callback(fname, email);
+        });
+
+    });
+}
+
 

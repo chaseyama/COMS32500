@@ -65,6 +65,7 @@ app.use(flash());
 */
 const usersDb = require('./usersDatabase.js');
 const market = require('./market.js');
+const notification = require('./notification.js');
 
 // Global variables
 app.use(function(req, res, next) {
@@ -79,6 +80,7 @@ app.use(function(req, res, next) {
 */
 usersDb.createUserTable();
 market.createMarketTable();
+notification.createNotificationTable();
 
 
 // Make the URL lower case.
@@ -143,17 +145,15 @@ function banUpperCase(root, folder) {
 ******************************************************************************/
 
 app.get('/', function(req, res) {
-    var user;
+    var user = null;
     if(req.user) user = req.user;
-    else user = null;
     res.render('index',{
         user: user
     });
 });
 app.get('/index', function(req, res) {
-    var user;
+    var user = null;
     if(req.user) user = req.user;
-    else user = null;
     res.render('index',{
         user: user
     });
@@ -174,10 +174,10 @@ app.get('/register', function(req, res) {
 });
 
 app.get('/market', function(req, res){
-    var user;
+    var user = null;
     if(req.user) user = req.user;
-    else user = null;
     res.render('market', {
+        success_message: null,
         browse: false, 
         browseResults: null,
         user: user
@@ -185,9 +185,8 @@ app.get('/market', function(req, res){
 });
 
 app.get('/resources', function(req, res) {
-    var user;
+    var user = null;
     if(req.user) user = req.user;
-    else user = null;
     res.render('resources',{
         user: user
     });
@@ -195,21 +194,28 @@ app.get('/resources', function(req, res) {
 });
 
 app.get('/questions', function(req, res) {
-    var user;
+    var user = null;
     if(req.user) user = req.user;
-    else user = null;
     res.render('questions',{
         user: user
     });
 });
 
 app.get('/profile', function(req, res) {
-    var user;
-    if(req.user) user = req.user;
-    else user = null;
-    res.render('profile',{
-        success_message: null,
-        user:user
+    market.fetchUsersItems(req.user.id, (rows) => {
+        var items = null; 
+        if(rows) items = rows;
+        notification.fetchNotificationsById(req.user.id, (rows) =>{
+            var notifications = null;
+            if(rows) notifications = rows;
+            res.render('profile', {
+                success_message: null,
+                notifications: notifications,
+                myItems: rows,
+                user: req.user
+            });
+        });
+
     });
 });
 
@@ -333,18 +339,12 @@ app.post('/register_user', function (req, res) {
                 usersDb.insertUser(user);
                 
                 //Redirect user
-                var userItems = market.fetchUsersItems(1, (rows) => {
-                    var msg = null; 
-                    if(rows){
-                        msg = rows;
-                    }
-                    req.flash('success_message', 'Your account has been successfully registered');
-                    res.render('login', {
-                        fname: req.body.fname,
-                        myItems: msg,
-                        success_message: req.flash('success_message'),
-                        user: null
-                    });
+                req.flash('success_message', 'Your account has been successfully registered');
+                res.render('login', {
+                    fname: req.body.fname,
+                    myItems: msg,
+                    success_message: req.flash('success_message'),
+                    user: null
                 });
             }
         });
@@ -365,10 +365,23 @@ app.post('/find_item', function (req,res){
     console.log(req.body.item_price);
 
     market.fetchItems(itemParameter,(rows) =>{
+        var user;
+        if(req.user) user = req.user;
+        else user = null;
         if(rows){
-            res.render('market', {browse: true, browseResults: rows});
+            res.render('market', {
+                success_message: null,
+                browse: true, 
+                browseResults: rows,
+                user: user
+            });
         }else{
-            res.render('market', {browse: true, browseResults: null});
+            res.render('market', {
+                success_message: null,
+                browse: true, 
+                browseResults: null,
+                user: user
+            });
         }
     });
 })
@@ -396,12 +409,22 @@ app.post('/sell_item', function (req,res){
         'priceRange': priceRange,
         'category': req.body.category,
         'description': req.body.description,
-        'seller': req.body.seller
+        'seller': req.user.id
     };
     console.log(newItem);
     market.insertItem(newItem);
+
+    var user;
+    if(req.user) user = req.user;
+    else user = null;
+    req.flash('success_message', 'Your item has been successfully listed on the market');
     //Redirect and how queried item
-    res.render('market', {browse: false, browseResults: null});
+    res.render('market', {
+        success_message: req.flash('success_message'),
+        browse: false, 
+        browseResults: null,
+        user: user
+    });
     
 })
 
@@ -412,12 +435,56 @@ app.post('/delete_items', function(req,res){
     console.log('Inside delete item function:');
     market.removeItem(req.body.delete,(rows) =>{
         if(rows){
-            res.send('Item ' + req.body.delete + ' successfully deleted');
+            req.flash('success_message', 'Your item has been successfully deleted');
+            var userItems = market.fetchUsersItems(req.user.id, (rows) => {
+                var items = null; 
+                if(rows){
+                    items = rows;
+                }
+                res.render('profile', {
+                    success_message: req.flash('success_message'),
+                    notifications: null,
+                    myItems: rows,
+                    user: req.user
+                });
+            });
         }else{
+            req.flash('error_message', 'Your item not has been deleted');
             res.send('Error, item not deleted');
         }
     });
 
+})
+
+app.get('/makeInquiry', function(req,res){
+    console.log('Entering Make Inquiry Function');
+    var ownerId = req.query.owner;
+    var itemName= req.query.itemName;
+    var buyerId = req.query.buyer;
+    //Get buyer email
+    usersDb.getEmailById(buyerId, (buyerName, email) =>{
+        if(email){
+            //Send message
+            var msg = buyerName + " is interested in purchasing your " + itemName + ". You can contact him at " + email + ".";
+            console.log(msg);
+            notification.insertNotification(ownerId, msg, (result) =>{
+                if(result){
+                    req.flash('success_message', 'Request Sent');
+                    res.render('market', {
+                        success_message: req.flash('success_message'),
+                        browse: false,
+                        browseResults: null,
+                        user: req.user
+                    });
+                }else{
+                    
+                }
+            });
+        }
+    });
+
+    
+    
 })
 
 
