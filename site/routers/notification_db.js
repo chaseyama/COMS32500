@@ -1,8 +1,22 @@
 "use strict";
 
+/********************************************************************
+*********************************************************************
+*********************************************************************
+    NOTIFICATIONS FILE:
+    CRUD Methods for Interacting with Notification Database
+    Database Method SQLite
+*********************************************************************
+*********************************************************************
+********************************************************************/
+
+//Instantiate Database Connection Using SQLite
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database("studyabroad.db");
 
+/*****************************************
+    Create Users Table Method
+*****************************************/
 exports.createNotificationTable = function() {
     db.serialize(() => {
         // create a new database table:
@@ -11,32 +25,36 @@ exports.createNotificationTable = function() {
           " recipient INTEGER, " +
           " msg VARCHAR(255), " +
           " FOREIGN KEY (recipient) REFERENCES users (id));");
-
-        console.log('successfully created the notification table in studyabroad.db');
     });  
 
 }
 
+/*****************************************
+    Insert Notification Method
+    Parameter: INT User.id, STRING Message
+    Description: Insert New Notification
+*****************************************/
 exports.insertNotification = function(ownerId, msg, callback){
     db.serialize(() => {
         var command = "INSERT INTO notification ('recipient', 'msg') ";
         command += "VALUES (?,?);"
-        console.log(command);
-        console.log(ownerId + msg);
         db.run(command, [ownerId, msg], function(error){
             if(error){
-                console.log('Error inserting notification');
                 throw error;
                 // callback(false);
             }
             else{
-                console.log('successfully inserted notification');
                 callback(true);
             }
         });
     });
 }
 
+/*****************************************
+    Get Notifications by User Id Method
+    Parameter: INT User.id
+    Description: Display Notifications on Profile Page
+*****************************************/
 exports.fetchNotificationsById = function(id, callback){
     db.serialize(() => {
         var command = "SELECT msg FROM notification WHERE recipient = ?";
@@ -47,6 +65,11 @@ exports.fetchNotificationsById = function(id, callback){
     });
 }
 
+/*****************************************
+    Delete Notification by Notification Id Method
+    Parameter: INT Notification.id
+    Description: Delete Notifications
+*****************************************/
 exports.deleteNotificationById = function(id, callback){
     db.serialize(() =>{
         var command = "DELETE FROM notification WHERE id = ?";
