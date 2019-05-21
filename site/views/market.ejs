@@ -17,7 +17,10 @@
         <!--Main Content-->  
         <main>
             <section id="marketplace" class="container">
-                
+                <% if(success_message){ %>
+                <div class="alert alert-success"><%= success_message %></div>
+                <% }%>
+
                 <!-- Description Section -->
                 <section id="market_header" class="row">
                     <div class="col-sm-12 text-center">
@@ -28,7 +31,7 @@
                     </div>
                     <ul class="nav nav-tabs nav-justified">
                         <li class="active"><a data-toggle="tab" href="#browse">Browse Items</a></li>
-                        <li><a data-toggle="tab" href="#sell" onclick="">Sell Item</a></li>
+                        <li><a data-toggle="tab" href="#sell" <% if(browseResults){ %>onclick="document.getElementById('browseResults').style.display = 'none';" <% } %>>Sell Item</a></li>
                     </ul>    
                 </section>
 
@@ -87,30 +90,69 @@
                         </form>
                     </section>
                    
-
                     <%if(browse){ %>
                         <section id="browseResults" class="row">
                                 <h2>Results</h2>
                                 <% if(browseResults){ %>
-                                    <% for(var i=browseResults.length-1; i >= 0; i--) { %>
+                                    <% for(var i=browseResults.length-1; i >= 0; i--) { 
+                                        if(!user){
+                                    %>
+                                        <!-- Only display if not your own item -->
+
                                         <div class="well well-sm">
                                             <h4>
                                             <%= browseResults[i].itemName %>
                                             </h4>
                                             <p>Asking Price: £<%= browseResults[i].price %></p>
                                             <p>Description: <%= browseResults[i].description %></p>
+
+                                            <p>Login to Make Inquiry</p>
+                                            <a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
+                                            <a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a>
                                         </div>
-                                    <%}%>
-                                <%}else{%>
+                                    <%}else{
+                                        if(user.id != browseResults[i].seller){%>
+                                        <div class="well well-sm">
+                                            <h4>
+                                            <%= browseResults[i].itemName %>
+                                            </h4>
+                                            <p>Asking Price: £<%= browseResults[i].price %></p>
+                                            <p>Description: <%= browseResults[i].description %></p>
+                                            <!-- <a href="/makeInquiry?owner=<%= browseResults[i].seller %>&itemId=<%= browseResults[i].id %>">Make Inquiry</a> -->
+                                            <button onclick="getConfirmation('<%=browseResults[i].seller%>', '<%=browseResults[i].itemName%>', '<%=user.id%>');">Make Inquiry</button>
+                                        </div>
+                                    <%}
+                                    
+                                }}}else{%>
                                     <p>No items matched your search result.</p>   
                                 <%}%>
                         </section>
                     <%}%>
-                    
+
+                    <script type="text/javascript">
+                        function getConfirmation(sellerId, itemName, buyerId){
+                            var message = 'Study Abroad Bristol can share your email with this item\'s owner to coordinate future inquiries. Do you want Study Abroad Bristol to share your email?';
+                            if(window.confirm(message)){
+                                var xmlHttp = new XMLHttpRequest();
+                                var path = '/makeInquiry?owner=';
+                                path += sellerId;
+                                path += '&itemName=';
+                                path += itemName;
+                                path += '&buyer=';
+                                path += buyerId;
+                                xmlHttp.open( "GET", path, true); // false for synchronous request
+                                xmlHttp.send( null );
+                                console.log('True');
+                            }else{
+                                console.log('False');
+                            }
+                        }
+                    </script>
                         
                     <!-- Sell Item Section -->
                     <section id="sell" class="tab-pane fade jumbotron">
                         <h2>Sell</h2>
+                            <% if(user){ %>
                             <form action="/sell_item" method="post">
                                 <div class="row">
                                     <div class="col-sm-6">
@@ -160,9 +202,17 @@
                                         </textarea>
                                     </div>
                                 </div>
-                                <input type="hidden" name="seller" value="1"/>
+                                <div class="row">
+                                    <input type="file" name="pic" accept="image/*">
+                                </div>
+                                <!-- <input type="hidden" name="seller" value="<%=user.id%>"/> -->
                                 <input type="submit" name="submit"/>
                             </form>
+                            <% }else{ %>
+                                <p>Please login to sell an item.</p>
+                                <a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
+                                <a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                            <% } %>
                         </section>
                     </div>
                 
