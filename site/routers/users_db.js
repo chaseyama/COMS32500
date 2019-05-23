@@ -56,7 +56,7 @@ exports.fetchUserByEmail = function(email, callback){
     var command = "SELECT * FROM USERS WHERE email = ? ;";
     db.serialize( () => {
         db.all(command, email, (error,rows) => {
-            if(rows.length != 0){
+            if(rows){
                 callback(null, rows);
             }else{
                 callback(error, null);

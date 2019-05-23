@@ -31,7 +31,9 @@ exports.createQuestionsTable = function() {
 */
 exports.fetchAllQuestions = function(callback){
     console.log('Fetching all questions.');
-    var command = "SELECT * FROM questions;";
+    var command = "SELECT questions.id, questions.title, questions.description, " +
+                " questions.category, questions.author, users.fname " +
+                " FROM questions JOIN users ON questions.author=users.id;";
     db.serialize( () => {
         db.all(command, function(error,rows){
             if(error){
@@ -56,7 +58,10 @@ exports.fetchAllQuestions = function(callback){
 */
 exports.fetchUsersQuestions = function(userId, callback){
     console.log('Searching for all questions posted by: ' + userId);
-    var command = "SELECT * FROM questions WHERE author = ?;";
+    var command = "SELECT questions.id, questions.title, questions.description, " +
+                " questions.category, questions.author, users.fname " +
+                " FROM questions JOIN users ON questions.author=users.id " +
+                " WHERE questions.author = ?;";
     db.serialize( () => {
         db.all(command, [userId], function(error,rows){
             if(error){
@@ -80,7 +85,10 @@ exports.fetchUsersQuestions = function(userId, callback){
 */
 exports.fetchQuestionsByCategory = function(questionCategory, callback){
     console.log('Fetching questions in category: ' + questionCategory);
-    var command = "SELECT * FROM questions WHERE category = ?;";
+    var command = "SELECT questions.id, questions.title, questions.description, " +
+                " questions.category, questions.author, users.fname " +
+                " FROM questions JOIN users ON questions.author=users.id " +
+                " WHERE questions.category = ?;";
     db.serialize( () => {
         db.all(command, [questionCategory], function(error,rows){
             if(error){
@@ -105,7 +113,10 @@ exports.fetchQuestionsByCategory = function(questionCategory, callback){
 */
 exports.fetchQuestionById = function(questionId, callback){
     console.log('Fetching question with id: ' + questionId);
-    var command = "SELECT * FROM questions WHERE id = ?;";
+    var command = "SELECT questions.id, questions.title, questions.description, " +
+                " questions.category, questions.author, users.fname " +
+                " FROM questions JOIN users ON questions.author=users.id " +
+                " WHERE questions.id = ?;";
     db.serialize( () => {
         db.all(command, [questionId], function(error,rows){
             if(error){

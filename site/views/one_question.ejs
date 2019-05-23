@@ -22,10 +22,15 @@
                     <h3>
                         <%= question.title %>
                     </h3>
-                    <div class="text-right">
-                        <a href="/delete_question?id=<%=question.id%>" class="btn btn-info" role="button">Delete Question</a>
-                    </div>
-                    <p>Author: <%= question.author %></p>
+
+                    <% if(user){ %>
+                        <% if(user.id == question.author){ %>
+                            <div class="text-right">
+                                <a href="/delete_question?id=<%=question.id%>" class="btn btn-info" role="button">Delete Question</a>
+                            </div>
+                        <%}%>
+                    <%}%>
+                    <p><span class="glyphicon glyphicon-user"></span><%= question.fname %></p>
                     <div class="well well-sm">
                         <h4><%= question.description %></h4>
                     </div>
@@ -38,8 +43,15 @@
                 <% if(responses){ %>
                     <% for(var i=0; i < responses.length; i++) { %>
                         <div class="well well-sm">
-                            <p>Author: <%= responses[i].author %></p>
+                            <p><span class="glyphicon glyphicon-user"></span><%= responses[i].fname %></p>
                             <p><%= responses[i].description %></p>
+                            <% if(user){ %>
+                                <% if(user.id == responses[i].author){ %>
+                                    <div class="text-right">
+                                        <a href="/delete_response?id=<%=responses[i].id%>&questionId=<%=responses[i].questionId%>" class="btn btn-info" role="button">Delete Response</a>
+                                    </div>
+                                <%}%>
+                            <%}%>
                         </div>
                     <%}%>
                 <%}else{%>
