@@ -45,14 +45,18 @@
                 <%}else{%>
                     <p>No responses posted to this question.</p>
                 <%}%>
-                <form action="/post_response" method="post">
-                    <h4>Post A Response</h4>
-                    <textarea name="description" rows="10" cols="100" maxlength="255" required="required">Type your response here.
-                    </textarea>
-                    <input type="hidden" name="author" value="1"/>
-                    <input type="hidden" name="questionId" value="<%= question.id %>"/>
-                    <input type="submit" name="submit"/>
-                </form>
+
+                <% if(user){ %>
+                    <form action="/post_response" method="post">
+                        <h4>Post A Response</h4>
+                        <textarea name="description" rows="10" cols="100" maxlength="255" required="required" placeholder="Type your response here."></textarea>
+                        <input type="hidden" name="author" value="<%= user.id %>"/>
+                        <input type="hidden" name="questionId" value="<%= question.id %>"/>
+                        <input type="submit" name="submit"/>
+                    </form>
+                <%}else{%>
+                    <a href="/login" class="btn btn-info" role="button">Login to Post a Response</a>
+                <%}%>
 
                 
 
