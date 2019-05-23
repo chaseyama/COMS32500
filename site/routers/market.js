@@ -12,6 +12,7 @@
 const express = require("express");
 const router = express.Router();
 const market = require('./market_db.js');
+const notification = require('./notification_db.js');
 
 /*****************************************
     Query Items Route Handler
@@ -94,16 +95,18 @@ router.post('/delete_items', function(req,res){
     market.removeItem(req.body.delete,(rows) =>{
         if(rows){
             req.flash('success_message', 'Your item has been successfully deleted');
-            var userItems = market.fetchUsersItems(req.user.id, (rows) => {
+            market.fetchUsersItems(req.user.id, (rows) => {
                 var items = null; 
-                if(rows){
-                    items = rows;
-                }
-                res.render('profile', {
-                    success_message: req.flash('success_message'),
-                    notifications: null,
-                    myItems: rows,
-                    user: req.user
+                if(rows) items = rows;
+                notification.fetchNotificationsById(req.user.id, (rows) =>{
+                    var notifications = null;
+                    if(rows) notifications = rows;
+                    res.render('profile', {
+                        success_message: req.flash('success_message'),
+                        notifications: notifications,
+                        myItems: items,
+                        user: req.user
+                    });
                 });
             });
         }else{
