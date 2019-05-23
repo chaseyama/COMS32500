@@ -24,12 +24,10 @@ const responses = require('./responses.js');
 createTables();
 printTables();
 
-
 /*****************************************
     Create Tables Method
 *****************************************/
 function createTables(){
-	
 	try{
 		//Create Tables
 		users.createUserTable();
@@ -47,8 +45,6 @@ function createTables(){
 		console.log(error);
 		db.close();
 	}
-
-
 }
 
 

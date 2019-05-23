@@ -26,13 +26,11 @@ router.post('/register_user', function (req, res) {
     /******************
     Sanitize User Input
     ******************/
-
     req.check('email', 'Please enter a valid email address').isEmail();
     req.check('password','Password requirement: minimum 8 characters').isLength({min:8});
     req.check('confirmPassword','Password does not match').equals(req.body.password);
     var error = req.validationErrors();
     if(error){
-        console.log('Sanitation Error');
         var errors = [];
         for(var i = 0; i < error.length; i++){
             errors.push(error[i].msg)

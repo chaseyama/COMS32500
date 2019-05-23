@@ -32,7 +32,10 @@ exports.createResponsesTable = function() {
 */
 exports.fetchResponsesByQuestionId = function(questionId, callback){
     console.log('Fetching responses with questionId: ' + questionId);
-    var command = "SELECT * FROM responses WHERE questionId = ?;";
+    var command = "SELECT responses.id, responses.description, responses.author, " +
+                " responses.questionId, users.fname " +
+                " FROM responses JOIN users ON responses.author=users.id" +
+                " WHERE responses.questionId = ?;";
     db.serialize( () => {
         db.all(command, [questionId], function(error,rows){
             if(error){

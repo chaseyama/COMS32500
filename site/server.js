@@ -221,7 +221,7 @@ app.get('/new_question', function(req, res) {
         res.render('new_question', {
             error_message: null, 
             success_message: null,
-            user: null
+            user: user
         });
     }else{
         res.render('login', {
@@ -379,4 +379,38 @@ app.post('/post_response', function (req,res){
         });
     });
     
+
+})
+
+//Delete response by Id
+app.get('/delete_response', function (req,res){
+    console.log('Entering delete_response method');
+    responses.removeResponse(req.query.id, (rows) =>{ 
+    //Redirect
+        var user = null;
+        if(req.user) user = req.user;
+    
+        questions.fetchQuestionById(req.query.questionId, (rows) =>{
+            var question = rows[0];
+            responses.fetchResponsesByQuestionId(question.id, (rows) =>{
+                if(rows){
+                    res.render('one_question', {
+                        browse: true, 
+                        question: question,
+                        responses: rows,
+                        user: user
+                    });
+                }else{
+                    res.render('one_question', {
+                        browse: true, 
+                        browseResults: null,
+                        question: question,
+                        responses: null,
+                        user: user
+                    });
+                }
+            });
+        });
+    });
+
 })
