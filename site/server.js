@@ -209,17 +209,27 @@ app.get('/questions', function(req, res) {
         user: user});
         }else{
             res.render('questions', {browse: true, browseResults: null,
-        user: null});
+        user: user});
         }
     });
 });
 
 app.get('/new_question', function(req, res) {
-    res.render('new_question', {
+    var user = null;
+    if(req.user) user = req.user;
+    if(user){
+        res.render('new_question', {
+            error_message: null, 
+            success_message: null,
+            user: null
+        });
+    }else{
+        res.render('login', {
         error_message: null, 
         success_message: null,
         user: null
     });
+    }
 });
 
 /***

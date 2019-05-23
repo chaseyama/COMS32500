@@ -21,7 +21,12 @@
                     <h2>Q&amp;A</h2>
                 </div>
 
-                <a href="/new_question" class="btn btn-info" role="button">Ask a Question</a>
+                <% if(user){ %>
+                    <a href="/new_question" class="btn btn-info" role="button">Ask a Question</a>
+                <%}else{%>
+                    <a href="/login" class="btn btn-info" role="button">Login to Ask a Question</a>
+                <%}%>
+
 
                 <!-- Search By Category -->
                 <form action='/fetch_by_category' method='post'>
