@@ -13,9 +13,11 @@ banUpperCase("./public/", "");
 app.use(lower);
 app.use(ban)
 
-/*
-    Generate session using express-session module
-*/
+/*****************************************
+    Initialize User Sessions
+    - Express-Session Module
+    - UUID Module
+*****************************************/
 const session = require('express-session');
 const uuid = require('uuid/v4');
 var ssn = null;
@@ -35,9 +37,9 @@ app.use(express.static("public", options));
 app.listen(8080, "localhost");
 console.log("Visit http://localhost:8080/");
 
-/*
-    3rd Party Modules
-*/
+/*****************************************
+    Imported Node Modules
+*****************************************/
 const bodyParser = require('body-parser');
 app.use(bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -47,29 +49,20 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 const expressValidator = require('express-validator');
 app.use(expressValidator());
 
-const bcrypt = require('bcrypt');
 const path = require('path');
-// const ejs = require('ejs');
 app.set('view engine', 'ejs');
 
+/*****************************************
+    Initialize PassportJS (Local-Strategy)
+    - PassportJS
+*****************************************/
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const flash = require('connect-flash');
-
-// Passport init
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-/*
-    Our Imported Modules
-*/
-const usersDb = require('./usersDatabase.js');
-const market = require('./market.js');
-const notification = require('./notification.js');
-const questions = require('./questions.js');
-const responses = require('./responses.js');
 
-// Global variables
 app.use(function(req, res, next) {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_message = req.flash('error_message');
@@ -78,13 +71,19 @@ app.use(function(req, res, next) {
 });
 
 /*
+    Our Imported Modules
+*/
+const questions = require('./questions.js');
+const responses = require('./responses.js');
+
+/*
     Initialize Databases
 */
-usersDb.createUserTable();
-market.createMarketTable();
-notification.createNotificationTable();
-questions.createQuestionsTable();
-responses.createResponsesTable();
+// users.createUserTable();
+// market.createMarketTable();
+// notification.createNotificationTable();
+// questions.createQuestionsTable();
+// responses.createResponsesTable();
 
 
 // var newQuestion = {
@@ -154,7 +153,6 @@ function ban(req, res, next) {
 // Redirect the browser to the login page.
 function auth(req, res, next) {
     console.log('Inside the homepage callback function');
-    console.log(req.sessionID);
     res.render('index',{
         user: null
     });
@@ -190,58 +188,17 @@ function banUpperCase(root, folder) {
 
 /******************************************************************************
 ******************************************************************************
-                                WEBSITE ROUTING
+                                Handle Routing
 ******************************************************************************
 ******************************************************************************/
-
-app.get('/', function(req, res) {
-    var user = null;
-    if(req.user) user = req.user;
-    res.render('index',{
-        user: user
-    });
-});
-app.get('/index', function(req, res) {
-    var user = null;
-    if(req.user) user = req.user;
-    res.render('index',{
-        user: user
-    });
-});
-
-app.get('/login', function(req, res) {
-    res.render('login', {
-        error_message: null, 
-        success_message: null,
-        user: null
-    });
-});
-app.get('/register', function(req, res) {
-    res.render('register', {
-        errorMessages: null,
-        user: null
-    });
-});
-
-app.get('/market', function(req, res){
-    var user = null;
-    if(req.user) user = req.user;
-    res.render('market', {
-        success_message: null,
-        browse: false, 
-        browseResults: null,
-        user: user
-    });
-});
-
-app.get('/resources', function(req, res) {
-    var user = null;
-    if(req.user) user = req.user;
-    res.render('resources',{
-        user: user
-    });
-
-});
+var users = require('./routers/users.js');
+var market = require('./routers/market.js');
+var notification = require('./routers/notification.js');
+var nav = require('./routers/nav.js');
+app.use('/', users);
+app.use('/', market);
+app.use('/', notification);
+app.use('/', nav);
 
 app.get('/questions', function(req, res) {
     var user = null;
@@ -274,296 +231,6 @@ app.get('/new_question', function(req, res) {
     });
     }
 });
-
-app.get('/profile', function(req, res) {
-    market.fetchUsersItems(req.user.id, (rows) => {
-        var items = null; 
-        if(rows) items = rows;
-        notification.fetchNotificationsById(req.user.id, (rows) =>{
-            var notifications = null;
-            if(rows) notifications = rows;
-            res.render('profile', {
-                success_message: null,
-                notifications: notifications,
-                myItems: rows,
-                user: req.user
-            });
-        });
-
-    });
-});
-
-app.get('/logout', (req, res) => {
-    req.logout();
-    req.flash('success_message', 'You are logged out');
-  // res.redirect('login');
-    res.render('login', { 
-        success_message: req.flash('success_message'),
-        user: null
-    });
-});
-
-/******************************************************************************
-******************************************************************************
-    USER ACCOUNTS CODE
-    - USER LOGIN
-    - USER REGISTRATION
-******************************************************************************
-******************************************************************************/
-passport.use(new LocalStrategy({passReqToCallback: true}, function(req, username, password, done) {
-        console.log('Entering Local Strategy Login Method');
-        usersDb.fetchUserByEmail(username, (error, user) => {
-            if(error) throw error;
-            if(!user){
-                console.log('User not found');
-                req.flash({error_message: 'Unknown user'});
-                return done(null, false, { error_message: req.flash('error_message') });
-            }else{
-                console.log('User found, comparing passwords');
-                usersDb.comparePassword(password, user[0].password, (error, isMatch) =>{
-                    console.log('Password Comparison Result: ' + isMatch);
-                    console.log(user[0]);
-                    if(error) throw error;
-                    if(isMatch){
-                        console.log('About to return match');
-                        req.flash({success_message: 'Successfully logged in'});
-                        return done(null, user[0], { success_message: req.flash('success_message') });   
-                    }else{
-                        console.log('About to return fail');
-                        req.flash({error_message: 'Incorrect password'});
-                        return done(null, false, { error_message: req.flash('error_message') });
-                    }
-                });    
-
-            }
-        });    
-    }
-));
-
-
-/***
-    USER LOGIN
-***/
-app.post('/login_user', 
-    passport.authenticate('local', {
-        successRedirect: 'profile', 
-        failureRedirect: 'login', 
-        failureFlash: true}),
-    function(req, res) {
-        res.redirect('/');
-    });
-
-passport.serializeUser(function(user, done){
-    done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done){
-    usersDb.getUserById(id, function(error, user){
-        done(error, user);
-    });
-});
-
-/***
-    REGISTER USER:
-***/
-app.post('/register_user', function (req, res) {
-    console.log('Entering register_user method');
-    console.log(req.body.email);
-    /*
-        User input sanitation using express-validator
-        - Require first name
-        - Check for valid email
-        - Check password minimum length (8 characters) and that passwords match
-    */
-
-    req.check('email', 'Please enter a valid email address').isEmail();
-    req.check('password','Password requirement: minimum 8 characters').isLength({min:8});
-    req.check('confirmPassword','Password does not match').equals(req.body.password);
-    var error = req.validationErrors();
-    if(error){
-        var errors = [];
-        for(var i = 0; i < error.length; i++){
-            errors.push(error[i].msg)
-        }
-        req.flash('error_message', errors);
-        res.render('register', { 
-            error_message: req.flash('error_message'),
-            user: null
-        });
-    }
-    else{
-        usersDb.fetchUserByEmail(req.body.email, (error, rows) => {
-            if(error) throw error;
-            if(rows){
-                req.flash('error_message', 'There is already an account associated with this email');
-                res.render('register', {
-                    error_message: req.flash('error_message'),
-                    user: null
-                });
-            }else{
-                var salt = bcrypt.genSaltSync(10);
-                var hashedPassword = bcrypt.hashSync(req.body.password, salt);
-
-                var user = {'email': req.body.email,
-                            'fname': req.body.fname,
-                            'lname': req.body.lname,
-                            'password': hashedPassword,
-                            'salt': salt
-                };
-                usersDb.insertUser(user);
-                
-                //Redirect user
-                req.flash('success_message', 'Your account has been successfully registered');
-                res.render('login', {
-                    fname: req.body.fname,
-                    myItems: msg,
-                    success_message: req.flash('success_message'),
-                    user: null
-                });
-            }
-        });
-    }
-})
-
-/***
-    Marketplace Handlers
-***/
-//Search item
-app.post('/find_item', function (req,res){
-    console.log('Entering find_item method');
-    console.log('Searching for item with category: ' + req.body.item_category + ' and price range: ' + req.body.item_price);
-    var itemParameter = {
-        'category': req.body.item_category,
-        'priceRange': req.body.item_price
-    };
-    console.log(req.body.item_price);
-
-    market.fetchItems(itemParameter,(rows) =>{
-        var user;
-        if(req.user) user = req.user;
-        else user = null;
-        if(rows){
-            res.render('market', {
-                success_message: null,
-                browse: true, 
-                browseResults: rows,
-                user: user
-            });
-        }else{
-            res.render('market', {
-                success_message: null,
-                browse: true, 
-                browseResults: null,
-                user: user
-            });
-        }
-    });
-})
-
-//Insert new item
-app.post('/sell_item', function (req,res){
-    console.log('Entering insert new item method');
-
-    //Calculate price range
-    var priceRange;
-    if(req.body.price <= 10){
-        priceRange = '£';
-    }else if(req.body.price > 10 && req.body.price <= 20){
-        priceRange = '££';
-    }else if(req.body.price > 20 && req.body.price <= 30){
-        priceRange = '£££';
-    }else{
-        priceRange = '££££';
-    }
-    
-    //Insert into database
-    var newItem = {
-        'itemName': req.body.itemName,
-        'price': req.body.price,
-        'priceRange': priceRange,
-        'category': req.body.category,
-        'description': req.body.description,
-        'seller': req.user.id
-    };
-    console.log(newItem);
-    market.insertItem(newItem);
-
-    var user;
-    if(req.user) user = req.user;
-    else user = null;
-    req.flash('success_message', 'Your item has been successfully listed on the market');
-    //Redirect and how queried item
-
-    res.render('market', {
-        success_message: req.flash('success_message'),
-        browse: false, 
-        browseResults: null,
-        user: user
-    });
-
-    
-})
-
-/*
-    Delete item
-*/
-app.post('/delete_items', function(req,res){
-    console.log('Inside delete item function:');
-    market.removeItem(req.body.delete,(rows) =>{
-        if(rows){
-            req.flash('success_message', 'Your item has been successfully deleted');
-            var userItems = market.fetchUsersItems(req.user.id, (rows) => {
-                var items = null; 
-                if(rows){
-                    items = rows;
-                }
-                res.render('profile', {
-                    success_message: req.flash('success_message'),
-                    notifications: null,
-                    myItems: rows,
-                    user: req.user
-                });
-            });
-        }else{
-            req.flash('error_message', 'Your item not has been deleted');
-            res.send('Error, item not deleted');
-        }
-    });
-
-})
-
-
-app.get('/makeInquiry', function(req,res){
-    console.log('Entering Make Inquiry Function');
-    var ownerId = req.query.owner;
-    var itemName= req.query.itemName;
-    var buyerId = req.query.buyer;
-    //Get buyer email
-    usersDb.getEmailById(buyerId, (buyerName, email) =>{
-        if(email){
-            //Send message
-            var msg = buyerName + " is interested in purchasing your " + itemName + ". You can contact him at " + email + ".";
-            console.log(msg);
-            notification.insertNotification(ownerId, msg, (result) =>{
-                if(result){
-                    req.flash('success_message', 'Request Sent');
-                    res.render('market', {
-                        success_message: req.flash('success_message'),
-                        browse: false,
-                        browseResults: null,
-                        user: req.user
-                    });
-                }else{
-                    
-                }
-            });
-        }
-    });
-
-    
-    
-})
-
 
 /***
     Question Handlers
@@ -713,12 +380,3 @@ app.post('/post_response', function (req,res){
     });
     
 })
-
-
-
-
-
-
-
-
-
