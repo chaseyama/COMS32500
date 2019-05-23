@@ -19,7 +19,7 @@ const notification = require('./notification_db.js');
 *****************************************/
 router.get('/', function(req, res) {
     var user = null;
-    if(req.user) user = req.user;
+    if(req.user) user = {id: req.user.id};
     res.render('index',{
         user: user
     });
@@ -30,7 +30,7 @@ router.get('/', function(req, res) {
 *****************************************/
 router.get('/index', function(req, res) {
     var user = null;
-    if(req.user) user = req.user;
+    if(req.user) user = {id: req.user.id};;
     res.render('index',{
         user: user
     });
@@ -62,7 +62,7 @@ router.get('/register', function(req, res) {
 *****************************************/
 router.get('/market', function(req, res){
     var user = null;
-    if(req.user) user = req.user;
+    if(req.user) user = {id: req.user.id};
     res.render('market', {
         success_message: null,
         browse: false, 
@@ -76,7 +76,7 @@ router.get('/market', function(req, res){
 *****************************************/
 router.get('/resources', function(req, res) {
     var user = null;
-    if(req.user) user = req.user;
+    if(req.user) user = {id: req.user.id};
     res.render('resources',{
         user: user
     });
@@ -92,12 +92,12 @@ router.get('/profile', function(req, res) {
         notification.fetchNotificationsById(req.user.id, (rows) =>{
             var notifications = null;
             if(rows.length != 0) notifications = rows;
-            console.log(notifications);
+            var user = {id: req.user.id};
             res.render('profile', {
                 success_message: null,
                 notifications: notifications,
                 myItems: items,
-                user: req.user
+                user: user
             });
         });
     });

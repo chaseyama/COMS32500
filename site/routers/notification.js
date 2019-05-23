@@ -33,11 +33,12 @@ router.get('/makeInquiry', function(req,res){
             notification.insertNotification(ownerId, msg, (result) =>{
                 if(result){
                     req.flash('success_message', 'Request Sent');
+                    var user = {id: req.user.id};
                     res.render('market', {
                         success_message: req.flash('success_message'),
                         browse: false,
                         browseResults: null,
-                        user: req.user
+                        user: user
                     });
                 }
             });
@@ -57,11 +58,12 @@ router.post('/deleteNotification', function(req, res){
                 notification.fetchNotificationsById(req.user.id, (rows) =>{
                     var notifications = null;
                     if(rows) notifications = rows;
+                    var user = {id: req.user.id};
                     res.render('profile', {
                         success_message: req.flash('success_message'),
                         notifications: notifications,
                         myItems: items,
-                        user: req.user
+                        user: user
                     });
                 });
             });
