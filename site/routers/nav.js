@@ -91,11 +91,12 @@ router.get('/profile', function(req, res) {
         if(rows) items = rows;
         notification.fetchNotificationsById(req.user.id, (rows) =>{
             var notifications = null;
-            if(rows) notifications = rows;
+            if(rows.length != 0) notifications = rows;
+            console.log(notifications);
             res.render('profile', {
                 success_message: null,
                 notifications: notifications,
-                myItems: rows,
+                myItems: items,
                 user: req.user
             });
         });

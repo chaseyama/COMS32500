@@ -25,8 +25,7 @@ exports.createNotificationTable = function() {
           " recipient INTEGER, " +
           " msg VARCHAR(255), " +
           " FOREIGN KEY (recipient) REFERENCES users (id));");
-    });  
-
+    });
 }
 
 /*****************************************
@@ -57,7 +56,7 @@ exports.insertNotification = function(ownerId, msg, callback){
 *****************************************/
 exports.fetchNotificationsById = function(id, callback){
     db.serialize(() => {
-        var command = "SELECT msg FROM notification WHERE recipient = ?";
+        var command = "SELECT id, msg FROM notification WHERE recipient = ?";
         db.all(command, [id], function(error, rows){
             if(error) throw error;
             else callback(rows);

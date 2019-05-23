@@ -40,9 +40,9 @@ exports.insertItem = function(item){
         var command = "INSERT INTO market ('itemName', 'price', 'priceRange', 'category', 'description', 'seller') ";
         command += "VALUES (?, ?, ?, ?, ?, ?);";
         db.run(command, [item['itemName'], item['price'], item['priceRange'], item['category'], item['description'], item['seller']], function(error) {
-            if (error) throw error;
+            if (error) console.log(error) ;
             else {
-                console.log('Added new item' + item['itemName']);
+                // console.log('Added new item: ' + item['itemName']);
             }
         });
     });
@@ -90,17 +90,61 @@ exports.fetchUsersItems = function(userId, callback){
     Description: Query Marketplace Items
 *****************************************/
 exports.fetchItems = function(itemParameters, callback){
-    var command = "SELECT * FROM market WHERE category = ? AND priceRange = ?;";
-    db.serialize( () => {
-        db.all(command, [itemParameters['category'], itemParameters['priceRange']], function(error,rows){
-            if(error) throw error;
-            if(rows.length != 0){
-                callback(rows);
-            }else{
-                callback(null);
-            }
+    var command;
+    if(!itemParameters['category'] && !itemParameters['priceRange']){
+        console.log('Query All');
+        command = "SELECT * FROM market;";
+        db.serialize( () => {
+            db.all(command, function(error,rows){
+                if(error) throw error;
+                if(rows.length != 0){
+                    callback(rows);
+                }else{
+                    callback(null);
+                }
+            });
         });
-    });
+    }else if(!itemParameters['category'] && itemParameters['priceRange']){
+        console.log('Query Price');
+        command = "SELECT * FROM market WHERE priceRange = ?;";
+        db.serialize( () => {
+            db.all(command, [itemParameters['priceRange']], function(error,rows){
+                if(error) throw error;
+                if(rows.length != 0){
+                    callback(rows);
+                }else{
+                    callback(null);
+                }
+            });
+        });
+    }else if(itemParameters['category'] && !itemParameters['priceRange']){
+        console.log('Query Category');
+        command = "SELECT * FROM market WHERE category = ?;";
+        db.serialize( () => {
+            db.all(command, [itemParameters['category']], function(error,rows){
+                if(error) throw error;
+                if(rows.length != 0){
+                    callback(rows);
+                }else{
+                    callback(null);
+                }
+            });
+        });
+    }else{
+        command = "SELECT * FROM market WHERE category = ? AND priceRange = ?;";
+        console.log('Query Price and Category');
+        console.log(itemParameters['category'] + " " + itemParameters['priceRange']);
+        db.serialize( () => {
+            db.all(command, [itemParameters['category'], itemParameters['priceRange']], function(error,rows){
+                if(error) throw error;
+                if(rows.length != 0){
+                    callback(rows);
+                }else{
+                    callback(null);
+                }
+            });
+        });
+    }
 }
 
 

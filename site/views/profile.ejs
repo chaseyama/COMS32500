@@ -19,52 +19,55 @@
                 <div class="alert alert-success"><%= success_message %></div>
             <% }%>
             <div class="row">
-                <section id="user_profile" class="well col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                    
-                    <a href="/logout" class="btn btn-secondary">Logout</a>
-                </section>
-                <section id="Notifications" class="well col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <section id="Notifications" class="well col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <h3>Notifications:</h3>
-                        <% if(notifications){ %> 
+                        <div style="overflow-y: scroll; height: 18em;">
+                        <% if(notifications){ console.log(notifications)%> 
                             <% for(var i=0; i < notifications.length; i++) { %>
                                 <div class="well well-sm">
                                     <h4><%= notifications[i].msg %></h4>
+                                    <form action="/deleteNotification" method="post">
+                                        <input type="hidden" name="delete" value="<%= notifications[i].id%>"/>
+                                        <p>Delete Notification: <input type="submit" class= "btn btn-danger"name=""/></p>
+                                    </form>
                                 </div>
                             <%}
                         }else{%>
                             <p>No Notifications</p>
+                        <%}%> 
+                        </div>    
+                </section>
+            </div>
+
+            <div class="row">
+                
+                <section id="myItems" class="well well-sm col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <h3>Items For Sale:</h3>
+                    <div style="overflow-y: scroll; height: 18em;">
+                        <% if(myItems){ %> 
+                            <% for(var i=0; i < myItems.length; i++) { %>
+                                <div class="well well-sm">
+                                    <h4><%= myItems[i].itemName %></h4>
+                                    <p>Asking Price: £<%= myItems[i].price %></p>
+                                    <p>Description: <%= myItems[i].description %></p>
+                                    <form action="/delete_items" method="post">
+                                        <input type="hidden" name="delete" value="<%= myItems[i].id%>"/>
+                                        <p>Delete Item: <input type="submit" class="btn btn-danger" name=""/></p>
+                                    </form>
+                                </div>
+                            <%}
+                        }else{%>
+                            <p>No Items for Sale</p>
                         <%}%>     
+                    </div>
+                </section>
+                <section id="myQuestions" class=" well well-sm col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <h3>Your Questions:</h3>
+                    <div style="overflow-y: scroll; height: 18em;">
+                        
+                    </div>
                 </section>
             </div>
-
-            <div class="row">
-                <h3>Items For Sale:</h3>  
-                <section style="overflow-y: scroll; height: 18em;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <% if(myItems){ %> 
-                    <% for(var i=0; i < myItems.length; i++) { %>
-                        <div class="well well-sm">
-                            <h4><%= myItems[i].itemName %></h4>
-                            <p>Asking Price: £<%= myItems[i].price %></p>
-                            <p>Description: <%= myItems[i].description %></p>
-                            <p>Delete Item:</p>
-                            <form action="/delete_items" method="post">
-                                <input type="hidden" name="delete" value="<%= myItems[i].id%>"/>
-                                <input type="submit" name=""/>
-                            </form>
-                        </div>
-                    <%}
-                }else{%>
-                    <p>No Items for Sale</p>
-                <%}%>     
-                </section>
-            </div>
-            <div class="row">
-                <h3>Your Questions:</h3>
-                <section></section>
-            </div>
-            
-
-
         </main>
         <footer>
             <p>Jack Allison and Cameron Haseyama</p>

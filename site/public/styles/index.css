@@ -61,7 +61,7 @@ a{
 */
 #login_register{
   width: 100%;
-  padding: 6em;
+  padding: 1em;
   background-color: white;
 }
 
@@ -90,4 +90,11 @@ a{
 #logo{
   border-radius: 50%;
   height: 4em;
+}
+
+#reg_logo{
+  border-radius: 50%;
+  width: 25em;
+  padding: 0em;
+  margin-bottom: 0em;
 }
