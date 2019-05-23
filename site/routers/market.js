@@ -25,7 +25,7 @@ router.post('/find_item', function (req,res){
     };
     market.fetchItems(itemParameter,(rows) =>{
         var user;
-        if(req.user) user = req.user;
+        if(req.user) user = {id: req.user.id};
         else user = null;
         if(rows){
             res.render('market', {
@@ -75,7 +75,7 @@ router.post('/sell_item', function (req,res){
     market.insertItem(newItem);
 
     var user;
-    if(req.user) user = req.user;
+    if(req.user) user = {id: req.user.id};
     else user = null;
     req.flash('success_message', 'Your item has been successfully listed on the market');
     res.render('market', {
@@ -101,11 +101,12 @@ router.post('/delete_items', function(req,res){
                 notification.fetchNotificationsById(req.user.id, (rows) =>{
                     var notifications = null;
                     if(rows) notifications = rows;
+                    var user = {id: req.user.id};
                     res.render('profile', {
                         success_message: req.flash('success_message'),
                         notifications: notifications,
                         myItems: items,
-                        user: req.user
+                        user: user
                     });
                 });
             });
