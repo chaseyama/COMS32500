@@ -34,14 +34,14 @@ exports.createUserTable = function() {
     Parameter: Object containing user information
 *****************************************/
 exports.insertUser = function(userInfo){
-    var command = "INSERT INTO USERS ('email', 'fname', 'lname', 'password', 'salt') ";
-    command += "VALUES (?, ?, ?, ?, ?);";
+    var command = "INSERT INTO USERS ('email', 'fname', 'lname', 'password') ";
+    command += "VALUES (?, ?, ?, ?);";
     db.serialize(() => {
-        db.run(command, [userInfo['email'], userInfo['fname'], userInfo['lname'], userInfo['password'], userInfo['salt']], function(error) {
+        db.run(command, [userInfo['email'], userInfo['fname'], userInfo['lname'], userInfo['password']], function(error) {
             if (error) {
                 console.log(error);
             } else {
-                console.log("Successfully added user, printing all users");
+                // console.log("Successfully added user, printing all users");
             }
         });
     });

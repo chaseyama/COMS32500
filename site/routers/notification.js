@@ -12,6 +12,8 @@
 const express = require("express");
 const router = express.Router();
 const notification = require('./notification_db.js');
+const users = require('./users_db.js');
+const market = require('./market_db.js');
 
 
 /*****************************************
@@ -41,6 +43,34 @@ router.get('/makeInquiry', function(req,res){
             });
         }
     });
+})
+
+router.post('/deleteNotification', function(req, res){
+    var notificationId = req.body.delete;
+    console.log("Note id: " + notificationId);
+    notification.deleteNotificationById(req.body.delete,(result) =>{
+        if(result){
+            req.flash('success_message', 'Your notification has been successfully deleted');
+            market.fetchUsersItems(req.user.id, (rows) => {
+                var items = null; 
+                if(rows) items = rows;
+                notification.fetchNotificationsById(req.user.id, (rows) =>{
+                    var notifications = null;
+                    if(rows) notifications = rows;
+                    res.render('profile', {
+                        success_message: req.flash('success_message'),
+                        notifications: notifications,
+                        myItems: items,
+                        user: req.user
+                    });
+                });
+            });
+        }else{
+            req.flash('error_message', 'Your notification not has been deleted');
+            res.send('Error, item not deleted');
+        }
+    });
+
 })
 
 module.exports = router;
