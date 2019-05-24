@@ -64,7 +64,20 @@
                 <section id="myQuestions" class=" well well-sm col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <h3>Your Questions:</h3>
                     <div style="overflow-y: scroll; height: 18em;">
-                        
+                        <% if(myQuestions){ %> 
+                            <% for(var i=0; i < myQuestions.length; i++) { %>
+                                <div class="well well-sm">
+                                    <h4><%= myQuestions[i].title %></h4>
+                                    <p>Description: <%= myQuestions[i].description %></p>
+                                    <form action="/fetch_by_id" method="get">
+                                        <input type="hidden" name="id" value="<%= myQuestions[i].id%>"/>
+                                        <p>View Responses: <input type="submit" class="btn btn-info" name=""/></p>
+                                    </form>
+                                </div>
+                            <%}
+                        }else{%>
+                            <p>No Questions Currently Posted</p>
+                        <%}%>
                     </div>
                 </section>
             </div>
