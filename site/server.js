@@ -141,3 +141,24 @@ app.use('/', questions);
 app.use('/', responses);
 app.use('/', notification);
 app.use('/', nav);
+
+/*****************************************
+    Error Handling
+*****************************************/
+app.use(function(err, req, res, next) {
+    console.error(err.message);
+    if (!err.statusCode) err.statusCode = 500; // Sets a generic server error status code if none is part of the err
+
+    if (err.shouldRedirect) { // Renders a index.ejs for the user
+        var user = null;
+        if(req.user) user = {id: req.user.id};
+        res.render('index',{
+            user: user
+        });
+    } else {
+        res.status(err.statusCode).send(err.message); // If shouldRedirect is not defined in our error, sends our original err data
+    }
+});
+
+
+
