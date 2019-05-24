@@ -98,3 +98,8 @@ a{
   padding: 0em;
   margin-bottom: 0em;
 }
+#results{
+  overflow-y: scroll;
+  height: 40em;
+  margin-bottom: 10em;
+}
