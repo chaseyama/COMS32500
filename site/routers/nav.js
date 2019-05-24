@@ -22,7 +22,9 @@ router.get('/', function(req, res) {
     var user = null;
     if(req.user) user = {id: req.user.id};
     res.render('index',{
-        user: user
+        error: null,
+        user: user,
+        first_visit: false
     });
 });
 
@@ -33,7 +35,9 @@ router.get('/index', function(req, res) {
     var user = null;
     if(req.user) user = {id: req.user.id};;
     res.render('index',{
-        user: user
+        error: null,
+        user: user,
+        first_visit: false
     });
 });
 
@@ -169,6 +173,7 @@ router.get('*', function(req, res, next) {
   let err = new Error(`${req.ip} tried to reach ${req.originalUrl}`); // Tells us which IP tried to reach a particular URL
   err.statusCode = 404;
   err.shouldRedirect = true; //New property on err so that our middleware will redirect
+  req.flash('error_message', 'Invalid URL');
   next(err);
 });
 

@@ -92,7 +92,9 @@ function ban(req, res, next) {
 function auth(req, res, next) {
     console.log('Inside the homepage callback function');
     res.render('index',{
-        user: null
+        error: null,
+        user: null,
+        first_visit: true
     });
 
 }
@@ -153,7 +155,9 @@ app.use(function(err, req, res, next) {
         var user = null;
         if(req.user) user = {id: req.user.id};
         res.render('index',{
-            user: user
+            error: req.flash('error_message'),
+            user: user,
+            first_visit: false
         });
     } else {
         res.status(err.statusCode).send(err.message); // If shouldRedirect is not defined in our error, sends our original err data
