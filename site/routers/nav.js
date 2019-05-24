@@ -20,7 +20,7 @@ const notification = require('./notification_db.js');
 *****************************************/
 router.get('/', function(req, res) {
     var user = null;
-    if(req.user) user = req.user;
+    if(req.user) user = {id: req.user.id};
     res.render('index',{
         user: user
     });
@@ -31,7 +31,7 @@ router.get('/', function(req, res) {
 *****************************************/
 router.get('/index', function(req, res) {
     var user = null;
-    if(req.user) user = req.user;
+    if(req.user) user = {id: req.user.id};;
     res.render('index',{
         user: user
     });
@@ -63,7 +63,7 @@ router.get('/register', function(req, res) {
 *****************************************/
 router.get('/market', function(req, res){
     var user = null;
-    if(req.user) user = req.user;
+    if(req.user) user = {id: req.user.id};
     res.render('market', {
         success_message: null,
         browse: false, 
@@ -77,7 +77,7 @@ router.get('/market', function(req, res){
 *****************************************/
 router.get('/resources', function(req, res) {
     var user = null;
-    if(req.user) user = req.user;
+    if(req.user) user = {id: req.user.id};
     res.render('resources',{
         user: user
     });
@@ -128,6 +128,7 @@ router.get('/profile', function(req, res) {
     market.fetchUsersItems(req.user.id, (rows) => {
         var items = null; 
         if(rows) items = rows;
+
         questions.fetchUsersQuestions(req.user.id, (rows) => {
             var questions = null; 
             if(rows) questions = rows;
@@ -142,6 +143,7 @@ router.get('/profile', function(req, res) {
                     myQuestions: questions,
                     user: req.user
                 });
+
             });
         });
     });
