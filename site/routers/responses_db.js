@@ -1,14 +1,21 @@
 "use strict";
-/*
-	This file contains the methods needed for the Q&A aspect of the website.
-*/
+/********************************************************************
+*********************************************************************
+*********************************************************************
+    RESPONSES DATABASE FILE:
+    CRUD Methods for Interacting with Responses Database
+    Database Method SQLite
+*********************************************************************
+*********************************************************************
+********************************************************************/
 
+//Instantiate Database Connection Using SQLite
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database("studyabroad.db");
 
-/*
-	Create Respsonses Database Table
-*/
+/*****************************************
+    Create Responses Table Method
+*****************************************/
 exports.createResponsesTable = function() {
     db.serialize(() => {
         // create a new database table:
@@ -19,19 +26,16 @@ exports.createResponsesTable = function() {
           " questionId INTEGER, " +
           " FOREIGN KEY (questionId) REFERENCES questions (id), " +
           " FOREIGN KEY (author) REFERENCES users (id));");
-
-        console.log('successfully created the responses table in studyabroad.db');
     });  
 
 }
 
-/*
-    Query Responses Method
-    Description: Return specific responses based on questionId
-    Parameters: Integer representing questionId
-*/
+/*****************************************
+    Get Responses By Question Id Method
+    Parameter: INT questionId
+    Description: Return specific Responses based on questionId
+*****************************************/
 exports.fetchResponsesByQuestionId = function(questionId, callback){
-    console.log('Fetching responses with questionId: ' + questionId);
     var command = "SELECT responses.id, responses.description, responses.author, " +
                 " responses.questionId, users.fname " +
                 " FROM responses JOIN users ON responses.author=users.id" +
@@ -42,7 +46,6 @@ exports.fetchResponsesByQuestionId = function(questionId, callback){
                 console.log(error);
             }else{
                 if(rows.length != 0){
-                    console.log(rows);
                     callback(rows);
                 }else{
                     console.log("No responses match this questionId");
@@ -53,48 +56,38 @@ exports.fetchResponsesByQuestionId = function(questionId, callback){
     });
 }
 
-/*
-	Insert New Response Method
-	Description: Add new response to the responses table
-	Parameters: Dictionary object containing response information
-*/
+/*****************************************
+    Insert Response Method
+    Parameter: Response Object
+    Description: Add new Response to the Responses table
+*****************************************/
 exports.insertResponse = function(response){
-	db.serialize(() => {
-		var command = "INSERT INTO responses ('description', 'author', 'questionId') ";
+    db.serialize(() => {
+        var command = "INSERT INTO responses ('description', 'author', 'questionId') ";
         command += "VALUES (?, ?, ?);";
         db.run(command, [response['description'], response['author'], response['questionId']], function(error) {
             if (error) {
                 console.log(error);
             } else {
-                console.log('Added new response ' + response['description']);
-
                 //Console check for add
-                console.log('Checking added response')
                 db.serialize(() => {
                     var command = "SELECT * FROM responses";
                     var results = db.all(command, [], function(error,rows) {
                         if (error) {
                             console.log(error);
-                        } else {
-                            console.log(rows);
                         }
                     });
                 });
             }
         });
-	});
+    });
 }
 
-/*
-	Update Response Method
-*/
-exports.updateResponse = function(item){
-
-}
-
-/*
-	Remove Response Method
-*/
+/*****************************************
+    Delete Response Method
+    Parameter: INT responseId
+    Description: Delete Response
+*****************************************/
 exports.removeResponse = function(responseId, callback){
     db.serialize(() => {
         var command = "DELETE FROM responses WHERE id = ?";
@@ -103,18 +96,17 @@ exports.removeResponse = function(responseId, callback){
                 console.log(error);
                 callback(false);
             } else {
-                console.log('Removed response: ' + responseId);
                 callback(true);
             }
         });
     });
 }
 
-/*
-    Remove Responses By Question Id Method
-    Description: Deletes specific responses based on questionId
-    Parameters: Integer representing questionId
-*/
+/*****************************************
+    Delete Response By Question Id Method
+    Parameter: INT questionId
+    Description: Deletes specific Responses based on questionId
+*****************************************/
 exports.removeResponsesByQuestionId = function(questionId, callback){
     db.serialize(() => {
         var command = "DELETE FROM responses WHERE questionId = ?";
@@ -123,22 +115,9 @@ exports.removeResponsesByQuestionId = function(questionId, callback){
                 console.log(error);
                 callback(false);
             } else {
-                console.log('Removed responses corresponding to questionId: ' + questionId);
                 callback(true);
             }
         });
     });
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

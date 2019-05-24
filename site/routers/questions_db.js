@@ -1,17 +1,23 @@
 "use strict";
-/*
-	This file contains the methods needed for the Q&A aspect of the website.
-*/
+/********************************************************************
+*********************************************************************
+*********************************************************************
+    QUESTIONS DATABASE FILE:
+    CRUD Methods for Interacting with Questions Database
+    Database Method SQLite
+*********************************************************************
+*********************************************************************
+********************************************************************/
 
+//Instantiate Database Connection Using SQLite
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database("studyabroad.db");
 
-/*
-	Create Questions Database Table
-*/
+/*****************************************
+    Create Questions Table Method
+*****************************************/
 exports.createQuestionsTable = function() {
     db.serialize(() => {
-        // create a new database table:
         db.run("CREATE TABLE IF NOT EXISTS questions (" +
           " id INTEGER PRIMARY KEY AUTOINCREMENT, " +
           " title VARCHAR(255), " +
@@ -19,18 +25,15 @@ exports.createQuestionsTable = function() {
           " category VARCHAR(255), " + 
           " author INTEGER, " +
           " FOREIGN KEY (author) REFERENCES users (id));");
-
-        console.log('successfully created the questions table in studyabroad.db');
     });  
 
 }
 
-/*
-	Fetch All Questions Method
-	Description: Query all questions from questions database
-*/
+/*****************************************
+    Fetch All Questions Method
+    Description: Fetch All Questions from Questions Database
+*****************************************/
 exports.fetchAllQuestions = function(callback){
-    console.log('Fetching all questions.');
     var command = "SELECT questions.id, questions.title, questions.description, " +
                 " questions.category, questions.author, users.fname " +
                 " FROM questions JOIN users ON questions.author=users.id;";
@@ -40,7 +43,6 @@ exports.fetchAllQuestions = function(callback){
                 console.log(error);
             }else{
                 if(rows.length != 0){
-                    console.log(rows);
                     callback(rows);
                 }else{
                     console.log("No questions in database");
@@ -51,13 +53,12 @@ exports.fetchAllQuestions = function(callback){
     });
 }
 
-/*
-	Query User's Questions Method
-	Description: Query  questions from questions database that correspond to the userID
-	Parameters: Object containing category
-*/
+/*****************************************
+    Get Questions by User Method
+    Parameter: INT userId
+    Description: Get Questions from Questions Database that correspond to the userId
+*****************************************/
 exports.fetchUsersQuestions = function(userId, callback){
-    console.log('Searching for all questions posted by: ' + userId);
     var command = "SELECT questions.id, questions.title, questions.description, " +
                 " questions.category, questions.author, users.fname " +
                 " FROM questions JOIN users ON questions.author=users.id " +
@@ -68,7 +69,6 @@ exports.fetchUsersQuestions = function(userId, callback){
                 console.log(error);
             }else{
                 if(rows.length != 0){
-                    console.log(rows);
                     callback(rows);
                 }else{
                     console.log("No questions posted by this user");
@@ -78,13 +78,13 @@ exports.fetchUsersQuestions = function(userId, callback){
         });
     });
 }
-/*
-	Query Questions Method
-	Description: Return questions in a certain category
-	Parameters: Category of questions to be retrieved
-*/
+
+/*****************************************
+    Get Questions By Category Method
+    Parameter: STRING questionCategory
+    Description: Return Questions in a certain Category
+*****************************************/
 exports.fetchQuestionsByCategory = function(questionCategory, callback){
-    console.log('Fetching questions in category: ' + questionCategory);
     var command = "SELECT questions.id, questions.title, questions.description, " +
                 " questions.category, questions.author, users.fname " +
                 " FROM questions JOIN users ON questions.author=users.id " +
@@ -95,7 +95,6 @@ exports.fetchQuestionsByCategory = function(questionCategory, callback){
                 console.log(error);
             }else{
                 if(rows.length != 0){
-                    console.log(rows);
                     callback(rows);
                 }else{
                     console.log("No questions match this query");
@@ -106,13 +105,12 @@ exports.fetchQuestionsByCategory = function(questionCategory, callback){
     });
 }
 
-/*
-    Query Question Method
-    Description: Return specific question based on id
-    Parameters: Integer representing question id
-*/
+/*****************************************
+    Get Question By Id Method
+    Parameter: INT questionId
+    Description: Return specific Question based on Id
+*****************************************/
 exports.fetchQuestionById = function(questionId, callback){
-    console.log('Fetching question with id: ' + questionId);
     var command = "SELECT questions.id, questions.title, questions.description, " +
                 " questions.category, questions.author, users.fname " +
                 " FROM questions JOIN users ON questions.author=users.id " +
@@ -123,7 +121,6 @@ exports.fetchQuestionById = function(questionId, callback){
                 console.log(error);
             }else{
                 if(rows.length != 0){
-                    console.log(rows);
                     callback(rows);
                 }else{
                     console.log("No questions match this id");
@@ -134,11 +131,11 @@ exports.fetchQuestionById = function(questionId, callback){
     });
 }
 
-/*
-	Insert New Question Method
-	Description: Add new question to the question table
-	Parameters: Dictionary object containing question information
-*/
+/*****************************************
+    Insert Question Method
+    Parameter: Question Object
+    Description: Add New Question to the Questions table
+*****************************************/
 exports.insertQuestion = function(question){
 	db.serialize(() => {
 		var command = "INSERT INTO questions ('title', 'description', 'category', 'author') ";
@@ -147,17 +144,12 @@ exports.insertQuestion = function(question){
             if (error) {
                 console.log(error);
             } else {
-                console.log('Added new question' + question['title']);
-
                 //Console check for add
-                console.log('Checking added question');
                 db.serialize(() => {
                     var command = "SELECT * FROM questions";
                     var results = db.all(command, [], function(error,rows) {
                         if (error) {
                             console.log(error);
-                        } else {
-                            console.log(rows);
                         }
                     });
                 });
@@ -166,16 +158,11 @@ exports.insertQuestion = function(question){
 	});
 }
 
-/*
-	Update Question Method
-*/
-exports.updateQuestion = function(item){
-
-}
-
-/*
-	Remove Question Method
-*/
+/*****************************************
+    Delete Question Method
+    Parameter: INT questionId
+    Description: Remove Question from the Questions table
+*****************************************/
 exports.removeQuestion = function(questionId, callback){
     db.serialize(() => {
         var command = "DELETE FROM questions WHERE id = ?";
@@ -184,21 +171,8 @@ exports.removeQuestion = function(questionId, callback){
                 console.log(error);
                 callback(false);
             } else {
-                console.log('Removed question: ' + questionId);
                 callback(true);
             }
         });
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-

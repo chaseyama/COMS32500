@@ -21,30 +21,33 @@
                     <h2>Q&amp;A</h2>
                 </div>
 
+                <div class="text-right">
                 <% if(user){ %>
                     <a href="/new_question" class="btn btn-info" role="button">Ask a Question</a>
                 <%}else{%>
                     <a href="/login" class="btn btn-info" role="button">Login to Ask a Question</a>
                 <%}%>
+            </div>
 
 
                 <!-- Search By Category -->
-                <form action='/fetch_by_category' method='post'>
-                    <input type="text" name="category" id="category"></input>
-                    <input type="submit"></input>
-                </form>
-
-                <button name='general_button' onclick='set_category("general")' value="general">General</button>
-                <button name='supplies_button' onclick='set_category("supplies")' value="supplies">Supplies</button>
-                <button name='academics_button' onclick='set_category("academics")' value="academics">Academics</button>
-                <button name='travel_button' onclick='set_category("travel")' value="travel">Travel</button>
-
-                <script type="text/javascript">
-                    function set_category(category){
-                        document.getElementById('category').value=category;
-                    }
-                </script>
-
+                <section id="browse" class="tab-pane fade in active jumbotron">
+                    <h2>Browse Questions</h2>
+                    <form action="/fetch_by_category" method="post">
+                        <div class="form-group row">
+                            <select class="custom-select col-sm-5" name="category">
+                                <option value="" selected>Search by Category</option>
+                                <option name="question_category" value="general">General</option>
+                                <option name="question_category" value="supplies">Supplies</option>
+                                <option name="question_category" value="academics">Academics</option>
+                                <option name="question_category" value="travel">Travel</option>
+                            </select>
+                            <div class="text-center">
+                                <button class="btn btn-primary">SEARCH</button>
+                            </div>
+                        </div>
+                    </form>
+                </section>
 
                 <section id="browseResults" class="row">
                     <h3>Results</h3>
