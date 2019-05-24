@@ -69,39 +69,41 @@
                     <%if(browse){ %>
                         <section id="browseResults" class="row">
                                 <h2>Results</h2>
-                                <% if(browseResults){ %>
-                                    <% for(var i=browseResults.length-1; i >= 0; i--) { 
-                                        if(!user){
-                                    %>
-                                        <!-- Only display if not your own item -->
+                                <div id='results'>
+                                    <% if(browseResults){ %>
+                                        <% for(var i=browseResults.length-1; i >= 0; i--) { 
+                                            if(!user){
+                                        %>
+                                            <!-- Only display if not your own item -->
 
-                                        <div class="well well-sm">
-                                            <h4>
-                                            <%= browseResults[i].itemName %>
-                                            </h4>
-                                            <p>Asking Price: £<%= browseResults[i].price %></p>
-                                            <p>Description: <%= browseResults[i].description %></p>
+                                            <div class="well well-sm">
+                                                <h4>
+                                                <%= browseResults[i].itemName %>
+                                                </h4>
+                                                <p>Asking Price: £<%= browseResults[i].price %></p>
+                                                <p>Description: <%= browseResults[i].description %></p>
 
-                                            <p>Login to Make Inquiry</p>
-                                            <a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
-                                            <a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a>
-                                        </div>
-                                    <%}else{
-                                        if(user.id != browseResults[i].seller){%>
-                                        <div class="well well-sm">
-                                            <h4>
-                                            <%= browseResults[i].itemName %>
-                                            </h4>
-                                            <p>Asking Price: £<%= browseResults[i].price %></p>
-                                            <p>Description: <%= browseResults[i].description %></p>
-                                            <!-- <a href="/makeInquiry?owner=<%= browseResults[i].seller %>&itemId=<%= browseResults[i].id %>">Make Inquiry</a> -->
-                                            <button onclick="getConfirmation('<%=browseResults[i].seller%>', '<%=browseResults[i].itemName%>', '<%=user.id%>');">Make Inquiry</button>
-                                        </div>
-                                    <%}
-                                    
-                                }}}else{%>
-                                    <p>No items matched your search result.</p>   
-                                <%}%>
+                                                <p>Login to Make Inquiry</p>
+                                                <a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
+                                                <a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+                                            </div>
+                                        <%}else{
+                                            if(user.id != browseResults[i].seller){%>
+                                            <div class="well well-sm">
+                                                <h4>
+                                                <%= browseResults[i].itemName %>
+                                                </h4>
+                                                <p>Asking Price: £<%= browseResults[i].price %></p>
+                                                <p>Description: <%= browseResults[i].description %></p>
+                                                <!-- <a href="/makeInquiry?owner=<%= browseResults[i].seller %>&itemId=<%= browseResults[i].id %>">Make Inquiry</a> -->
+                                                <button onclick="getConfirmation('<%=browseResults[i].seller%>', '<%=browseResults[i].itemName%>', '<%=user.id%>');">Make Inquiry</button>
+                                            </div>
+                                        <%}
+                                        
+                                    }}}else{%>
+                                        <p>No items matched your search result.</p>   
+                                    <%}%>
+                                </div>
                         </section>
                     <%}%>
 
