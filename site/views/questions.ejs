@@ -17,6 +17,11 @@
         <!--Main Content-->  
         <main>
             <div class="container">
+
+                <% if(success_message){ %>
+                    <div class="alert alert-success"><%= success_message %></div>
+                <% }%>
+
                 <div class="text-center">
                     <h2>Q&amp;A</h2>
                 </div>

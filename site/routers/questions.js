@@ -26,21 +26,37 @@ router.post('/fetch_by_category', function (req,res){
     if(req.body.category == 'all'){
         questions.fetchAllQuestions((rows) =>{
             if(rows){
-                res.render('questions', {browse: true, browseResults: rows,
-            user: user});
+                res.render('questions', {
+                    success_message: null,
+                    browse: true,
+                    browseResults: rows,
+                    user: user
+                });
             }else{
-                res.render('questions', {browse: true, browseResults: null,
-            user: user});
+                res.render('questions', {
+                    success_message: null,
+                    browse: true,
+                    browseResults: null,
+                    user: user
+                });
             }
         });
     }else{
         questions.fetchQuestionsByCategory(req.body.category, (rows) =>{
             if(rows){
-                res.render('questions', {browse: true, browseResults: rows,
-            user: user});
+                res.render('questions', {
+                    success_message: null,
+                    browse: true,
+                    browseResults: rows,
+                    user: user
+                });
             }else{
-                res.render('questions', {browse: true, browseResults: null,
-            user: user});
+                res.render('questions', {
+                    success_message: null,
+                    browse: true,
+                    browseResults: null,
+                    user: user
+                });
             }
         });
     }
@@ -59,15 +75,16 @@ router.get('/fetch_by_id', function (req,res){
         responses.fetchResponsesByQuestionId(question.id, (rows) =>{
             if(rows){
                 res.render('one_question', {
-                    browse: true, 
+                    success_message: null,
+                    browse: true,
                     question: question,
                     responses: rows,
                     user: user
                 });
             }else{
                 res.render('one_question', {
+                    success_message: null,
                     browse: true, 
-                    browseResults: null,
                     question: question,
                     responses: null,
                     user: user
@@ -94,13 +111,22 @@ router.post('/post_question', function (req,res){
     var user;
     if(req.user) user = req.user;
     else user = null;
+    req.flash('success_message', 'Your question has been successfully posted');
     questions.fetchAllQuestions((rows) =>{
         if(rows){
-            res.render('questions', {browse: true, browseResults: rows,
-        user: user});
+            res.render('questions', {
+                success_message: req.flash('success_message'),
+                browse: true,
+                browseResults: rows,
+                user: user
+            });
         }else{
-            res.render('questions', {browse: true, browseResults: null,
-        user: null});
+            res.render('questions', {
+                success_message: req.flash('success_message'),
+                browse: true,
+                browseResults: null,
+                user: user
+            });
         }
     });
     
@@ -116,18 +142,27 @@ router.get('/delete_question', function (req,res){
         responses.removeResponsesByQuestionId(req.query.id, (rows) =>{
             questions.removeQuestion(req.query.id, (rows) =>{
                 //Redirect
-                    var user = null;
-                    if(req.user) user = req.user;
-                
-                    questions.fetchAllQuestions((rows) =>{
-                        if(rows){
-                            res.render('questions', {browse: true, browseResults: rows,
-                        user: user});
-                        }else{
-                            res.render('questions', {browse: true, browseResults: null,
-                        user: user});
-                        }
-                    });
+                var user = null;
+                if(req.user) user = req.user;
+                req.flash('success_message', 'Your question has been successfully deleted');
+            
+                questions.fetchAllQuestions((rows) =>{
+                    if(rows){
+                        res.render('questions', {
+                            success_message: req.flash('success_message'),
+                            browse: true,
+                            browseResults: rows,
+                            user: user
+                        });
+                    }else{
+                        res.render('questions', {
+                            success_message: req.flash('success_message'),
+                            browse: true,
+                            browseResults: null,
+                            user: user
+                        });
+                    }
+                });
             });
         });
     });
