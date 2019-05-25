@@ -105,6 +105,7 @@ router.post('/login_user',
     Description: Definition of PassportJS (Local-Strategy)
 *****************************************/
 passport.use(new LocalStrategy({passReqToCallback: true}, function(req, username, password, done) {
+        console.log('Password:' + password);
 		/******************
     	Fetch User Information
     	******************/
@@ -113,30 +114,31 @@ passport.use(new LocalStrategy({passReqToCallback: true}, function(req, username
             /******************
 	    	Error: User Not Found
 	    	******************/
-            if(!user){
+            console.log(user);
+            if(user.length == 0){
                 req.flash({error_message: 'Unknown user'});
                 return done(null, false, { error_message: req.flash('error_message') });
-            }
-            /******************
-	    	Validate User Password
-	    	******************/
-            users.comparePassword(password, user[0].password, (error, isMatch) =>{    
-                if(error) throw error;
+            }else{
                 /******************
-		    	Successful Login
-		    	******************/
-                if(isMatch){
-                    req.flash({success_message: 'Successfully logged in'});
-                    return done(null, user[0], { success_message: req.flash('success_message') });   
-                }
-				/******************
-		    	Error: Incorrect Password
-		    	******************/
-                else{
-                    req.flash({error_message: 'Incorrect password'});
-                    return done(null, false, { error_message: req.flash('error_message') });
-                }
-            });      
+    	    	Validate User Password
+    	    	******************/
+                users.comparePassword(password, user[0].password, (error, isMatch) =>{    
+                    /******************
+    		    	Successful Login
+    		    	******************/
+                    if(isMatch){
+                        req.flash({success_message: 'Successfully logged in'});
+                        return done(null, user[0], { success_message: req.flash('success_message') });   
+                    }
+    				/******************
+    		    	Error: Incorrect Password
+    		    	******************/
+                    else{
+                        req.flash({error_message: 'Incorrect password'});
+                        return done(null, false, { error_message: req.flash('error_message') });
+                    }
+                }); 
+            }     
         });    
     }
 ));
