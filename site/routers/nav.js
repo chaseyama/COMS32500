@@ -46,9 +46,9 @@ router.get('/index', function(req, res) {
 *****************************************/
 router.get('/login', function(req, res) {
     if(req.user){
-        req.flash('error_message', 'You are already logged in');
+        req.flash('error_message', 'You are already logged in. Please logout to access the Login page.');
         res.render('index', {
-            error_message: null, 
+            error_message: req.flash('error_message'), 
             success_message: null,
             user: req.user,
             first_visit: false
@@ -67,9 +67,9 @@ router.get('/login', function(req, res) {
 *****************************************/
 router.get('/register', function(req, res) {
     if(req.user){
-        req.flash('error_message', 'You are already logged in');
+        req.flash('error_message', 'You are already logged in. Please logout to access the Registration page.');
         res.render('index', {
-            error_message: null, 
+            error_message: req.flash('error_message'), 
             success_message: null,
             user: req.user,
             first_visit: false
@@ -137,11 +137,12 @@ router.get('/new_question', function(req, res) {
             user: user
         });
     }else{
+        req.flash('error_message', 'Please login/register an account to access the New Question page');
         res.render('login', {
-        error_message: null, 
-        success_message: null,
-        user: null
-    });
+            error_message: req.flash('error_message'), 
+            success_message: null,
+            user: null
+        });
     }
 });
 
@@ -150,12 +151,11 @@ router.get('/new_question', function(req, res) {
 *****************************************/
 router.get('/profile', function(req, res) {
     if(!req.user){
-        req.flash('error_message', 'Please login/register an account to access the profile page');
-        res.render('index', {
-            error_message: null, 
+        req.flash('error_message', 'Please login/register an account to access the Profile page');
+        res.render('login', {
+            error_message: req.flash('error_message'), 
             success_message: null,
-            user: null,
-            first_visit: false
+            user: null
         });
     }else{
         market.fetchUsersItems(req.user.id, (rows) => {
