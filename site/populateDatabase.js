@@ -18,10 +18,10 @@ const bcrypt = require('bcrypt');
 const users = require('./routers/users_db.js');
 const market = require('./routers/market_db.js');
 const notification = require('./routers/notification_db.js');
-const questions = require('./questions.js');
-const responses = require('./responses.js');
+const questions = require('./routers/questions_db.js');
+const responses = require('./routers/responses_db.js');
 
-createTables();
+// createTables();
 printTables();
 
 /*****************************************
@@ -37,10 +37,10 @@ function createTables(){
 		responses.createResponsesTable();
 
 		//Populate Tables
-		populateUsers();
-		populateMarket();
+		// populateUsers();
+		// populateMarket();
 		populateNotification();
-		// db.close();
+		db.close();
 	}catch(error){
 		console.log(error);
 		db.close();
@@ -126,24 +126,24 @@ function printTables(){
    			}
    		});
     });
-    //Print Market Table
-    db.serialize(() => {
-        db.all("SELECT * FROM market;", (error,rows) => {
-	        if(rows){
-	            console.log(rows);
-	        }else{
-	            console.log(error);
-   			}
-   		});
-    });  
-    //Print Notification Table
-    db.serialize(() => {
-        db.all("SELECT * FROM notification;", (error,rows) => {
-	        if(rows){
-	            console.log(rows);
-	        }else{
-	            console.log(error);
-   			}
-   		});
-    });  
+    // //Print Market Table
+    // db.serialize(() => {
+    //     db.all("SELECT * FROM market;", (error,rows) => {
+	   //      if(rows){
+	   //          console.log(rows);
+	   //      }else{
+	   //          console.log(error);
+   	// 		}
+   	// 	});
+    // });  
+    // //Print Notification Table
+    // db.serialize(() => {
+    //     db.all("SELECT * FROM notification;", (error,rows) => {
+	   //      if(rows){
+	   //          console.log(rows);
+	   //      }else{
+	   //          console.log(error);
+   	// 		}
+   	// 	});
+    // });  
 }
