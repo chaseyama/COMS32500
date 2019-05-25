@@ -45,21 +45,41 @@ router.get('/index', function(req, res) {
     Login Route Handler
 *****************************************/
 router.get('/login', function(req, res) {
-    res.render('login', {
-        error_message: null, 
-        success_message: null,
-        user: null
-    });
+    if(req.user){
+        req.flash('error_message', 'You are already logged in');
+        res.render('index', {
+            error_message: null, 
+            success_message: null,
+            user: req.user,
+            first_visit: false
+        });
+    }else{
+        res.render('login', {
+            error_message: null, 
+            success_message: null,
+            user: null
+        });
+    }
 });
 
 /*****************************************
     Register Route Handler
 *****************************************/
 router.get('/register', function(req, res) {
-    res.render('register', {
-        error_message: null,
-        user: null
-    });
+    if(req.user){
+        req.flash('error_message', 'You are already logged in');
+        res.render('index', {
+            error_message: null, 
+            success_message: null,
+            user: req.user,
+            first_visit: false
+        });
+    }else{
+        res.render('register', {
+            error_message: null,
+            user: null
+        });
+    }
 });
 
 /*****************************************
@@ -129,28 +149,38 @@ router.get('/new_question', function(req, res) {
     Profile Route Handler
 *****************************************/
 router.get('/profile', function(req, res) {
-    market.fetchUsersItems(req.user.id, (rows) => {
-        var items = null; 
-        if(rows) items = rows;
+    if(!req.user){
+        req.flash('error_message', 'Please login/register an account to access the profile page');
+        res.render('index', {
+            error_message: null, 
+            success_message: null,
+            user: null,
+            first_visit: false
+        });
+    }else{
+        market.fetchUsersItems(req.user.id, (rows) => {
+            var items = null; 
+            if(rows) items = rows;
 
-        questions.fetchUsersQuestions(req.user.id, (rows) => {
-            var questions = null; 
-            if(rows) questions = rows;
-            notification.fetchNotificationsById(req.user.id, (rows) =>{
-                var notifications = null;
-                if(rows.length != 0) notifications = rows;
-                console.log(notifications);
-                res.render('profile', {
-                    success_message: null,
-                    notifications: notifications,
-                    myItems: items,
-                    myQuestions: questions,
-                    user: req.user
+            questions.fetchUsersQuestions(req.user.id, (rows) => {
+                var questions = null; 
+                if(rows) questions = rows;
+                notification.fetchNotificationsById(req.user.id, (rows) =>{
+                    var notifications = null;
+                    if(rows.length != 0) notifications = rows;
+                    console.log(notifications);
+                    res.render('profile', {
+                        success_message: null,
+                        notifications: notifications,
+                        myItems: items,
+                        myQuestions: questions,
+                        user: req.user
+                    });
+
                 });
-
             });
         });
-    });
+    }
 });
 
 /*****************************************
