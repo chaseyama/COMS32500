@@ -22,7 +22,7 @@ router.get('/', function(req, res) {
     var user = null;
     if(req.user) user = {id: req.user.id};
     res.render('index',{
-        error: null,
+        error_message: null,
         user: user,
         first_visit: false
     });
@@ -35,7 +35,7 @@ router.get('/index', function(req, res) {
     var user = null;
     if(req.user) user = {id: req.user.id};;
     res.render('index',{
-        error: null,
+        error_message: null,
         user: user,
         first_visit: false
     });
