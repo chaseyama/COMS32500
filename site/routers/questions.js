@@ -113,7 +113,7 @@ router.get('/delete_question', function (req,res){
                         user: user});
                         }else{
                             res.render('questions', {browse: true, browseResults: null,
-                        user: null});
+                        user: user});
                         }
                     });
             });

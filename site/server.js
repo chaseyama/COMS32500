@@ -92,7 +92,7 @@ function ban(req, res, next) {
 function auth(req, res, next) {
     console.log('Inside the homepage callback function');
     res.render('index',{
-        error: null,
+        error_message: null,
         user: null,
         first_visit: true
     });
@@ -155,7 +155,7 @@ app.use(function(err, req, res, next) {
         var user = null;
         if(req.user) user = {id: req.user.id};
         res.render('index',{
-            error: req.flash('error_message'),
+            error_message: req.flash('error_message'),
             user: user,
             first_visit: false
         });
