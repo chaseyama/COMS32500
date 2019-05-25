@@ -46,11 +46,13 @@ router.post('/register_user', function (req, res, next) {
         Validate Against Database
         ******************/
         console.log('Checking User Email');
+        console.log(req.body.email);
         users.fetchUserByEmail(req.body.email, (error, rows) => {
         		/******************
     		    Error: Email Already Registered
     		    ******************/
-                if(rows){
+                if(rows.length != 0){
+                    console.log(rows);
                     req.flash('error_message', 'There is already an account associated with this email');
                     res.render('register', {
                         error_message: req.flash('error_message'),
