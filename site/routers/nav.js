@@ -115,11 +115,19 @@ router.get('/questions', function(req, res) {
     if(req.user) user = req.user;
     questions.fetchAllQuestions((rows) =>{
         if(rows){
-            res.render('questions', {browse: true, browseResults: rows,
-        user: user});
+            res.render('questions', {
+                success_message: null,
+                browse: true,
+                browseResults: rows,
+                user: user
+            });
         }else{
-            res.render('questions', {browse: true, browseResults: null,
-        user: user});
+            res.render('questions', {
+                success_message: null,
+                browse: true,
+                browseResults: null,
+                user: user
+            });
         }
     });
 });

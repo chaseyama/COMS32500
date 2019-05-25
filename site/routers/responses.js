@@ -35,37 +35,6 @@ router.post('/fetch_by_category', function (req,res){
 })
 
 /*****************************************
-    Fetch Question by Id Route Handler
-    Description: Fetch a Question and it's Responses by QuestionId
-*****************************************/
-router.get('/fetch_by_id', function (req,res){
-    var user;
-    if(req.user) user = req.user;
-    else user = null;
-    questions.fetchQuestionById(req.query.id, (rows) =>{
-        var question = rows[0];
-        responses.fetchResponsesByQuestionId(question.id, (rows) =>{
-            if(rows){
-                res.render('one_question', {
-                    browse: true, 
-                    question: question,
-                    responses: rows,
-                    user: user
-                });
-            }else{
-                res.render('one_question', {
-                    browse: true, 
-                    browseResults: null,
-                    question: question,
-                    responses: null,
-                    user: user
-                });
-            }
-        });
-    });
-})
-
-/*****************************************
     Post Response Route Handler
     Description: Post a New Response
 *****************************************/
@@ -86,15 +55,16 @@ router.post('/post_response', function (req,res){
         responses.fetchResponsesByQuestionId(question.id, (rows) =>{
             if(rows){
                 res.render('one_question', {
-                    browse: true, 
+                    success_message: null,
+                    browse: true,
                     question: question,
                     responses: rows,
                     user: user
                 });
             }else{
                 res.render('one_question', {
+                    success_message: null,
                     browse: true, 
-                    browseResults: null,
                     question: question,
                     responses: null,
                     user: user
@@ -113,12 +83,14 @@ router.get('/delete_response', function (req,res){
     //Redirect
         var user = null;
         if(req.user) user = req.user;
+        req.flash('success_message', 'Your response has been successfully deleted');
     
         questions.fetchQuestionById(req.query.questionId, (rows) =>{
             var question = rows[0];
             responses.fetchResponsesByQuestionId(question.id, (rows) =>{
                 if(rows){
                     res.render('one_question', {
+                        success_message: req.flash('success_message'),
                         browse: true, 
                         question: question,
                         responses: rows,
@@ -126,8 +98,8 @@ router.get('/delete_response', function (req,res){
                     });
                 }else{
                     res.render('one_question', {
+                        success_message: req.flash('success_message'),
                         browse: true, 
-                        browseResults: null,
                         question: question,
                         responses: null,
                         user: user

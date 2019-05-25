@@ -18,6 +18,10 @@
         <main>
             <div class="container">
                 
+                <% if(success_message){ %>
+                    <div class="alert alert-success"><%= success_message %></div>
+                <% }%>
+                
                 <% if(question){ %>
                     <h3>
                         <%= question.title %>
