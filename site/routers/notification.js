@@ -14,6 +14,7 @@ const router = express.Router();
 const notification = require('./notification_db.js');
 const users = require('./users_db.js');
 const market = require('./market_db.js');
+const questions = require('./questions_db.js');
 
 
 /*****************************************
@@ -55,15 +56,20 @@ router.post('/deleteNotification', function(req, res){
             market.fetchUsersItems(req.user.id, (rows) => {
                 var items = null; 
                 if(rows) items = rows;
-                notification.fetchNotificationsById(req.user.id, (rows) =>{
-                    var notifications = null;
-                    if(rows) notifications = rows;
-                    var user = {id: req.user.id};
-                    res.render('profile', {
-                        success_message: req.flash('success_message'),
-                        notifications: notifications,
-                        myItems: items,
-                        user: user
+                questions.fetchUsersQuestions(req.user.id, (rows) => {
+                    var questions = null; 
+                    if(rows) questions = rows;
+                    notification.fetchNotificationsById(req.user.id, (rows) =>{
+                        var notifications = null;
+                        if(rows) notifications = rows;
+                        var user = {id: req.user.id};
+                        res.render('profile', {
+                            success_message: req.flash('success_message'),
+                            notifications: notifications,
+                            myItems: items,
+                            myQuestions: questions,
+                            user: user
+                        });
                     });
                 });
             });

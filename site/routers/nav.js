@@ -176,7 +176,6 @@ router.get('/profile', function(req, res) {
                         myQuestions: questions,
                         user: req.user
                     });
-
                 });
             });
         });
