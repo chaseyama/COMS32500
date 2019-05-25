@@ -61,7 +61,7 @@ router.post('/sell_item', function (req,res){
     }else{
         priceRange = '££££';
     }
-    
+
     //Create Item Object
     var newItem = {
         'itemName': req.body.itemName,
