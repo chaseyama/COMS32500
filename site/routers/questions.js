@@ -23,15 +23,27 @@ router.post('/fetch_by_category', function (req,res){
     var user;
     if(req.user) user = req.user;
     else user = null;
-    questions.fetchQuestionsByCategory(req.body.category, (rows) =>{
-        if(rows){
-            res.render('questions', {browse: true, browseResults: rows,
-        user: user});
-        }else{
-            res.render('questions', {browse: true, browseResults: null,
-        user: user});
-        }
-    });
+    if(req.body.category == 'all'){
+        questions.fetchAllQuestions((rows) =>{
+            if(rows){
+                res.render('questions', {browse: true, browseResults: rows,
+            user: user});
+            }else{
+                res.render('questions', {browse: true, browseResults: null,
+            user: user});
+            }
+        });
+    }else{
+        questions.fetchQuestionsByCategory(req.body.category, (rows) =>{
+            if(rows){
+                res.render('questions', {browse: true, browseResults: rows,
+            user: user});
+            }else{
+                res.render('questions', {browse: true, browseResults: null,
+            user: user});
+            }
+        });
+    }
 })
 
 /*****************************************
