@@ -105,7 +105,6 @@ router.post('/login_user',
     Description: Definition of PassportJS (Local-Strategy)
 *****************************************/
 passport.use(new LocalStrategy({passReqToCallback: true}, function(req, username, password, done) {
-        console.log('Password:' + password);
 		/******************
     	Fetch User Information
     	******************/
@@ -127,6 +126,7 @@ passport.use(new LocalStrategy({passReqToCallback: true}, function(req, username
     		    	Successful Login
     		    	******************/
                     if(isMatch){
+                        console.log('Success');
                         req.flash({success_message: 'Successfully logged in'});
                         return done(null, user[0], { success_message: req.flash('success_message') });   
                     }

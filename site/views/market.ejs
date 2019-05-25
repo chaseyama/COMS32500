@@ -17,9 +17,11 @@
         <!--Main Content-->  
         <main>
             <section id="marketplace" class="container">
-                <% if(success_message){ %>
-                <div class="alert alert-success"><%= success_message %></div>
-                <% }%>
+                <section id="messages">
+                    <% if(success_message){ %>
+                    <div class="alert alert-success"><%= success_message %></div>
+                    <% }%>
+                </section>
 
                 <!-- Description Section -->
                 <section id="market_header" class="row">
@@ -107,7 +109,7 @@
                         </section>
                     <%}%>
 
-                    <script type="text/javascript">
+<!--                     <script type="text/javascript">
                         function getConfirmation(sellerId, itemName, buyerId){
                             var message = 'Study Abroad Bristol can share your email with this item\'s owner to coordinate future inquiries. Do you want Study Abroad Bristol to share your email?';
                             if(window.confirm(message)){
@@ -125,7 +127,7 @@
                                 console.log('False');
                             }
                         }
-                    </script>
+                    </script> -->
                         
                     <!-- Sell Item Section -->
                     <section id="sell" class="tab-pane fade jumbotron">
@@ -156,8 +158,7 @@
                                 <div class="form-group row">
                                     <div class="col-sm-12">
                                         <h3>Description</h3>
-                                        <textarea name="description" rows="10" cols="100" maxlength="255" required="required">Please briefly describe your item. 
-                                        </textarea>
+                                        <textarea name="description" rows="10" cols="100" maxlength="255" required="required" placeholder='Please briefly describe your item. '></textarea>
                                     </div>
                                 </div>
                                 <!-- <input type="hidden" name="seller" value="<%=user.id%>"/> -->
@@ -177,10 +178,11 @@
         <%- include('partials/footer') %>
     </body>
 
+    <script type="text/javascript" src="scripts/market.js"></script>
     <!-- Bootstrap: jQuery library --> 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/> -->
 
     <!-- Bootstrap: Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> 
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"/> -->
     
 </html>

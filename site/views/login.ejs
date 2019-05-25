@@ -15,13 +15,18 @@
 
         <!--Main Content-->  
         <main>
-            <% if(error_message){ %>
-                    <div class="alert alert-danger"><%= error_message %></div>
-            <% } %>
+            <section id="messages">
+                <% if(error_message.length != 0){ %>
+                        <div class="alert alert-danger"><%= error_message %></div>
+                <% } %>
 
-            <% if(success_message){%>
-                    <div class="alert alert-success"><%= success_message %></div>
-            <% } %>
+                <% if(success_message){%>
+                        <div class="alert alert-success"><%= success_message %></div>
+                <% } %>
+                <% if(error.length != 0){%>
+                    <div class="alert alert-danger"><%= error %></div>
+                <% } %>
+            </section>
             <section id="login_register">
                 <div class="container">
                     <div class="row">

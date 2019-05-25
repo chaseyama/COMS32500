@@ -55,9 +55,10 @@ router.get('/login', function(req, res) {
         });
     }else{
         res.render('login', {
-            error_message: null, 
+            error_message: req.flash('error_message'), 
             success_message: null,
-            user: null
+            user: null,
+            error: req.flash('error_message')
         });
     }
 });
@@ -142,6 +143,7 @@ router.get('/new_question', function(req, res) {
             error_message: req.flash('error_message'), 
             success_message: null,
             user: null
+
         });
     }
 });

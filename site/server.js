@@ -12,7 +12,6 @@ banUpperCase("./public/", "");
 // and deliver static files from ./public.
 app.use(lower);
 app.use(ban)
-
 /*****************************************
     Initialize User Sessions
     - Express-Session Module

@@ -27,6 +27,7 @@ p{
 a{
   font-family: Georgia;
 }
+
 #navigation{
   font-size: 1.8em;
 }
@@ -146,4 +147,13 @@ a{
 #modal-img{
   border-radius: 50%;
   height: 25em;
+}
+#footer{
+  /*position: fixed;*/
+  height: 10em;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
