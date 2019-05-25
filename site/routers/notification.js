@@ -30,7 +30,6 @@ router.get('/makeInquiry', function(req,res){
         if(email){
             //Send message
             var msg = buyerName + " is interested in purchasing your " + itemName + ". You can contact him at " + email + ".";
-            console.log(msg);
             notification.insertNotification(ownerId, msg, (result) =>{
                 if(result){
                     req.flash('success_message', 'Request Sent');

@@ -68,7 +68,7 @@ router.post('/sell_item', function (req,res){
         'itemName': req.body.itemName,
         'price': req.body.price,
         'priceRange': priceRange,
-        'category': req.body.category,
+        'category': req.body.item_category,
         'description': req.body.description,
         'seller': req.user.id
     };
@@ -122,5 +122,18 @@ router.post('/delete_items', function(req,res){
         }
     });
 })
+function getConfirmation(sellerId, itemName, buyerId){
+    var message = 'Study Abroad Bristol can share your email with this item\'s owner to coordinate future inquiries. Do you want Study Abroad Bristol to share your email?';
+    if(window.confirm(message)){
+        var xmlHttp = new XMLHttpRequest();
+        var path = '/makeInquiry?owner=' + sellerId + '&itemName=' +itemName + '&buyer=' + buyerId;
+        xmlHttp.open( "GET", path, true); // false for synchronous request
+        xmlHttp.send( null );
+        console.log('True');
+    }else{
+        console.log('False');
+    }
+}
+
 
 module.exports = router;
