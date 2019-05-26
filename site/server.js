@@ -1,15 +1,18 @@
 "use strict";
-// Sample express web server.  Supports the same features as the provided server,
-// and demonstrates a big potential security loophole in express.
+/*****************************************
+    Server File:
+    - Based on express server example
+    provided for class.
+    - Expaned with express-routing and
+    other node modules
+*****************************************/
 var express = require("express");
 var app = express();
 var fs = require("fs");
 var banned = [];
 banUpperCase("./public/", "");
 
-// Define the sequence of functions to be called for each request.  Make URLs
-// lower case, ban upper case filenames, require authorisation for admin.html,
-// and deliver static files from ./public.
+// Make URLs lower case, ban upper case filenames, 
 app.use(lower);
 app.use(ban)
 
@@ -31,6 +34,7 @@ app.use(session({
     saveUninitialized: true
 }))
 
+// Require authorisation for admin.html, and deliver static files from ./public.
 app.all("/", auth);
 var options = { setHeaders: deliverXHTML };
 app.use(express.static("public", options));
@@ -38,24 +42,28 @@ app.listen(8080, "localhost");
 console.log("Visit http://localhost:8080/");
 
 /*****************************************
-    Imported Node Modules
+    Node Modules
+    - body-parser: read values from POST req.body
+    - express-validator: Sanitize user input
+    - EJS: set view engine
+    - PassportJS (Local-Strategy): User authentication strategy
 *****************************************/
+//Body-Parser
 const bodyParser = require('body-parser');
 app.use(bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
 
+//Express-Validator
 const expressValidator = require('express-validator');
 app.use(expressValidator());
 
+//EJS 
 const path = require('path');
 app.set('view engine', 'ejs');
 
-/*****************************************
-    Initialize PassportJS (Local-Strategy)
-    - PassportJS
-*****************************************/
+//PassportJS
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const flash = require('connect-flash');

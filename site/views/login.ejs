@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Study Abroad Bristol</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/general.css"/>
+    <link rel="stylesheet" href="styles/login.css"/>
     <!-- Bootstrap: Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/styles/index.css"/>
-
     <!-- Bootstrap: jQuery library --> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer="defer"></script>
     <!-- Bootstrap: Latest compiled JavaScript -->
@@ -20,7 +21,7 @@
 
         <!--Main Content-->  
         <main>
-
+            <!-- Sucess/Error Messages -->
             <section id="messages">
                 <% if(error_message){ %>
                     <% if(error_message.length != 0){ %>
@@ -32,6 +33,7 @@
                         <div class="alert alert-success"><%= success_message %></div>
                 <% } %>
             </section>
+            <!-- Login Section -->
             <section id="login_register">
                 <div class="container">
                     <div class="row">

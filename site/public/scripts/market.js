@@ -1,9 +1,9 @@
 "use strict";
 
-/********************************************************************
+/************************************
     MARKETPLACE FILE:
     Route Handlers for Marketplace
-********************************************************************/
+*************************************/
 
 /*****************************
 Hide Results When Selling Item
@@ -18,6 +18,9 @@ function hideResults(){
     }
 }
 
+/*****************************
+Send Notification to Server
+*****************************/
 function getConfirmation(sellerId, itemName, buyerId){
     // document.querySelector(".confirmation");
     console.log('Confirmation Message');

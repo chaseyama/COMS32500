@@ -47,6 +47,10 @@ router.get('/makeInquiry', function(req,res){
     });
 })
 
+/*****************************************
+    Delete Notification Route Handler
+    Description: Delete Notification from Database
+*****************************************/
 router.post('/deleteNotification', function(req, res){
     var notificationId = req.body.delete;
     console.log("Note id: " + notificationId);
