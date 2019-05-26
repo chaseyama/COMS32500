@@ -28,8 +28,14 @@ a{
   font-family: Georgia;
 }
 
-#navigation{
+.navbar-nav>li{
   font-size: 1.8em;
+  float: none;
+  display: inline-block;
+}
+
+#navbar{
+  width: 100%;
 }
 /*
   Introduction Summary Styling
@@ -155,13 +161,16 @@ a{
   height: 25em;
 }
 #footer{
-  /*position: fixed;*/
-  height: 10em;
+/*  position: fixed;*/
+  padding: 2em;
   left: 0;
   bottom: 0;
   width: 100%;
-  padding-bottom: 0;
   margin-bottom: 0;
+}
+
+main {
+  min-height: 74vh;
 }
 
 .hidden{
