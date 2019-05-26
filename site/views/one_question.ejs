@@ -6,7 +6,7 @@
     <title>Study Abroad Bristol</title>
     <!-- Bootstrap: Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="styles/index.css"/>
+    <link rel="stylesheet" href="/styles/index.css"/>
 
 </head>
     <body>
@@ -30,10 +30,14 @@
                     <% if(user){ %>
                         <% if(user.id == question.author){ %>
                             <div class="text-right">
-                                <a href="/delete_question?id=<%=question.id%>" class="btn btn-danger" role="button">Delete Question</a>
+                                <button type="submit" onclick="delete_question(<%= question.id%>)"class="btn btn-danger" name="">Delete Question</button>
                             </div>
                         <%}%>
                     <%}%>
+                    <form method="POST" action="/delete_question" id="delete_question_form">
+                        <input type="hidden" name="id" id="id" value=""></input>
+                    </form>
+
                     <p><span class="glyphicon glyphicon-user"></span><%= question.fname %></p>
                     <div class="well well-sm">
                         <h4><%= question.description %></h4>
@@ -52,12 +56,16 @@
                             <% if(user){ %>
                                 <% if(user.id == responses[i].author){ %>
                                     <div class="text-right">
-                                        <a href="/delete_response?id=<%=responses[i].id%>&questionId=<%=responses[i].questionId%>" class="btn btn-danger" role="button">Delete Response</a>
+                                        <button type="submit" onclick="delete_response(<%= responses[i].id %>, <%= responses[i].questionId %>)"class="btn btn-danger" name="">Delete Response</button>
                                     </div>
                                 <%}%>
                             <%}%>
                         </div>
                     <%}%>
+                    <form method="POST" action="/delete_response" id="delete_response_form">
+                        <input type="hidden" name="responseId" id="responseId" value=""></input>
+                        <input type="hidden" name="questionId" id="questionId" value=""></input>
+                    </form>
                 <%}else{%>
                     <p>No responses posted to this question.</p>
                 <%}%>
@@ -68,7 +76,7 @@
                         <textarea name="description" rows="10" cols="100" maxlength="255" required="required" placeholder="Type your response here."></textarea>
                         <input type="hidden" name="author" value="<%= user.id %>"/>
                         <input type="hidden" name="questionId" value="<%= question.id %>"/>
-                        <input type="submit" name="submit"/>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 <%}else{%>
                     <a href="/login" class="btn btn-info" role="button">Login to Post a Response</a>
@@ -81,6 +89,8 @@
         </main>
         <%- include('partials/footer') %>
     </body>
+
+    <script type="text/javascript" src="/scripts/one_question.js"></script>
 
     <!-- Bootstrap: jQuery library --> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
