@@ -105,6 +105,12 @@ a{
   margin-bottom: 10em;
 }
 
+.overflow{
+  overflow-y: 
+  scroll; 
+  height: 18em;
+}
+
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -156,4 +162,8 @@ a{
   width: 100%;
   padding-bottom: 0;
   margin-bottom: 0;
+}
+
+.hidden{
+  display: none;
 }

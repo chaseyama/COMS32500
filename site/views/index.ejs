@@ -6,20 +6,23 @@
         <!-- Bootstrap: Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="styles/index.css"/>
+        <script type="text/javascript" src="scripts/index.js" defer="defer"></script>
     </head>
-    <body onload="displayModal(<%=first_visit%>)">
-        <!-- Navigation Bar -->
+    <body>
+        <!-- 
+        Navigation Bar 
+        -->
         <%- include('partials/navbar') %>
         
         <!--Main Content-->  
         <main>
-
             <!-- The Modal -->
             <div id="myModal" class="modal">
 
                 <!-- Modal content -->
                 <div class="modal-content">
                     <div class="text-center">
+                        <p id="first_visit" class="hidden" ><%=first_visit%></p>
                         <span class="close">&times;</span>
                         <h2>Welcome to</h2>
                         <img src="/images/index/test.png" id="modal-img"></img>
@@ -34,8 +37,8 @@
                 <% } %>
             </section>
             <!-- 
-                Section 1
-             -->
+            Summary Section: Description of Website
+            -->
             <article id="summary">
                 <div class="container">
                     <div class="row">
@@ -49,8 +52,8 @@
             </article>
 
             <!-- 
-                Section 2
-             -->
+            Features Section: Description of Features
+            -->
             <section id="icons" class="container">
                 <div class="row">
                     <section class="col-lg-12 text-center">
@@ -80,8 +83,8 @@
             </section>
             
             <!-- 
-                Section 3
-             -->
+            User Accounts Section: Login and Registration
+            -->
             <% if(!user){ %>
             <section id="login_register" class="container">
                 <div class="row">
@@ -154,12 +157,4 @@
         
         <%- include('partials/footer') %>
     </body>
-
-    <script type="text/javascript" src="scripts/index.js"></script>"
-    <!-- Bootstrap: jQuery library --> 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <!-- Bootstrap: Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> 
-    
 </html>

@@ -22,6 +22,7 @@ const questions = require('./questions_db.js');
     Description: Create Inquiry
 *****************************************/
 router.get('/makeInquiry', function(req,res){
+    console.log('Adding Notification');
     var ownerId = req.query.owner;
     var itemName= req.query.itemName;
     var buyerId = req.query.buyer;
