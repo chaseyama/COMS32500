@@ -23,8 +23,10 @@
         <main>
             <!-- Sucess/Error Messages -->
             <section id="messages">
-                <% if(error_message.length != 0){ %>
-                        <div class="alert alert-danger"><%= error_message %></div>
+                <% if(error_message){ %>
+                    <% if(error_message.length != 0){ %>
+                            <div class="alert alert-danger"><%= error_message %></div>
+                    <% } %>
                 <% } %>
 
                 <% if(success_message){%>
