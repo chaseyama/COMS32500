@@ -68,11 +68,12 @@ router.post('/sell_item', function (req,res){
         'itemName': req.body.itemName,
         'price': req.body.price,
         'priceRange': priceRange,
-        'category': req.body.category,
+        'category': req.body.item_category,
         'description': req.body.description,
         'seller': req.user.id
     };
 
+    //Insert Item
     market.insertItem(newItem);
 
     var user;

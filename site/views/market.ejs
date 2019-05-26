@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/styles/index.css"/>
 
+    <script type="text/javascript" src="scripts/market.js" defer="defer"></script>
+    <!-- Bootstrap: jQuery library --> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer="defer"></script>
+    <!-- Bootstrap: Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer="defer"></script>
+
 </head>
     <body>
         
@@ -17,9 +23,11 @@
         <!--Main Content-->  
         <main>
             <section id="marketplace" class="container">
-                <% if(success_message){ %>
-                <div class="alert alert-success"><%= success_message %></div>
-                <% }%>
+                <section id="messages">
+                    <% if(success_message){ %>
+                    <div class="alert alert-success"><%= success_message %></div>
+                    <% }%>
+                </section>
 
                 <!-- Description Section -->
                 <section id="market_header" class="row">
@@ -31,7 +39,7 @@
                     </div>
                     <ul class="nav nav-tabs nav-justified">
                         <li class="active"><a data-toggle="tab" href="#browse">Browse Items</a></li>
-                        <li><a data-toggle="tab" href="#sell" <% if(browseResults){ %>onclick="document.getElementById('browseResults').style.display = 'none';" <% } %>>Sell Item</a></li>
+                        <li id="test"><a id="sellTab" data-toggle="tab" href="#sell" >Sell Item</a></li>
                     </ul>    
                 </section>
 
@@ -95,8 +103,7 @@
                                                 </h4>
                                                 <p>Asking Price: £<%= browseResults[i].price %></p>
                                                 <p>Description: <%= browseResults[i].description %></p>
-                                                <!-- <a href="/makeInquiry?owner=<%= browseResults[i].seller %>&itemId=<%= browseResults[i].id %>">Make Inquiry</a> -->
-                                                <button onclick="getConfirmation('<%=browseResults[i].seller%>', '<%=browseResults[i].itemName%>', '<%=user.id%>');">Make Inquiry</button>
+                                                <button onclick="console.log('Clicked'); getConfirmation('<%=browseResults[i].seller%>', '<%=browseResults[i].itemName%>', '<%=user.id%>');">Make Inquiry</button>
                                             </div>
                                         <%}
                                         
@@ -107,26 +114,6 @@
                         </section>
                     <%}%>
 
-                    <script type="text/javascript">
-                        function getConfirmation(sellerId, itemName, buyerId){
-                            var message = 'Study Abroad Bristol can share your email with this item\'s owner to coordinate future inquiries. Do you want Study Abroad Bristol to share your email?';
-                            if(window.confirm(message)){
-                                var xmlHttp = new XMLHttpRequest();
-                                var path = '/makeInquiry?owner=';
-                                path += sellerId;
-                                path += '&itemName=';
-                                path += itemName;
-                                path += '&buyer=';
-                                path += buyerId;
-                                xmlHttp.open( "GET", path, true); // false for synchronous request
-                                xmlHttp.send( null );
-                                console.log('True');
-                            }else{
-                                console.log('False');
-                            }
-                        }
-                    </script>
-                        
                     <!-- Sell Item Section -->
                     <section id="sell" class="tab-pane fade jumbotron">
                         <h2>Sell</h2>
@@ -156,7 +143,7 @@
                                 <div class="form-group row">
                                     <div class="col-sm-12">
                                         <h3>Description</h3>
-                                        <textarea name="description" rows="10" cols="100" maxlength="255" required="required" placeholder="Please briefly describe your item."></textarea>
+                                        <textarea name="description" rows="10" cols="100" maxlength="255" required="required" placeholder='Please briefly describe your item. '></textarea>
                                     </div>
                                 </div>
                                 <!-- <input type="hidden" name="seller" value="<%=user.id%>"/> -->
@@ -175,11 +162,4 @@
         </main>
         <%- include('partials/footer') %>
     </body>
-
-    <!-- Bootstrap: jQuery library --> 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <!-- Bootstrap: Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> 
-    
 </html>

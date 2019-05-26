@@ -6,7 +6,13 @@
     <title>Study Abroad Bristol</title>
     <!-- Bootstrap: Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/styles/index.css"/>
+    <link rel="stylesheet" href="styles/index.css"/>
+
+    <!-- Bootstrap: jQuery library -->
+        <script type="text/javascript" src="/scripts/questions.js" defer="defer"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer="defer"></script>
+    <!-- Bootstrap: Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer="defer"></script>
 </head>
     <body>    
         <!--Navigation Bar-->  
@@ -21,7 +27,7 @@
             <div class="row">
                 <section id="Notifications" class="well col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <h3>Notifications:</h3>
-                        <div style="overflow-y: scroll; height: 18em;">
+                        <div class="overflow">
                         <% if(notifications){ console.log(notifications)%> 
                             <% for(var i=0; i < notifications.length; i++) { %>
                                 <div class="well well-sm">
@@ -43,7 +49,7 @@
                 
                 <section id="myItems" class="well well-sm col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <h3>Items For Sale:</h3>
-                    <div style="overflow-y: scroll; height: 18em;">
+                    <div class="overflow">
                         <% if(myItems){ %> 
                             <% for(var i=0; i < myItems.length; i++) { %>
                                 <div class="well well-sm">
@@ -63,7 +69,7 @@
                 </section>
                 <section id="myQuestions" class=" well well-sm col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <h3>Your Questions:</h3>
-                    <div style="overflow-y: scroll; height: 18em;">
+                    <div class="overflow">
                         <% if(myQuestions){ %> 
                             <% for(var i=0; i < myQuestions.length; i++) { %>
                                 <div class="well well-sm">
@@ -84,13 +90,4 @@
         </main>
         <%- include('partials/footer') %>
     </body>
-
-    <script type="text/javascript" src="/scripts/questions.js"></script>
-
-    <!-- Bootstrap: jQuery library --> 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <!-- Bootstrap: Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> 
-    
 </html>

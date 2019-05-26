@@ -22,6 +22,7 @@ const questions = require('./questions_db.js');
     Description: Create Inquiry
 *****************************************/
 router.get('/makeInquiry', function(req,res){
+    console.log('Adding Notification');
     var ownerId = req.query.owner;
     var itemName= req.query.itemName;
     var buyerId = req.query.buyer;
@@ -30,7 +31,6 @@ router.get('/makeInquiry', function(req,res){
         if(email){
             //Send message
             var msg = buyerName + " is interested in purchasing your " + itemName + ". You can contact him at " + email + ".";
-            console.log(msg);
             notification.insertNotification(ownerId, msg, (result) =>{
                 if(result){
                     req.flash('success_message', 'Request Sent');

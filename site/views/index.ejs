@@ -5,21 +5,24 @@
         <title>Study Abroad Bristol</title>
         <!-- Bootstrap: Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="/styles/index.css"/>
+        <link rel="stylesheet" href="styles/index.css"/>
+        <script type="text/javascript" src="scripts/index.js" defer="defer"></script>
     </head>
     <body>
-        <!-- Navigation Bar -->
+        <!-- 
+        Navigation Bar 
+        -->
         <%- include('partials/navbar') %>
         
         <!--Main Content-->  
         <main>
-
             <!-- The Modal -->
             <div id="myModal" class="modal">
 
                 <!-- Modal content -->
                 <div class="modal-content">
                     <div class="text-center">
+                        <p id="first_visit" class="hidden" ><%=first_visit%></p>
                         <span class="close">&times;</span>
                         <h2>Welcome to</h2>
                         <img src="/images/index/test.png" id="modal-img"></img>
@@ -28,37 +31,14 @@
 
             </div>
 
-            <script>
-            // Get the modal
-            var modal = document.getElementById("myModal");
-
-            // Get the <span> element that closes the modal
-            var span = document.getElementsByClassName("close")[0];
-
-            // When the user clicks on <span> (x), close the modal
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
-
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
-            </script>
-
-            <% if(first_visit){ %>
-                <script> modal.style.display = "block"; </script>
-            <% } %>
-
-
-            <% if(error_message){ %>
-                <div class="alert alert-danger"><%= error_message %></div>
-            <% } %>
+            <section id="messages">
+                <% if(error_message){ %>
+                    <div class="alert alert-danger"><%= error_message %></div>
+                <% } %>
+            </section>
             <!-- 
-                Section 1
-             -->
+            Summary Section: Description of Website
+            -->
             <article id="summary">
                 <div class="container">
                     <div class="row">
@@ -72,8 +52,8 @@
             </article>
 
             <!-- 
-                Section 2
-             -->
+            Features Section: Description of Features
+            -->
             <section id="icons" class="container">
                 <div class="row">
                     <section class="col-lg-12 text-center">
@@ -103,8 +83,8 @@
             </section>
             
             <!-- 
-                Section 3
-             -->
+            User Accounts Section: Login and Registration
+            -->
             <% if(!user){ %>
             <section id="login_register" class="container">
                 <div class="row">
@@ -177,11 +157,4 @@
         
         <%- include('partials/footer') %>
     </body>
-
-    <!-- Bootstrap: jQuery library --> 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <!-- Bootstrap: Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> 
-    
 </html>
