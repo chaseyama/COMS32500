@@ -1,5 +1,4 @@
 "use strict";
-
 /********************************************************************
 *********************************************************************
 *********************************************************************
@@ -38,40 +37,6 @@ exports.createTables = function(){
 		db.close();
 	}
 }
-/*****************************************
-    Populate Tables Method
-*****************************************/
-exports.populateTables = function(){
-	db.serialize( () => {
-        db.all("SELECT * FROM USERS;", function(error,rows){
-            if(error) throw error;
-            if(rows.length != 0){
-                callback(null);
-            }else{
-				populateUsers((finished) => {
-					if(finished){
-						populateMarket((finished) =>{
-							if(finished){
-								populateNotification((finished) => {
-									
-								});
-							}
-						});
-					}
-				});
-            }
-        });
-    }); 
-	try{
-		
-
-		db.close();
-	}catch(error){
-		console.log(error);
-		db.close();
-	}
-}
-
 
 /*****************************************
     Populate Users Table Method

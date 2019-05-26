@@ -13,5 +13,6 @@ Dependencies/Node Modules:
 	EJS
 
 Running the Project:
-	The server is in the server.js file. Running this will start the server. The website 
-	can be access through the browser at localhost:8080.
+	The server is in the server.js file. Running this will start the server 
+	(node server.js). The website you can be access through the browser at localhost:8080.
+	
