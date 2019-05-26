@@ -21,13 +21,10 @@ const notification = require('./routers/notification_db.js');
 const questions = require('./routers/questions_db.js');
 const responses = require('./routers/responses_db.js');
 
-// createTables();
-// printTables();
-
 /*****************************************
     Create Tables Method
 *****************************************/
-function createTables(){
+exports.createTables = function(){
 	try{
 		//Create Tables
 		users.createUserTable();
@@ -35,13 +32,38 @@ function createTables(){
 		notification.createNotificationTable();
 		questions.createQuestionsTable();
 		responses.createResponsesTable();
-
-		//Populate Tables
-		// populateUsers();
-		// populateMarket();
-		// populateNotification();
-		// populateQuestions();
-		// populateResponses();
+		db.close();
+	}catch(error){
+		console.log(error);
+		db.close();
+	}
+}
+/*****************************************
+    Populate Tables Method
+*****************************************/
+exports.populateTables = function(){
+	db.serialize( () => {
+        db.all("SELECT * FROM USERS;", function(error,rows){
+            if(error) throw error;
+            if(rows.length != 0){
+                callback(null);
+            }else{
+				populateUsers((finished) => {
+					if(finished){
+						populateMarket((finished) =>{
+							if(finished){
+								populateNotification((finished) => {
+									
+								});
+							}
+						});
+					}
+				});
+            }
+        });
+    }); 
+	try{
+		
 		db.close();
 	}catch(error){
 		console.log(error);
@@ -53,7 +75,7 @@ function createTables(){
 /*****************************************
     Populate Users Table Method
 *****************************************/
-function populateUsers(){
+exports.populateUsers = function(){
 	var email = ['admin@gmail.com', 'smith@gmail.com', 'mary@gmail.com'];
 	var fname = ['admin', 'John', 'Mary'];
 	var lname = ['admin', 'Smith', null];
@@ -78,7 +100,7 @@ function populateUsers(){
 /*****************************************
     Populate Market Table Method
 *****************************************/
-function populateMarket(){
+exports.populateMarket = function (){
 	var itemName = ['Winter Jacket', 'Vans Shoes', '2 Pillows', 'Bed Sheets', 'Desk Chair', 'Bed Frame', 'Various Pots and Pans', 'Knife Set', 'iPhone Charger', 'Macbook Pro', 'Magic Beans'];
 	var price = [12.5, 5, 7, 3, 15, 30, 5, 20, 1, 100, 999];
 	var priceRange = ['££', '£', '£', '£', '££', '£££', '£', '££', '£', '££££', '££££'];
@@ -101,7 +123,7 @@ function populateMarket(){
 /*****************************************
     Populate Notification Table Method
 *****************************************/
-function populateNotification(){
+exports.populateNotification = function(){
 	var recipient = [1,1,2,2,2];
 	var buyerName = ['John','John','admin','admin','admin'];
 	var itemName = ['Winter Jacket', 'Vans Shoes','iPhone Charger', 'Macbook Pro', 'Magic Beans'];
@@ -168,55 +190,36 @@ function populateResponses(){
 /*****************************************
     Print All Tables Method
 *****************************************/
-function printTables(){
+exports.printTables = function(){
 	//Print Users Table
-	// db.serialize(() => {
- //        db.all("SELECT * FROM users;", (error,rows) => {
-	//         if(rows){
-	//             console.log(rows);
-	//         }else{
-	//             console.log(error);
- //   			}
- //   		});
- //    });
-    //Print Market Table
-    // db.serialize(() => {
-    //     db.all("SELECT * FROM market;", (error,rows) => {
-	   //      if(rows){
-	   //          console.log(rows);
-	   //      }else{
-	   //          console.log(error);
-   	// 		}
-   	// 	});
-    // }); 
-    // //Print Notification Table
-    // db.serialize(() => {
-    //     db.all("SELECT * FROM notification;", (error,rows) => {
-	   //      if(rows){
-	   //          console.log(rows);
-	   //      }else{
-	   //          console.log(error);
-   	// 		}
-   	// 	});
-    // });  
-    //Print Questions Table
-    db.serialize(() => {
-        db.all("SELECT * FROM questions;", (error,rows) => {
+	db.serialize(() => {
+        db.all("SELECT * FROM users;", (error,rows) => {
 	        if(rows){
 	            console.log(rows);
 	        }else{
 	            console.log(error);
    			}
-   	// 	});
-    // });  
-    //Print Responses Table
-    // db.serialize(() => {
-    //     db.all("SELECT * FROM responses;", (error,rows) => {
-	   //      if(rows){
-	   //          console.log(rows);
-	   //      }else{
-	   //          console.log(error);
-   	// 		}
-   	// 	});
-    // });  
+   		});
+    });
+    //Print Market Table
+    db.serialize(() => {
+        db.all("SELECT * FROM market;", (error,rows) => {
+	        if(rows){
+	            console.log(rows);
+	        }else{
+	            console.log(error);
+   			}
+   		});
+    });  
+    //Print Notification Table
+    db.serialize(() => {
+        db.all("SELECT * FROM notification;", (error,rows) => {
+
+	        if(rows){
+	            console.log(rows);
+	        }else{
+	            console.log(error);
+   			}
+   		});
+    });  
 }
