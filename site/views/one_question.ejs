@@ -32,11 +32,11 @@
                     <h3>
                         <%= question.title %>
                     </h3>
-
+                    <p id="question_id" class="hidden"><%= question.id %></p>
                     <% if(user){ %>
                         <% if(user.id == question.author){ %>
                             <div class="text-right">
-                                <button type="submit" onclick="delete_question(<%= question.id%>)"class="btn btn-danger" name="">Delete Question</button>
+                                <button type="submit" id="delete_question" class="btn btn-danger" name="">Delete Question</button>
                             </div>
                         <%}%>
                     <%}%>

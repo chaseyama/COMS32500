@@ -14,7 +14,6 @@ var first_visit = document.getElementById("first_visit").innerHTML;
 ***************************/
 addEventListener('load', displayModal);
 
-
 /***************************
 	Popup Method
 ***************************/
