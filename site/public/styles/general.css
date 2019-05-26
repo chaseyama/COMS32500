@@ -1,0 +1,96 @@
+/************************************
+    General CSS Styling
+*************************************/
+
+h1{
+  font-size: 6em;
+}
+h2{
+  font-size: 4em;
+  font-family: Georgia;
+  color: #C61909;
+}
+h3{
+  font-size: 3em;
+  font-family: Georgia;
+  color: #C61909;
+  text-decoration: underline;
+}
+h4{
+  font-size: 2em;
+}
+p{
+  font-family: Georgia;
+  font-size: 1.5em;
+}
+a{
+  font-family: Georgia;
+}
+main {
+  min-height: 74vh;
+}
+
+/************************************
+    Navigation Bar Styling
+*************************************/
+.navbar-nav>li{
+  font-size: 1.5em;
+  float: none;
+  display: inline-block;
+}
+#navbar{
+  width: 100%;
+}
+#navbar-header{
+  font-family: Georgia;
+  font-size: 1.5em;
+}
+.navbar{
+  background-color: #050705;
+}
+.navigation{
+  margin: 0.5em;
+  color: #F5F4F5;
+  font-size: 1.6em;
+}
+/************************************
+    Footer Styling
+*************************************/
+#footer{
+  padding: 2em;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+/************************************
+    Special Styling
+*************************************/
+.center{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
+.overflow{
+  overflow-y: 
+  scroll; 
+  height: 18em;
+}
+.hidden{
+  display: none;
+}
+/************************************
+    Image Styling
+*************************************/
+#logo{
+  border-radius: 50%;
+  height: 4em;
+}
+#reg_logo{
+  border-radius: 50%;
+  width: 25em;
+  padding: 0em;
+  margin-bottom: 0em;
+}

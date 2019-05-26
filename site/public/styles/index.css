@@ -1,54 +1,12 @@
-/*
-    Stylesheet for index.html
-*/
-h1{
-  font-size: 6em;
-
-}
-h2{
-  font-size: 4em;
-  font-family: Georgia;
-  color: #C61909;
-}
-h3{
-  font-size: 3em;
-  font-family: Georgia;
-  color: #C61909;
-  text-decoration: underline;
-}
-h4{
-  font-size: 2em;
-}
-p{
-  font-family: Georgia;
-  font-size: 1.5em;
-}
-
-a{
-  font-family: Georgia;
-}
-
-.navbar-nav>li{
-  font-size: 1.5em;
-  float: none;
-  display: inline-block;
-}
-
-#navbar{
-  width: 100%;
-}
-/*
-  Introduction Summary Styling
-*/
+/************************************
+    Index CSS Styling
+*************************************/
 #summary{
     width: 100%;
     padding: 4em;
     background-color: white;
 }
 
-/*
-  Icons Section Styling
-*/
 #icons{
     background-color: #CED3DC;
     width: 100%;
@@ -63,61 +21,9 @@ a{
     border-radius: 50%;
 }
 
-/*
-  Login and Registration Styling
-*/
-#login_register{
-  width: 100%;
-  padding: 1em;
-  background-color: white;
-}
-
-#navbar-header{
-  font-family: Georgia;
-  font-size: 1.5em;
-}
-
-.center{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
-}
-
-.navbar{
-  background-color: #050705;
-}
-.navigation{
-  margin: 0.5em;
-  color: #F5F4F5;
-  font-size: 1.6em;
-
-}
-
-#logo{
-  border-radius: 50%;
-  height: 4em;
-}
-
-#reg_logo{
-  border-radius: 50%;
-  width: 25em;
-  padding: 0em;
-  margin-bottom: 0em;
-}
-#results{
-  overflow-y: scroll;
-  height: 40em;
-  margin-bottom: 10em;
-}
-
-.overflow{
-  overflow-y: 
-  scroll; 
-  height: 18em;
-}
-
-/* The Modal (background) */
+/************************************
+    Modal Styling
+*************************************/
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -159,20 +65,4 @@ a{
 #modal-img{
   border-radius: 50%;
   height: 25em;
-}
-#footer{
-/*  position: fixed;*/
-  padding: 2em;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  margin-bottom: 0;
-}
-
-main {
-  min-height: 74vh;
-}
-
-.hidden{
-  display: none;
 }

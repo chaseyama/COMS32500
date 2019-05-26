@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Study Abroad Bristol</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/styles/general.css"/>
     <!-- Bootstrap: Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/styles/index.css"/>
-
     <!-- Bootstrap: jQuery library --> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer="defer" ></script>
     <!-- Bootstrap: Latest compiled JavaScript -->
@@ -15,14 +15,9 @@
 
 </head>
     <body>
-        <!--Website Banner-->
-        <header>
-
-        </header>
         
         <!--Navigation Bar-->  
         <%- include('partials/navbar') %>
-
         
         <!--Main Content-->  
         <main>
@@ -31,7 +26,6 @@
                 <!-- Use nav-pills, nav-tabs. To center tabs add nav-justified to the class for ul -->
                 <ul class="nav nav-tabs nav-justified">
                     <li class="active"><a data-toggle="tab" href="#cheapeats">Cheap Eats</a></li>
-                    <li><a data-toggle="tab" href="#studentdiscounts">Student Discounts</a></li>
                     <li><a data-toggle="tab" href="#academics">Academics</a></li>
                     <li><a data-toggle="tab" href="#nightlife">Night Life</a></li>
                     <li><a data-toggle="tab" href="#citysites">City Sites</a></li>
@@ -102,107 +96,6 @@
                             </div>
                         </div>
 
-                    </div>
-
-                    <div id="studentdiscounts" class="tab-pane fade">
-                        <div class="text-center">
-                            <h2>Student Discounts in Bristol Shopping Quarter</h2>
-                            <p> Exclusive student discounts. Please present a valid student ID card, including photograph &amp; expiry date, to claim.</p>
-                            <img src="/images/gen_resources/image5.png" alt="..." width="500"></img>
-                        </div>
-
-                        <div class="well well-sm">
-                            <h3><u><strong>Broadmead</strong></u></h3>
-                            <h4>(including Merchant Street, The Horsefair, Bond Street, Union Street &amp; Penn Street)</h4>
-                            <p><strong>5 Pointz</strong> &#8211; 10% off (T&amp;Cs apply)<br />
-                            <strong>Barber Brown </strong>&#8211; 10% off<br />
-                            <strong>Beyond Retro</strong> &#8211; 15% off, valid from Friday 3 &#8211; Friday 31 May 2019 only<br />
-                            <strong>Blacks</strong> &#8211; 10% off<br />
-                            <strong>Cococheno</strong> &#8211; 10% off with selected stylists<br />
-                            <strong>Consol</strong> &#8211; Free goggles and a tanning cream set to new sign ups with a valid student card<br />
-                            <strong>Cotswold Outdoor </strong>&#8211; 10% off (Cannot be used in conjunction with any other offers or discounts already running in store)<br />
-                            <strong>Craft and More </strong>&#8211; 10% off on all products with valid student ID card. (Not available on select existing special offers &amp; cannot be combined with other discounts)<br />
-                            <strong>Deichmann (shoes) </strong>&#8211; 20% off (T&amp;Cs apply)<br />
-                            <strong>Dr. Martens </strong>&#8211; 10% off<br />
-                            <strong>EE</strong> &#8211; Student discounts available, ask in store for details<br />
-                            <strong>Everyman Barbers </strong>&#8211; 20% off everything on Mondays, Tuesdays, &amp; Wednesdays<br />
-                            <strong>Exposure Men Studio</strong> &#8211; 20% discount<br />
-                            <strong>Firewood Grill &amp; Gelato</strong> &#8211; 10% off<br />
-                            <strong>Fitness 4 Less </strong>&#8211; seasonal student discounts available, please check in club for more<br />
-                            <strong>Fone Styles </strong>&#8211; 10% off<br />
-                            <strong>Game </strong>&#8211; 10% off all products except Digital Downloads (Cannot be used in conjunction with any other offers or discounts already running in store)<br />
-                            <strong>Garment Quarter </strong>&#8211; 10% off<br />
-                            <strong>Joy</strong> &#8211; 10% off<br />
-                            <strong>Judas Sinned Represents</strong> &#8211; 10%<br />
-                            <strong>Kemps of Broadmead </strong>&#8211; 10% off repairs and 5% off jewellery<br />
-                            <strong>London Camera Exchange </strong>&#8211; 10% off camera accessories and lens accessories. (Excludes cameras, camcorders, lenses and flash guns)<br />
-                            <strong>McDonald&#8217;s </strong>&#8211; With NUS Extra student card, free medium fries if you buy a Big Mac, a Chicken Sandwich or a Quarter Pounder. With any other student card, free hamburger, cheeseburger or any regular McFlurry (not promotional one) if you purchase a medium or large Extra Value Meal<br />
-                            <strong>Mountain Warehouse </strong>&#8211; 10% off<br />
-                            <strong>O2</strong> &#8211; 30% off O2 Refresh Airtime Plans (Terms &amp; Conditions apply. Ask instore for more details)<br />
-                            <strong>Odeon Cinema</strong> &#8211; Teen and Student deal &#8211; For £10 get 1 x standard 2D ticket, 1 x popcorn, 1 x regular soft drink. Simply select the Teen and Student deal when you book online or in cinema. Show your NUS card at the Box Office to get a further 25% off student/teen ticket prices from Monday to Thursday. (T&amp;Cs apply &#8211; ask Odeon staff for details)<br />
-                            <strong>Post Office </strong>&#8211; 15% off packaging items on production of a valid NUS/uni card. Enhanced  rates on selling Euro’s and Dollars, minimum spend £250, also buyback enhanced rates no minimum spend<br />
-                            <strong>PureGym</strong> &#8211; 10% off no contract, monthly memberships, or up to 30% off fixed-term memberships. Discount is available to verified UNiDAYS members only and is non-transferable. T&amp;Cs apply.<br />
-                            <strong>Rieker</strong> &#8211; 10% off<br />
-                            <strong>Sally </strong>&#8211; 10% off<br />
-                            <strong>Santander  </strong>&#8211; a free 4-year Santander 16-15 Railcard, which could save you 1/3 off rail travel in Great Britain; an interest free and fee free arranged overdraft, up to £1,500 in years 1-3, then up to £2,000 if you stay on to year 5 (overdrafts are subject to status); 3% AER/2.96% (variable) on balance from £300 up to a maximum of £2,000.<br />
-                            <strong>Skechers</strong> &#8211; 15% off<br />
-                            <strong>Smart Phones</strong> &#8211; 10% discount on all repairs and accessories<br />
-                            <strong>Specsavers</strong> &#8211; 1. Sign up to Contact Lens scheme or Switch Contact Lens scheme to Specsavers and get 3 months of lenses free  2. Half price spectacles for any single pair purchased from £69 and above 3. Free sight test for all students<br />
-                            <strong>Subway </strong>&#8211; Footlong for £5 on production of student card and sub card<br />
-                            <strong>Superdrug </strong>&#8211; 10% off (Exclusive to NUS extra card)<br />
-                            <strong>The Styling Lounge </strong>&#8211; 10% off (Cannot be used in conjunction with any other offers)<br />
-                            <strong>Trespass </strong>&#8211; 10% off all purchases including promotional and sale items<br />
-                            <strong>Two Seasons / Element </strong>&#8211; 10% off on full price items + in September, don&#8217;t miss student specific events in store with a chance to receive VIP student discount at 15% off year round<br />
-                            <strong>Virgin Media </strong>&#8211; 15% off all pay monthly mobiles (must have an NUS Extra card) + check in store for regular student discount offers<br />
-                            <strong>Vodafone</strong> &#8211; 10% off line rental (T&amp;C apply)</p>
-                        </div>
-
-                        <div class="well well-sm">
-                            <h3><u><strong>The Arcade</strong></u></h3>
-                            <p><strong>Card Shack </strong>&#8211; 10% off for NUS card holders (also available to NHS staff ID card holders and local traders)<br />
-                            <strong>Shakeaway</strong> &#8211; 10% off<br />
-                            <strong>Wok Boxstix </strong>&#8211; 20% off</p>
-                        </div>
-
-                        <div class="well well-sm">
-                            <h3><u><strong>The Galleries</strong></u></h3>
-                            <p><strong>Cafe W </strong>(within Waterstones) &#8211; 15% off<br />
-                            <strong>Everything Hair </strong>&#8211; 5% off<br />
-                            <strong>Fone Exchange </strong>&#8211; 10% off<br />
-                            <strong>Frequency Barbers &amp; Supply</strong> &#8211; student regular cuts £11, student skin fades £15<br />
-                            <strong>Fun Warehouse </strong>&#8211; 10% off<br />
-                            <strong>Ifix Mobiles Bristol </strong>&#8211; 10% off on mobile phone, accessories and laptop repairs<br />
-                            <strong>Jack Wills</strong> &#8211; 10% off<br />
-                            <strong>Luxury Nails</strong> &#8211; 10% off, Monday to Wednesday only<br />
-                            <strong>Robert Dyas </strong>&#8211; 10% off<br />
-                            <strong>The Perfume Shop &#8211;</strong>10% off with a NUS card<br />
-                            <strong>Vapour Days</strong> &#8211; 10% off<br />
-                            <strong>Whittard of Chelsea </strong>&#8211; 10% off (must sign up for e-newsletter while in store)</p>
-                        </div>
-
-                        <div class="well well-sm">
-                            <h3><u><strong>Cabot Circus</strong></u></h3>
-                            <p><strong>Casa Brasil</strong> &#8211; 20% off food only with valid student card &#8211; T&amp;Cs apply. Sunday to Friday excluding some key dates such as Valentine&#8217;s Day, Mother&#8217;s Day, Father&#8217;s Day and New Year&#8217;s Eve<br />
-                            <strong>Dorothy Perkins </strong>&#8211; 10% off with NUS card<br />
-                            <strong>EE</strong> &#8211; Student discounts available, ask in store for details<br />
-                            <strong>Foyles &#8211;</strong> 10% off (T&amp;Cs apply and Students must first sign up to Foyles Student Card)<br />
-                            <strong>Frankie &amp; Bennys</strong> &#8211; 25% off food from the main menu<br />
-                            <strong>Fraser Hart</strong> &#8211; 10% off<br />
-                            <strong>Fred Perry</strong> &#8211; 10% off full price items<br />
-                            <strong>Gourmet Burger Kitchen</strong> &#8211; exclusive student discounts available on the GBK app, which you can download at <a href="http://www.gbkapp.co.uk/uni" target="_blank" rel="noopener">gbkapp.co.uk/uni</a>. (you will need to show a valid NUS card when claiming a discount)<br />
-                            <strong>Mango</strong>: 10% off (with NUS card and NUS extra card)<br />
-                            <strong>Office</strong>: 10% off full price items (Exclusions apply, please ask in store for more details)<br />
-                            <strong>Oliver Bonas</strong>: 10% off full price items (Cannot be used in conjunction with any other offers)<br />
-                            <strong>Scribbler</strong>: 10% off all full price items (No discount on stamps)<br />
-                            <strong>The North Face</strong>: 10% off all full priced items<br />
-                            <strong>The Perfume Shop &#8211; </strong>10% off with a NUS card<br />
-                            <strong>The Real Greek</strong> &#8211; 25% OFF the food bill only on presentation of a valid photo NUS Student Card. Valid at all The Real Greek restaurants. 25% off Main Menu food only. Not valid in conjunction with any other offer or promotion, Lunch Menu, Athenian Set Menu or Party Menu. Valid photo NUS Student card or University photo Student ID must be presented to be eligible for this offer. 25% off the food bill only.<br />
-                            <strong>Yo Sushi</strong> &#8211; 25% off Tuesday to Friday and Sunday (Student must first sign up at Yo Sushi Love Club, <a href="http://www.yosushi.com/offers/student">www.yosushi.com/offers/student</a>)<br />
-                            <strong>Zizzi</strong> &#8211; 25% off the food bill with a NUS Extra card</p>
-                        </div>
-                        <div class="text-center">
-                            <p>(Source: https://bristolshoppingquarter.co.uk/offer/student-discounts/)</p>
-                        </div>
                     </div>
 
                     <div id="academics" class="tab-pane fade">
@@ -491,9 +384,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
 
                 </div>

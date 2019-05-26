@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Study Abroad Bristol</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/general.css"/>
+    <link rel="stylesheet" href="styles/query.css"/>
     <!-- Bootstrap: Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="styles/index.css"/>
-
+    <!-- Javascript -->
+    <script type="text/javascript" src="/scripts/questions.js" defer="defer"></script>
     <!-- Bootstrap: jQuery library -->
-        <script type="text/javascript" src="/scripts/questions.js" defer="defer"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer="defer"></script>
     <!-- Bootstrap: Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer="defer"></script>
@@ -18,12 +20,12 @@
         <!--Navigation Bar-->  
         <%- include('partials/navbar') %>
 
-        
         <!--Main Content-->  
         <main class="container">
             <% if(success_message){ %>
                 <div class="alert alert-success"><%= success_message %></div>
             <% }%>
+            <!-- Notifications Section -->
             <div class="row">
                 <section id="Notifications" class="well col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <h3>Notifications:</h3>
@@ -46,7 +48,7 @@
             </div>
 
             <div class="row">
-                
+                <!-- Manage Marketplace Items Section -->
                 <section id="myItems" class="well well-sm col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <h3>Items For Sale:</h3>
                     <div class="overflow">
@@ -67,6 +69,7 @@
                         <%}%>     
                     </div>
                 </section>
+                <!-- Manage Questions Section -->
                 <section id="myQuestions" class=" well well-sm col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <h3>Your Questions:</h3>
                     <div class="overflow">
