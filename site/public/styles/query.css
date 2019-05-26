@@ -1,8 +1,0 @@
-/************************************
-    Query CSS Styling
-*************************************/
-#results{
-  overflow-y: scroll;
-  height: 40em;
-  margin-bottom: 10em;
-}
