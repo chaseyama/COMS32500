@@ -66,11 +66,11 @@ router.post('/fetch_by_category', function (req,res){
     Fetch Question by Id Route Handler
     Description: Fetch a Question and it's Responses by QuestionId
 *****************************************/
-router.get('/fetch_by_id', function (req,res){
+router.post('/fetch_by_id', function (req,res){
     var user;
     if(req.user) user = req.user;
     else user = null;
-    questions.fetchQuestionById(req.query.id, (rows) =>{
+    questions.fetchQuestionById(req.body.id, (rows) =>{
         var question = rows[0];
         responses.fetchResponsesByQuestionId(question.id, (rows) =>{
             if(rows){
@@ -136,11 +136,11 @@ router.post('/post_question', function (req,res){
     Delete Question Route Handler
     Description: Delete a Question and its responses
 *****************************************/
-router.get('/delete_question', function (req,res){
-    questions.fetchQuestionById(req.query.id, (rows) =>{
+router.post('/delete_question', function (req,res){
+    questions.fetchQuestionById(req.body.id, (rows) =>{
         var question = rows[0];
-        responses.removeResponsesByQuestionId(req.query.id, (rows) =>{
-            questions.removeQuestion(req.query.id, (rows) =>{
+        responses.removeResponsesByQuestionId(req.body.id, (rows) =>{
+            questions.removeQuestion(req.body.id, (rows) =>{
                 //Redirect
                 var user = null;
                 if(req.user) user = req.user;

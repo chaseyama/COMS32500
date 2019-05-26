@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="styles/index.css"/>
 
-    <!-- Bootstrap: jQuery library --> 
+    <!-- Bootstrap: jQuery library -->
+        <script type="text/javascript" src="/scripts/questions.js" defer="defer"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer="defer"></script>
     <!-- Bootstrap: Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer="defer"></script>
@@ -33,7 +34,7 @@
                                     <h4><%= notifications[i].msg %></h4>
                                     <form action="/deleteNotification" method="post">
                                         <input type="hidden" name="delete" value="<%= notifications[i].id%>"/>
-                                        <p>Delete Notification: <input type="submit" class= "btn btn-danger"name=""/></p>
+                                        <button type="submit" class="btn btn-danger" name="">Delete Notification</button>
                                     </form>
                                 </div>
                             <%}
@@ -57,7 +58,7 @@
                                     <p>Description: <%= myItems[i].description %></p>
                                     <form action="/delete_items" method="post">
                                         <input type="hidden" name="delete" value="<%= myItems[i].id%>"/>
-                                        <p>Delete Item: <input type="submit" class="btn btn-danger" name=""/></p>
+                                        <button type="submit" class="btn btn-danger" name="">Delete Item</button>
                                     </form>
                                 </div>
                             <%}
@@ -73,16 +74,16 @@
                             <% for(var i=0; i < myQuestions.length; i++) { %>
                                 <div class="well well-sm">
                                     <h4><%= myQuestions[i].title %></h4>
-                                    <p>Description: <%= myQuestions[i].description %></p>
-                                    <form action="/fetch_by_id" method="get">
-                                        <input type="hidden" name="id" value="<%= myQuestions[i].id%>"/>
-                                        <p>View Responses: <input type="submit" class="btn btn-info" name=""/></p>
-                                    </form>
+                                    <p><%= myQuestions[i].description %></p>
+                                    <button type="submit" onclick="fetch_by_id(<%= myQuestions[i].id%>)" class="btn btn-info" name="">View Responses</button>
                                 </div>
                             <%}
                         }else{%>
                             <p>No Questions Currently Posted</p>
                         <%}%>
+                        <form method="POST" action="/fetch_by_id" id="fetch_by_id_form">
+                            <input type="hidden" name="id" id="id" value=""></input>
+                        </form>
                     </div>
                 </section>
             </div>

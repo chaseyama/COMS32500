@@ -6,9 +6,10 @@
     <title>Study Abroad Bristol</title>
     <!-- Bootstrap: Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="styles/index.css"/>
+    <link rel="stylesheet" href="/styles/index.css"/>
 
-    <!-- Bootstrap: jQuery library --> 
+    <!-- Bootstrap: jQuery library -->
+    <script type="text/javascript" src="/scripts/questions.js" defer="defer"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer="defer"></script>
     <!-- Bootstrap: Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer="defer"></script>
@@ -36,7 +37,7 @@
                 <%}else{%>
                     <a href="/login" class="btn btn-info" role="button">Login to Ask a Question</a>
                 <%}%>
-            </div>
+                </div>
 
 
                 <!-- Search By Category -->
@@ -64,9 +65,11 @@
                         <% for(var i=browseResults.length-1; i >= 0; i--) { %>
                             <div class="well well-sm">
                                 <p><span class="glyphicon glyphicon-user"></span><%= browseResults[i].fname %></p>
-                                <h4><a href="/fetch_by_id?id=<%=browseResults[i].id%>">
-                                <%= browseResults[i].title %>
-                                </a></h4>
+                                <h4>
+                                    <a href="#" onclick="fetch_by_id(<%= browseResults[i].id%>)">
+                                        <%= browseResults[i].title %>
+                                    </a>
+                                </h4>
                                 <p><%= browseResults[i].description %></p>
                             </div>
                         <%}%>
@@ -74,11 +77,12 @@
                         <p>No questions matched your search result.</p>
                     <%}%>
                 </section>
-
+                <form method="POST" action="/fetch_by_id" id="fetch_by_id_form">
+                    <input type="hidden" name="id" id="id" value=""></input>
+                </form>
             </div>
 
         </main>
         <%- include('partials/footer') %>
-    </body> 
-    
+    </body>     
 </html>
