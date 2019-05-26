@@ -4,10 +4,13 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Study Abroad Bristol</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/general.css"/>
+    <link rel="stylesheet" href="styles/login.css"/>
+    <link rel="stylesheet" href="styles/query.css"/>
     <!-- Bootstrap: Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/styles/index.css"/>
-
+    <!-- Javascript -->
     <script type="text/javascript" src="scripts/market.js" defer="defer"></script>
     <!-- Bootstrap: jQuery library --> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer="defer"></script>
@@ -16,7 +19,6 @@
 
 </head>
     <body>
-        
         <!--Navigation Bar-->  
         <%- include('partials/navbar') %>
         
@@ -43,8 +45,7 @@
                     </ul>    
                 </section>
 
-                <!-- Main section -->
-                        
+                <!-- Main section -->       
                 <section id="search" class="row tab-content">
                     <!-- Browse Item Section -->
                     <section id="browse" class="tab-pane fade in active jumbotron">
@@ -73,7 +74,7 @@
                             </div>
                         </form>
                     </section>
-                   
+                   <!-- Browse Results -->
                     <%if(browse){ %>
                         <section id="browseResults" class="row">
                                 <h2>Results</h2>
@@ -156,9 +157,7 @@
                             <% } %>
                         </section>
                     </div>
-                
             </section>
-            
         </main>
         <%- include('partials/footer') %>
     </body>

@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Study Abroad Bristol</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/styles/general.css"/>
     <!-- Bootstrap: Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/styles/index.css"/>
-
-    <!-- Bootstrap: jQuery library -->
+    <!-- Javascript -->
     <script type="text/javascript" src="/scripts/one_question.js" defer="defer"></script>
+    <!-- Bootstrap: jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer="defer"></script>
     <!-- Bootstrap: Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js" defer="defer"></script>
@@ -32,11 +33,11 @@
                     <h3>
                         <%= question.title %>
                     </h3>
-
+                    <p id="question_id" class="hidden"><%= question.id %></p>
                     <% if(user){ %>
                         <% if(user.id == question.author){ %>
                             <div class="text-right">
-                                <button type="submit" onclick="delete_question(<%= question.id%>)"class="btn btn-danger" name="">Delete Question</button>
+                                <button type="submit" id="delete_question" class="btn btn-danger" name="">Delete Question</button>
                             </div>
                         <%}%>
                     <%}%>

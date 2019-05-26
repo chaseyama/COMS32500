@@ -1,5 +1,11 @@
 "use strict";
 
+/************************************
+    Index Page Javascript File
+	- Create event listeners
+	- Popup Method
+*************************************/
+
 /**************************
 	Instantiate Variables 
 	Using QuerySelector
@@ -13,7 +19,6 @@ var first_visit = document.getElementById("first_visit").innerHTML;
 	Display Popup
 ***************************/
 addEventListener('load', displayModal);
-
 
 /***************************
 	Popup Method
