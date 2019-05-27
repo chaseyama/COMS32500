@@ -139,7 +139,7 @@ exports.populateNotification = function(){
 /*****************************************
     Populate Questions Table Method
 *****************************************/
-function populateQuestions(){
+exports.populateQuestions = function(){
 	var title = ["Where to buy Crest toothpaste?",
 		"How does the grading system work in the UK?",
 		"What's the best way to get to Bristol Airport?",
@@ -168,7 +168,7 @@ function populateQuestions(){
 /*****************************************
     Populate Responses Table Method
 *****************************************/
-function populateResponses(){
+exports.populateResponses = function(){
 	var description = ["Unfortunately, they don't sell Crest in the UK.",
 		"If you've got to leave that early in the morning, I'd take an Uber just to be safe. They're not that expensive.",
 		"You should try Men's Cave Barber! I think my haircut was about £12 last time I went.",
@@ -221,5 +221,27 @@ exports.printTables = function(){
 	            console.log(error);
    			}
    		});
-    });  
+    });
+    //Print Questions Table
+    db.serialize(() => {
+        db.all("SELECT * FROM questions;", (error,rows) => {
+
+	        if(rows){
+	            console.log(rows);
+	        }else{
+	            console.log(error);
+   			}
+   		});
+    });
+    //Print Responses Table
+    db.serialize(() => {
+        db.all("SELECT * FROM responses;", (error,rows) => {
+
+	        if(rows){
+	            console.log(rows);
+	        }else{
+	            console.log(error);
+   			}
+   		});
+    });   
 }

@@ -16,6 +16,16 @@ banUpperCase("./public/", "");
 app.use(lower);
 app.use(ban)
 
+
+// const populate = require('./populateDatabase.js');
+// populate.createTables();
+// setTimeout(populate.populateUsers(), 2000);
+// setTimeout(populate.populateMarket(), 4000);
+// setTimeout(populate.populateNotification(), 6000);
+// setTimeout(populate.populateQuestions(), 8000);
+// setTimeout(populate.populateResponses(), 10000);
+// setTimeout(populate.printTables(), 12000);
+
 /*****************************************
     Initialize User Sessions
     - Express-Session Module
