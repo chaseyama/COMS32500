@@ -182,13 +182,3 @@ app.use(function(err, req, res, next) {
         res.status(err.statusCode).send(err.message); // If shouldRedirect is not defined in our error, sends our original err data
     }
 });
-
-/*****************************************
-    Instantiate Databases
-*****************************************/
-var server = require('./populateDatabase.js');
-server.createTables();
-server.printTables();
-
-
-
