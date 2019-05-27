@@ -103,6 +103,57 @@ exports.populateNotification = function(){
 }
 
 /*****************************************
+    Populate Questions Table Method
+*****************************************/
+function populateQuestions(){
+	var title = ["Where to buy Crest toothpaste?",
+		"How does the grading system work in the UK?",
+		"What's the best way to get to Bristol Airport?",
+		"Best place to get a haircut?",
+		"Is the food from Source actually good?",
+		"How many bags can you take with easyJet?"];
+	var description = ["I checked Sainsbury's, Tesco and Wilko, but I can't seem to find Crest toothpaste anywhere. Do they sell Crest in the UK, and if so, where?",
+		"I'm an exchange student from the US, and I'm trying to figure out how the grading here compares to the US. Also, if someone could give me the link to a grade conversion chart, I would greatly appreciate it.",
+		"I'm living in the North Village and I need to be at the airport by 6am Friday morning. What's the best way of getting there that early in the morning?",
+		"Looking for the best place to get a guy's haircut for under £20.",
+		"I've seen people get coffee there, but is the food any good?",
+		"I'm flying with easyJet next weekend, and I'm trying to figure out how many bags I can take, and how heavy they can be."];
+	var category = ['supplies', 'academics', 'travel', 'general', 'general', 'travel'];
+	var author = [1,1,1,2,2,2];
+	for(var i =0; i < 6; i++){
+		var question ={
+			title: title[i],
+			description: description[i],
+			category: category[i],
+			author: author[i]
+		}
+		questions.insertQuestion(question);
+	}
+}
+
+/*****************************************
+    Populate Responses Table Method
+*****************************************/
+function populateResponses(){
+	var description = ["Unfortunately, they don't sell Crest in the UK.",
+		"If you've got to leave that early in the morning, I'd take an Uber just to be safe. They're not that expensive.",
+		"You should try Men's Cave Barber! I think my haircut was about £12 last time I went.",
+		"Eh, I'd try to avoid it if I were you.",
+		"I tried it yesterday and it honestly wasn't that bad!",
+		"I think you get one carry-on and one personal item, but check their website for the maximum weights."];
+	var author = [2,2,1,1,2,1];
+	var questionId = [1,3,4,5,5,6];
+	for(var i =0; i < 6; i++){
+		var response ={
+			description: description[i],
+			author: author[i],
+			questionId: questionId[i]
+		}
+		responses.insertResponse(response);
+	}
+}
+
+/*****************************************
     Print All Tables Method
 *****************************************/
 exports.printTables = function(){
@@ -129,6 +180,7 @@ exports.printTables = function(){
     //Print Notification Table
     db.serialize(() => {
         db.all("SELECT * FROM notification;", (error,rows) => {
+
 	        if(rows){
 	            console.log(rows);
 	        }else{
