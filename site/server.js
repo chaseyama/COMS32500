@@ -183,5 +183,12 @@ app.use(function(err, req, res, next) {
     }
 });
 
+/*****************************************
+    Instantiate Databases
+*****************************************/
+var server = require('./populateDatabase.js');
+server.createTables();
+server.printTables();
+
 
 
