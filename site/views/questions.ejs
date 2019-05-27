@@ -36,26 +36,28 @@
                 <% if(user){ %>
                     <a href="/new_question" class="btn btn-info" role="button">Ask a Question</a>
                 <%}else{%>
-                    <a href="/login" class="btn btn-info" role="button">Login to Ask a Question</a>
+                    <p><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a> or <a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a> to Ask a Question</p>
                 <%}%>
                 </div>
 
 
                 <!-- Search By Category -->
                 <section id="browse" class="tab-pane fade in active jumbotron">
-                    <h2>Browse Questions</h2>
+                    <h2 class="text-center">Browse Questions</h2>
                     <form action="/fetch_by_category" method="post">
                         <div class="form-group row">
-                            <select class="custom-select col-sm-5" name="category">
+                            <div class="col-sm-4"></div>
+                            <select class="custom-select col-sm-4" name="category">
                                 <option name="question_category" value="all" selected>Search by Category</option>
                                 <option name="question_category" value="general">General</option>
                                 <option name="question_category" value="supplies">Supplies</option>
                                 <option name="question_category" value="academics">Academics</option>
                                 <option name="question_category" value="travel">Travel</option>
                             </select>
-                            <div class="text-center">
-                                <button class="btn btn-primary">SEARCH</button>
-                            </div>
+                            <div class="col-sm-4"></div>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary text-center">SEARCH</button>
                         </div>
                     </form>
                 </section>
@@ -65,7 +67,7 @@
                     <% if(browseResults){ %>
                         <% for(var i=browseResults.length-1; i >= 0; i--) { %>
                             <div class="well well-sm">
-                                <p><span class="glyphicon glyphicon-user"></span><%= browseResults[i].fname %></p>
+                                <p><span class="glyphicon glyphicon-user"></span> <%= browseResults[i].fname %></p>
                                 <h4>
                                     <a href="#" onclick="fetch_by_id(<%= browseResults[i].id%>)">
                                         <%= browseResults[i].title %>

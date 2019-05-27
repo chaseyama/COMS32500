@@ -30,9 +30,9 @@
                 <% }%>
                 
                 <% if(question){ %>
-                    <h3>
+                    <h2>
                         <%= question.title %>
-                    </h3>
+                    </h2>
                     <p id="question_id" class="hidden"><%= question.id %></p>
                     <% if(user){ %>
                         <% if(user.id == question.author){ %>
@@ -45,9 +45,9 @@
                         <input type="hidden" name="id" id="id" value=""></input>
                     </form>
 
-                    <p><span class="glyphicon glyphicon-user"></span><%= question.fname %></p>
                     <div class="well well-sm">
-                        <h4><%= question.description %></h4>
+                        <p><span class="glyphicon glyphicon-user"></span> <%= question.fname %></p>
+                        <p><%= question.description %></p>
                     </div>
                 <%}else{%>
                     <p>No questions matches this id.</p>
@@ -58,7 +58,7 @@
                 <% if(responses){ %>
                     <% for(var i=0; i < responses.length; i++) { %>
                         <div class="well well-sm">
-                            <p><span class="glyphicon glyphicon-user"></span><%= responses[i].fname %></p>
+                            <p><span class="glyphicon glyphicon-user"></span> <%= responses[i].fname %></p>
                             <p><%= responses[i].description %></p>
                             <% if(user){ %>
                                 <% if(user.id == responses[i].author){ %>
@@ -86,7 +86,7 @@
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 <%}else{%>
-                    <a href="/login" class="btn btn-info" role="button">Login to Post a Response</a>
+                    <p><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a> or <a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a> to Post a Response</p>
                 <%}%>
 
                 

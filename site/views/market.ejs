@@ -102,7 +102,7 @@
                                                 </h4>
                                                 <p>Asking Price: £<%= browseResults[i].price %></p>
                                                 <p>Description: <%= browseResults[i].description %></p>
-                                                <button onclick="console.log('Clicked'); getConfirmation('<%=browseResults[i].seller%>', '<%=browseResults[i].itemName%>', '<%=user.id%>');">Make Inquiry</button>
+                                                <button class="btn btn-primary" onclick="console.log('Clicked'); getConfirmation('<%=browseResults[i].seller%>', '<%=browseResults[i].itemName%>', '<%=user.id%>');">Make Inquiry</button>
                                             </div>
                                         <%}
                                         

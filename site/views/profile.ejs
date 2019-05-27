@@ -30,7 +30,7 @@
                     <h3>Notifications:</h3>
                         <div class="overflow">
                         <% if(notifications){ console.log(notifications)%> 
-                            <% for(var i=0; i < notifications.length; i++) { %>
+                            <% for(var i=notifications.length-1; i >= 0; i--) { %>
                                 <div class="well well-sm">
                                     <h4><%= notifications[i].msg %></h4>
                                     <form action="/deleteNotification" method="post">
@@ -52,7 +52,7 @@
                     <h3>Items For Sale:</h3>
                     <div class="overflow">
                         <% if(myItems){ %> 
-                            <% for(var i=0; i < myItems.length; i++) { %>
+                            <% for(var i=myItems.length-1; i >= 0; i--) { %>
                                 <div class="well well-sm">
                                     <h4><%= myItems[i].itemName %></h4>
                                     <p>Asking Price: £<%= myItems[i].price %></p>
@@ -73,7 +73,7 @@
                     <h3>Your Questions:</h3>
                     <div class="overflow">
                         <% if(myQuestions){ %> 
-                            <% for(var i=0; i < myQuestions.length; i++) { %>
+                            <% for(var i=myQuestions.length-1; i >= 0; i--) { %>
                                 <div class="well well-sm">
                                     <h4><%= myQuestions[i].title %></h4>
                                     <p><%= myQuestions[i].description %></p>
